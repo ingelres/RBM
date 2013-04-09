@@ -6,7 +6,7 @@
     require_once "./inc/consts.php";
 
     // Debug mode
-    if($CONSTS_DEBUG_MODE)
+    if(Consts::DEBUG_MODE)
     {
         ini_set('display_errors', 1);
         ini_set('error_reporting', E_ALL);
