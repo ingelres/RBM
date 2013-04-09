@@ -1,7 +1,11 @@
 <?php
 
-    $DIR_DATA = "./data/";
+    class Consts
+    {
+        const DEBUG_MODE = true;
 
-    $FILE_TAGS = $DIR_DATA . "tags.txt";
+        const DIR_DATA  = "./data/";
+        const FILE_TAGS = "./data/tags.txt";
+    }
 
 ?>

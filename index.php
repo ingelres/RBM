@@ -2,7 +2,24 @@
 
     $startTime = microtime(true);
 
-    include("./inc/consts.php");
+    require_once "./inc/init.php";
+    require_once "./inc/consts.php";
+
+    // Debug mode
+    if($CONSTS_DEBUG_MODE)
+    {
+        ini_set('display_errors', 1);
+        ini_set('error_reporting', E_ALL);
+    }
+
+    // Init our data directory
+    $error = init_initDataDir();
+
+    if(!is_null($error))
+    {
+        // FIXME Do something smarter to display errors (there may be other ones later on)
+        echo $error;
+    }
 
 ?>
 
