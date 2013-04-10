@@ -2,11 +2,14 @@
 
     $startTime = microtime(true);
 
-    require_once "./inc/init.php";
-    require_once "./inc/consts.php";
+    // Base directory of the website
+    $RBM_BASE_DIR = __DIR__;
+
+    require_once $RBM_BASE_DIR . "/inc/init.php";
+    require_once $RBM_BASE_DIR . "/inc/consts.php";
 
     // Debug mode
-    if(Consts::DEBUG_MODE)
+    if($CONSTS_DEBUG_MODE)
     {
         ini_set('display_errors', 1);
         ini_set('error_reporting', E_ALL);
@@ -43,6 +46,9 @@
     </head>
 
     <body>
+
+        <button onClick="jsfunc_addTag()">Add Tag</button>
+        <button onClick="jsfunc_deleteTag()">Delete Tag</button>
 
         <div id="css-footer">
 

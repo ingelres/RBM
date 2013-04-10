@@ -1,6 +1,7 @@
 <?php
 
-    require_once "./inc/consts.php";
+    require_once $RBM_BASE_DIR . "/inc/db.php";
+    require_once $RBM_BASE_DIR . "/inc/consts.php";
 
     /**
      * Create the data directory if needed and check file permissions.
@@ -9,16 +10,28 @@
     **/
     function init_initDataDir()
     {
-        if(!is_writable(Consts::DIR_DATA))
+        global $CONSTS_DIR_DATA, $CONSTS_FILE_TAGS, $CONSTS_FILE_TAG_TO_BOOKMARK, $CONSTS_FILE_BOOKMARK_TO_TAG;
+
+        if(!is_writable($CONSTS_DIR_DATA))
         {
-                 if(file_exists(Consts::DIR_DATA))  return sprintf(_("Directory '%s' is not writable"), Consts::DIR_DATA);
-            else if(!mkdir(Consts::DIR_DATA, 0755)) return sprintf(_("Could not create directory '%s', please check file permissions"), Consts::DIR_DATA);
+                 if(file_exists($CONSTS_DIR_DATA))  return sprintf(_("Directory '%s' is not writable"), $CONSTS_DIR_DATA);
+            else if(!mkdir($CONSTS_DIR_DATA, 0755)) return sprintf(_("Could not create directory '%s', please check file permissions"), $CONSTS_DIR_DATA);
         }
 
-        // Only check for correct permissions on the file that store the tags
-        // We assume that if permissions are correct for this file, they will be correct as well for the other files in the data directory
-        if(file_exists(Consts::FILE_TAGS) && (!is_readable(Consts::FILE_TAGS) || !is_writable(Consts::FILE_TAGS)))
-            return sprintf(_("File '%s' is either not readable or not writable"), realpath(Consts::FILE_TAGS));
+        if(file_exists($CONSTS_FILE_TAGS))
+        {
+            // Only check for correct permissions on the file that store the list of tags
+            // We assume that if permissions are correct for this file, they are correct as well for the other files
+            if(!is_readable($CONSTS_FILE_TAGS) || !is_writable($CONSTS_FILE_TAGS))
+                return sprintf(_("File '%s' is either not readable or not writable"), $CONSTS_FILE_TAGS);
+        }
+        else
+        {
+            // Create all the data files
+            db_saveTagFile(array(), array(), 0);
+            db_saveTagToBookmarkFile(array());
+            db_saveBookmarkToTagFile(array());
+        }
 
         return NULL;
     }
