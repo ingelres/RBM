@@ -5,57 +5,57 @@
     /**
      * Create a new tag file.
      *
-     * @param tagToUID   The array that maps a tag name to its UID.
-     * @param UIDToTag   The array that maps a tag UID to its name.
-     * @param nextTagUID The UID to be used the next time a tag is created.
+     * @param tname2tid The array that maps a tag name to its UID.
+     * @param tid2tname The array that maps a tag id to its name.
+     * @param nextTagId The id to be used the next time a tag is created.
     **/
-    function db_saveTagFile($tagToUID, $UIDToTag, $nextTagUID)
+    function db_saveTagFile($tname2tid, $tid2tname, $nextTagId)
     {
         global $CONSTS_FILE_TAGS;
 
         $handle = fopen($CONSTS_FILE_TAGS, "w");
 
-        fprintf($handle, "<?php\n\$NEXT_TAG_UID=%u;\n\$TAG_TO_UID=%s;\n\$UID_TO_TAG=%s;\n?>\n", $nextTagUID, var_export($tagToUID, true), var_export($UIDToTag, true));
+        fprintf($handle, "<?php\n\$NEXT_TAG_ID=%u;\n\$TNAME_TO_TID=%s;\n\$TID_TO_TNAME=%s;\n?>\n", $nextTagId, var_export($tname2tid, true), var_export($tid2tname, true));
         fclose($handle);
     }
 
     /**
      * Save an array to a PHP file.
      *
-     * @param array     The array to be saved.
-     * @param arrayName The name of the array.
-     * @param file      The name of the file.
+     * @param array The array to be saved.
+     * @param name  The name of the array.
+     * @param file  The name of the file.
     **/
-    function db_saveArray($array, $arrayName, $filename)
+    function db_saveArray($name, $array, $filename)
     {
         $handle = fopen($filename, "w");
 
-        fprintf($handle, "<?php\n\$%s=%s;\n?>\n", $arrayName, var_export($array, true));
+        fprintf($handle, "<?php\n\$%s=%s;\n?>\n", $name, var_export($array, true));
         fclose($handle);
     }
 
     /**
-     * Create a new Tag To Bookmark file.
+     * Create a new tid to bid file.
      *
-     * @param tagToBookmark The array that maps a tag UID to a number of bookmark UIDs.
+     * @param tid2bid The array that maps a tag id to a number of bookmark id.
     **/
-    function db_saveTagToBookmarkFile($tagToBookmark)
+    function db_saveTidToBidFile($tid2bid)
     {
-        global $CONSTS_FILE_TAG_TO_BOOKMARK;
+        global $CONSTS_FILE_TID_TO_BID;
 
-        db_saveArray($tagToBookmark, "TAG_TO_BOOKMARK", $CONSTS_FILE_TAG_TO_BOOKMARK);
+        db_saveArray("TID_TO_BID", $tid2bid, $CONSTS_FILE_TID_TO_BID);
     }
 
     /**
-     * Create a new Bookmark To Tag file.
+     * Create a new bid to tid file.
      *
-     * @param bookmarkToTag The array that maps a bookmark UID to a number of tag UIDs.
+     * @param bid2tid The array that maps a bookmark id to a number of tag id.
     **/
-    function db_saveBookmarkToTagFile($bookmarkToTag)
+    function db_saveBidToTidFile($bid2tid)
     {
-        global $CONSTS_FILE_BOOKMARK_TO_TAG;
+        global $CONSTS_FILE_BID_TO_TID;
 
-        db_saveArray($bookmarkToTag, "BOOKMARK_TO_TAG", $CONSTS_FILE_BOOKMARK_TO_TAG);
+        db_saveArray("BID_TO_TID", $bid2tid, $CONSTS_FILE_BID_TO_TID);
     }
 
 ?>

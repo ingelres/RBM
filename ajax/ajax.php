@@ -21,7 +21,7 @@
     /**
      * Add a new tag to the database.
      *
-     * @param tagName Name of the tag to be added.
+     * @param name Name of the tag to be added.
     **/
     function addTag()
     {
@@ -29,16 +29,16 @@
 
         include $CONSTS_FILE_TAGS;
 
-        $tagName = getStringParam("tagName");
+        $tname = getStringParam("name");
 
-        if(!array_key_exists($tagName, $TAG_TO_UID))
+        if(!array_key_exists($tname, $TNAME_TO_TID))
         {
             // The tag doesn't already exist
-            // Create a mapping between the tag name and its UID
-            $TAG_TO_UID[$tagName]      = $NEXT_TAG_UID;
-            $UID_TO_TAG[$NEXT_TAG_UID] = $tagName;
+            // Create a mapping between the tag name and its id
+            $TNAME_TO_TID[$tname]       = $NEXT_TAG_ID;
+            $TID_TO_TNAME[$NEXT_TAG_ID] = $tname;
 
-            db_saveTagFile($TAG_TO_UID, $UID_TO_TAG, $NEXT_TAG_UID+1);
+            db_saveTagFile($TNAME_TO_TID, $TID_TO_TNAME, $NEXT_TAG_ID+1);
         }
     }
 
@@ -46,45 +46,47 @@
     /**
      * Delete a tag from the database.
      *
-     * @param tagName Name of the tag to be deleted.
+     * @param id Id of the tag to be deleted.
     **/
     function deleteTag()
     {
-        global $CONSTS_FILE_TAGS, $CONSTS_FILE_TAG_TO_BOOKMARK, $CONSTS_FILE_BOOKMARK_TO_TAG;
+        global $CONSTS_FILE_TAGS, $CONSTS_FILE_TID_TO_BID, $CONSTS_FILE_BID_TO_TID;
 
         include $CONSTS_FILE_TAGS;
-        include $CONSTS_FILE_TAG_TO_BOOKMARK;
-        include $CONSTS_FILE_BOOKMARK_TO_TAG;
 
-        $tagName = getStringParam("tagName");
+        $tid = getStringParam("id");
 
-        if(array_key_exists($tagName, $TAG_TO_UID))
+        if(array_key_exists($tid, $TID_TO_TNAME))
         {
-            $tagUID = $TAG_TO_UID[$tagName];
+            include $CONSTS_FILE_TID_TO_BID;
 
             // First remove all the associations to bookmarks, if any
-            if(array_key_exists($tagUID, $TAG_TO_BOOKMARK))
+            if(array_key_exists($tid, $TID_TO_BID))
             {
-                foreach($TAG_TO_BOOKMARK[$tagUID] as $bookmarkUID => $foo)
+                include $CONSTS_FILE_BID_TO_TID;
+
+                foreach($TID_TO_BID[$tid] as $bid => $foo)
                 {
-                    unset($BOOKMARK_TO_TAG[$bookmarkUID][$tagUID]);
+                    unset($BID_TO_TID[$bid][$tid]);
 
                     // Completely remove the array if it's empty
-                    if(count($BOOKMARK_TO_TAG[$bookmarkUID]) == 0)
-                        unset($BOOKMARK_TO_TAG[$bookmarkUID]);
+                    if(count($BID_TO_TID[$bid]) == 0)
+                        unset($BID_TO_TID[$bid]);
                 }
 
-                db_saveBookmarkToTagFile($BOOKMARK_TO_TAG);
+                db_saveBIdToTidFile($BID_TO_TID);
 
-                unset($TAG_TO_BOOKMARK[$tagUID]);
-                db_saveTagToBookmarkFile($TAG_TO_BOOKMARK);
+                unset($TID_TO_BID[$tid]);
+                db_saveTidToBidFile($TID_TO_BID);
             }
 
             // Now we can remove the tag itself
-            unset($UID_TO_TAG[$tagUID]);
-            unset($TAG_TO_UID[$tagName]);
+            $tname = $TID_TO_TNAME[$tid];
 
-            db_saveTagFile($TAG_TO_UID, $UID_TO_TAG, $NEXT_TAG_UID);
+            unset($TNAME_TO_TID[$tname]);
+            unset($TID_TO_TNAME[$tid]);
+
+            db_saveTagFile($TNAME_TO_TID, $TID_TO_TNAME, $NEXT_TAG_ID);
         }
     }
 

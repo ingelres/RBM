@@ -3,16 +3,16 @@ function jsfunc_addTag()
     var tag = prompt("Enter the tag name");
 
     $.ajax({
-        data: "action=addTag&tagName=" + tag,
+        data: "action=addTag&name=" + tag,
     });
 }
 
 function jsfunc_deleteTag()
 {
-    var tag = prompt("Enter the tag name");
+    var tag = prompt("Enter the tag Id");
 
     $.ajax({
-        data: "action=deleteTag&tagName=" + tag,
+        data: "action=deleteTag&id=" + tag,
     });
 }
 

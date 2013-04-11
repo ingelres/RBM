@@ -10,7 +10,7 @@
     **/
     function init_initDataDir()
     {
-        global $CONSTS_DIR_DATA, $CONSTS_FILE_TAGS, $CONSTS_FILE_TAG_TO_BOOKMARK, $CONSTS_FILE_BOOKMARK_TO_TAG;
+        global $CONSTS_DIR_DATA, $CONSTS_FILE_TAGS, $CONSTS_FILE_TID_TO_BID, $CONSTS_FILE_BID_TO_TID;
 
         if(!is_writable($CONSTS_DIR_DATA))
         {
@@ -28,9 +28,9 @@
         else
         {
             // Create all the data files
+            db_saveTidToBidFile(array());
+            db_saveBidToTidFile(array());
             db_saveTagFile(array(), array(), 0);
-            db_saveTagToBookmarkFile(array());
-            db_saveBookmarkToTagFile(array());
         }
 
         return NULL;
