@@ -67,11 +67,8 @@
 
                 foreach($TID_TO_BID[$tid] as $bid => $foo)
                 {
-                    unset($BID_TO_TID[$bid][$tid]);
-
-                    // Completely remove the array if it's empty
-                    if(count($BID_TO_TID[$bid]) == 0)
-                        unset($BID_TO_TID[$bid]);
+                    if(count($BID_TO_TID[$bid]) == 1) unset($BID_TO_TID[$bid]);
+                    else                              unset($BID_TO_TID[$bid][$tid]);
                 }
 
                 db_saveBIdToTidFile($BID_TO_TID);
