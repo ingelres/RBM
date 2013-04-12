@@ -30,6 +30,10 @@ body {
     background: #83C988 url('img/selected.png') no-repeat right center;
 }
 
+.css-explorer-droppable {
+    background-color: #0000AA;
+}
+
 .css-explorer-tag {
     /* Add 6px between the expander and the tag name (which is 12px large) */
     padding-left: 18px;
@@ -40,7 +44,6 @@ body {
     width: 12px;
     height: 12px;
     cursor: pointer;
-    background-image: url(
 }
 
 .css-explorer-expand {
@@ -49,6 +52,14 @@ body {
 
 .css-explorer-collapse {
     background-image: url('img/collapse.png');
+}
+
+.css-explorer-handle {
+    float: left;
+    width: 12px;
+    height: 12px;
+    cursor: move;
+    background-image: url('img/handle.png');
 }
 
 #css-footer {

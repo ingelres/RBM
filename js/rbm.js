@@ -1,29 +1,34 @@
 function jsfunc_explorerToggleTag(expander, ptid, lvl)
 {
+    var container = "css-explorer-item-" + ptid + "-children";
+
     if($(expander).hasClass("css-explorer-expand"))
     {
         // Don't go deeper than level 5
         var childLvl = Math.min(lvl+1, 5);
 
-        // All children go into a specific div container to make it easy to remove them later on
+        // All children go into a specific container to make it easy to remove them later on
         // It's hidden at first so that we can show it with an animation
-        var container = "<div id='css-explorer-item-children-" + ptid + "' style='display: none'>";
+        $("<div id='" + container + "' style='display: none'></div>").insertAfter("#css-explorer-item-" + ptid);
 
         $.each(rbm_tid_children[ptid], function(idx, tid){
-            container += "<div id='css-explorer-item-" + tid + "' class='css-explorer-item css-explorer-level-" + childLvl + "'";
-            container += " onclick='jsfunc_explorerSelectTag(" + tid + ")'>";
+            child  = "<div id='css-explorer-item-" + tid + "' class='css-explorer-item css-explorer-level-" + childLvl + "'";
+            child += " onclick='jsfunc_explorerSelectTag(" + tid + ")'><div class='css-explorer-handle'></div>";
 
             if(rbm_tid_children[tid] != undefined)
-                container += "<div class='css-explorer-expand' onclick='jsfunc_explorerToggleTag(this, " + tid + ", " + childLvl + ")'></div>";
+                child += "<div class='css-explorer-expand' onclick='jsfunc_explorerToggleTag(this, " + tid + ", " + childLvl + ")'></div>";
 
-            container += "<div class='css-explorer-tag'>" + rbm_tid_to_tname[tid] + "</div></div>";
+            $("#" + container).append(child + "<div class='css-explorer-tag'>" + rbm_tid_to_tname[tid] + "</div></div>");
+
+            // Enable drag'n'drop now that the child has been added to the DOM
+            jsfunc_explorerEnableDragAndDrop(tid);
         });
 
-        $(container + "</div>").insertAfter("#css-explorer-item-" + ptid).slideDown(200);
+        $("#" + container).slideDown(200);
     }
     else
     {
-        $("#css-explorer-item-children-" + ptid).slideUp(200, function(){ this.remove() });
+        $("#" + container).slideUp(200, function(){ this.remove() });
     }
 
     // Expand <-> Collapse
@@ -48,6 +53,26 @@ function jsfunc_explorerExpandAll()
     }
 }
 
+function jsfunc_explorerEnableDragAndDrop(tid)
+{
+    var item = "#css-explorer-item-" + tid;
+
+    $(item).draggable({
+        axis: "y",
+        zIndex: 100,
+        opacity: 0.75,
+        revert: "invalid",
+        handle: ".css-explorer-handle",
+        containment: "#css-explorer",
+    });
+
+    $(item).droppable({
+        tolerance: "pointer",
+        hoverClass: "css-explorer-droppable",
+        accept: function(elt){ return $(item).parents("#" + elt.attr("id") + "-children").length == 0 },
+    });
+}
+
 var mExplorerSelectedTag = -1;
 
 function jsfunc_explorerSelectTag(tid)
@@ -66,6 +91,10 @@ function jsfunc_onReady()
         type:  "GET",
         cache: false,
     });
+
+    jsfunc_explorerEnableDragAndDrop(0);
+    jsfunc_explorerEnableDragAndDrop(25);
+    jsfunc_explorerEnableDragAndDrop(59);
 }
 
 $(document).ready(jsfunc_onReady);
