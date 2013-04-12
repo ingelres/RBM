@@ -37,6 +37,7 @@
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
 
         <script>
+            <?php include("./js/sample-data.js"); ?>
             <?php include("./js/rbm.js"); ?>
         </script>
 
@@ -47,13 +48,25 @@
 
     <body>
 
-        <button onClick="jsfunc_addTag()">Add Tag</button>
-        <button onClick="jsfunc_deleteTag()">Delete Tag</button>
+        <button onclick="jsfunc_explorerExpandAll()">Expand All</button>
+        <button onclick="jsfunc_explorerCollapseAll()">Collapse All</button>
+
+        <div id="css-explorer">
+            <div id="css-explorer-item-25" class="css-explorer-item css-explorer-level-1" onclick="jsfunc_explorerSelectTag(25)">
+                <div class="css-explorer-expand" onclick="jsfunc_explorerToggleTag(this, 25, 1)"></div>
+                <div class="css-explorer-tag">Code</div>
+            </div>
+            <div id="css-explorer-item-0" class="css-explorer-item css-explorer-level-1" onclick="jsfunc_explorerSelectTag(0)">
+                <div class="css-explorer-expand" onclick="jsfunc_explorerToggleTag(this, 0, 1)"></div>
+                <div class="css-explorer-tag">Game</div>
+            </div>
+            <div id="css-explorer-item-59" class="css-explorer-item css-explorer-level-1" onclick="jsfunc_explorerSelectTag(59)">
+                <div class="css-explorer-tag">Tools</div>
+            </div>
+        </div>
 
         <div id="css-footer">
-
-            <?php echo sprintf(_("Page generated in %u ms"), (microtime(true) - $startTime) * 1000); ?>
-
+            <?php echo sprintf(_("Version %s"), $CONSTS_VERSION), " / ", sprintf(_("Page generated in %u ms"), (microtime(true) - $startTime) * 1000); ?>
         </div>
 
     </body>
