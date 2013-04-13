@@ -28,6 +28,9 @@ function jsfunc_explorerToggleTag(expander, ptid, lvl)
     }
     else
     {
+        $("#" + container + " .css-explorer-item").droppable("destroy");
+        $("#" + container + " .css-explorer-item").draggable("destroy");
+
         $("#" + container).slideUp(200, function(){ this.remove() });
     }
 
