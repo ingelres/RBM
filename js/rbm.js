@@ -1,15 +1,24 @@
+var rbm_consts = {
+    EXPLORER_MAX_LVL:    5,
+    EXPLORER_ANIM_LEN: 200,
+}
+
+var rbm_globals = {
+    explorerSelectedTag: -1,
+}
+
 function jsfunc_explorerToggleTag(expander, ptid, lvl)
 {
-    var container = "css-explorer-item-" + ptid + "-children";
+    var name      = "css-explorer-item-" + ptid + "-children";
+    var container = "#" + name;
 
     if($(expander).hasClass("css-explorer-expand"))
     {
-        // Don't go deeper than level 5
-        var childLvl = Math.min(lvl+1, 5);
+        var childLvl = Math.min(lvl+1, rbm_consts.EXPLORER_MAX_LVL);
 
         // All children go into a specific container to make it easy to remove them later on
         // It's hidden at first so that we can show it with an animation
-        $("<div id='" + container + "' style='display: none'></div>").insertAfter("#css-explorer-item-" + ptid);
+        $("<div id='" + name + "' style='display: none'></div>").insertAfter("#css-explorer-item-" + ptid);
 
         $.each(rbm_tid_children[ptid], function(idx, tid){
             child  = "<div id='css-explorer-item-" + tid + "' class='css-explorer-item css-explorer-level-" + childLvl + "'";
@@ -18,20 +27,24 @@ function jsfunc_explorerToggleTag(expander, ptid, lvl)
             if(rbm_tid_children[tid] != undefined)
                 child += "<div class='css-explorer-expand' onclick='jsfunc_explorerToggleTag(this, " + tid + ", " + childLvl + ")'></div>";
 
-            $("#" + container).append(child + "<div class='css-explorer-tag'>" + rbm_tid_to_tname[tid] + "</div></div>");
+            $(container).append(child + "<div class='css-explorer-tag'>" + rbm_tid_to_tname[tid] + "</div></div>");
 
-            // Enable drag'n'drop now that the child has been added to the DOM
-            jsfunc_explorerEnableDragAndDrop(tid);
+            // Enable item drag'n'drop now that the child has been added to the DOM
+            jsfunc_explorerEnableItemDND(tid);
         });
 
-        $("#" + container).slideDown(200);
+        $(container).slideDown(rbm_consts.EXPLORER_ANIM_LEN);
     }
     else
     {
-        $("#" + container + " .css-explorer-item").droppable("destroy");
-        $("#" + container + " .css-explorer-item").draggable("destroy");
+        var children = $(container + " .css-explorer-item");
 
-        $("#" + container).slideUp(200, function(){ this.remove() });
+        // Destroy all draggable/droppable children
+        children.droppable("destroy");
+        children.draggable("destroy");
+
+        // Remove the container once the animation over
+        $(container).slideUp(rbm_consts.EXPLORER_ANIM_LEN, function(){ this.remove() });
     }
 
     // Expand <-> Collapse
@@ -46,17 +59,11 @@ function jsfunc_explorerCollapseAll()
 
 function jsfunc_explorerExpandAll()
 {
-    // Loop until there's no more expandable elements
-    while(true)
-    {
-        var expandable = $(".css-explorer-expand");
-
-        if(expandable.length == 0) break;
-        else                       expandable.trigger("click");
-    }
+    // Loop until there's no more expandable element
+    while($(".css-explorer-expand").trigger("click").length != 0);
 }
 
-function jsfunc_explorerEnableDragAndDrop(tid)
+function jsfunc_explorerEnableItemDND(tid)
 {
     var item = "#css-explorer-item-" + tid;
 
@@ -76,28 +83,24 @@ function jsfunc_explorerEnableDragAndDrop(tid)
     });
 }
 
-var mExplorerSelectedTag = -1;
-
 function jsfunc_explorerSelectTag(tid)
 {
-    $("#css-explorer-item-" + mExplorerSelectedTag).removeClass("css-explorer-item-selected");
+    $("#css-explorer-item-" + rbm_globals.explorerSelectedTag).removeClass("css-explorer-item-selected", rbm_consts.EXPLORER_ANIM_LEN);
     $("#css-explorer-item-" + tid).addClass("css-explorer-item-selected");
 
-    mExplorerSelectedTag = tid;
+    rbm_globals.explorerSelectedTag = tid;
 }
 
-function jsfunc_onReady()
-{
-    // JQuery default settings for AJAX requests
+$(document).ready(function(){
+
+    jsfunc_explorerEnableItemDND(0);
+    jsfunc_explorerEnableItemDND(25);
+    jsfunc_explorerEnableItemDND(59);
+
+    // Default settings for AJAX requests
     $.ajaxSetup({
         url:   "ajax/ajax.php",
         type:  "GET",
         cache: false,
     });
-
-    jsfunc_explorerEnableDragAndDrop(0);
-    jsfunc_explorerEnableDragAndDrop(25);
-    jsfunc_explorerEnableDragAndDrop(59);
-}
-
-$(document).ready(jsfunc_onReady);
+});
