@@ -85,10 +85,14 @@ function jsfunc_explorerEnableItemDND(tid)
 
 function jsfunc_explorerSelectTag(tid)
 {
-    $("#css-explorer-item-" + rbm_globals.explorerSelectedTag).removeClass("css-explorer-item-selected", rbm_consts.EXPLORER_ANIM_LEN);
-    $("#css-explorer-item-" + tid).addClass("css-explorer-item-selected");
+    // Clicking on the selected item should do nothing
+    if(tid != rbm_globals.explorerSelectedTag)
+    {
+        $("#css-explorer-item-" + rbm_globals.explorerSelectedTag).removeClass("css-explorer-item-selected", rbm_consts.EXPLORER_ANIM_LEN);
+        $("#css-explorer-item-" + tid).addClass("css-explorer-item-selected");
 
-    rbm_globals.explorerSelectedTag = tid;
+        rbm_globals.explorerSelectedTag = tid;
+    }
 }
 
 $(document).ready(function(){
