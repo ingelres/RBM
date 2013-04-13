@@ -52,20 +52,20 @@
         <button onclick="jsfunc_explorerCollapseAll()">Collapse All</button>
 
         <div id="css-explorer">
-            <div id="css-explorer-item-25" class="css-explorer-item css-explorer-level-1" onclick="jsfunc_explorerSelectTag(25)">
+            <div id="css-explorer-item-25" class="css-explorer-item css-explorer-level-1">
                 <div class="css-explorer-handle"></div>
                 <div class="css-explorer-expander css-explorer-expand" onclick="jsfunc_explorerToggleTag(this, 25, 1)"></div>
-                <div class="css-explorer-tag">Code</div>
+                <div class="css-explorer-tag" onclick="jsfunc_explorerSelectTag(25)">Code</div>
             </div>
-            <div id="css-explorer-item-0" class="css-explorer-item css-explorer-level-1" onclick="jsfunc_explorerSelectTag(0)">
+            <div id="css-explorer-item-0" class="css-explorer-item css-explorer-level-1">
                 <div class="css-explorer-handle"></div>
                 <div class="css-explorer-expander css-explorer-expand" onclick="jsfunc_explorerToggleTag(this, 0, 1)"></div>
-                <div class="css-explorer-tag">Game</div>
+                <div class="css-explorer-tag" onclick="jsfunc_explorerSelectTag(0)">Game</div>
             </div>
-            <div id="css-explorer-item-59" class="css-explorer-item css-explorer-level-1" onclick="jsfunc_explorerSelectTag(59)">
+            <div id="css-explorer-item-59" class="css-explorer-item css-explorer-level-1">
                 <div class="css-explorer-handle"></div>
                 <div class="css-explorer-expander"></div>
-                <div class="css-explorer-tag">Tools</div>
+                <div class="css-explorer-tag" onclick="jsfunc_explorerSelectTag(59)">Tools</div>
             </div>
         </div>
 

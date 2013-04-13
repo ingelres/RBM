@@ -21,15 +21,13 @@ function jsfunc_explorerToggleTag(expander, ptid, lvl)
         $("<div id='" + name + "' style='display: none'></div>").insertAfter("#css-explorer-item-" + ptid);
 
         $.each(rbm_tid_children[ptid], function(idx, tid){
-            child  = "<div id='css-explorer-item-" + tid + "' class='css-explorer-item css-explorer-level-" + childLvl + "'";
-            child += " onclick='jsfunc_explorerSelectTag(" + tid + ")'><div class='css-explorer-handle'></div>";
+            child = "<div id='css-explorer-item-" + tid + "' class='css-explorer-item css-explorer-level-" + childLvl + "'>"
+                        + "<div class='css-explorer-handle'></div><div class='css-explorer-expander";
 
-            child += "<div class='css-explorer-expander";
+            if(rbm_tid_children[tid] != undefined)
+                child += " css-explorer-expand' onclick='jsfunc_explorerToggleTag(this, " + tid + ", " + childLvl + ")";
 
-            if(rbm_tid_children[tid] != undefined) child += " css-explorer-expand' onclick='jsfunc_explorerToggleTag(this, " + tid + ", " + childLvl + ")'></div>";
-            else                                   child += "'></div>";
-
-            $(container).append(child + "<div class='css-explorer-tag'>" + rbm_tid_to_tname[tid] + "</div></div>");
+            $(container).append(child + "'></div><div class='css-explorer-tag' onclick='jsfunc_explorerSelectTag(" + tid + ")'>" + rbm_tid_to_tname[tid] + "</div></div>");
 
             // Enable item drag'n'drop now that the child has been added to the DOM
             jsfunc_explorerEnableItemDND(tid);
