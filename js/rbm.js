@@ -24,8 +24,10 @@ function jsfunc_explorerToggleTag(expander, ptid, lvl)
             child  = "<div id='css-explorer-item-" + tid + "' class='css-explorer-item css-explorer-level-" + childLvl + "'";
             child += " onclick='jsfunc_explorerSelectTag(" + tid + ")'><div class='css-explorer-handle'></div>";
 
-            if(rbm_tid_children[tid] != undefined)
-                child += "<div class='css-explorer-expand' onclick='jsfunc_explorerToggleTag(this, " + tid + ", " + childLvl + ")'></div>";
+            child += "<div class='css-explorer-expander";
+
+            if(rbm_tid_children[tid] != undefined) child += " css-explorer-expand' onclick='jsfunc_explorerToggleTag(this, " + tid + ", " + childLvl + ")'></div>";
+            else                                   child += "'></div>";
 
             $(container).append(child + "<div class='css-explorer-tag'>" + rbm_tid_to_tname[tid] + "</div></div>");
 

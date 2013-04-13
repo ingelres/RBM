@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    font-size: 8pt;
+    font-size: 9pt;
     font-family: Helvetica, sans-serif;
 }
 
@@ -14,36 +14,33 @@ body {
     padding: 5px 0;
 }
 
-/* Skip 18px per level (18px is the distance between the left of the expander and the tag name) */
-.css-explorer-level-1 { padding-left:  0px; }
-.css-explorer-level-2 { padding-left: 18px; }
-.css-explorer-level-3 { padding-left: 36px; }
-.css-explorer-level-4 { padding-left: 54px; }
-.css-explorer-level-5 { padding-left: 72px; }
-
 .css-explorer-item:hover {
     background: #C1DEC3 url('img/selected-shadow.png') no-repeat right center;
 }
 
 .css-explorer-item-selected, .css-explorer-item-selected:hover {
-    font-weight: bold;
     background: #83C988 url('img/selected.png') no-repeat right center;
+    font-weight: bold;
 }
 
-.css-explorer-droppable {
-    background-color: #0000AA;
-}
-
-.css-explorer-tag {
-    /* Add 6px between the expander and the tag name (which is 12px large) */
-    padding-left: 18px;
-}
-
-.css-explorer-expand, .css-explorer-collapse {
+/* An handle for moving items around, visible only when the item is hovered */
+/* An expander to expand / collapse items */
+.css-explorer-handle, .css-explorer-expander {
     float: left;
-    width: 12px;
+    width: 20px;
     height: 12px;
+    cursor: move;
+
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.css-explorer-expander {
     cursor: pointer;
+}
+
+.css-explorer-item:hover .css-explorer-handle {
+    background-image: url('img/handle.png');
 }
 
 .css-explorer-expand {
@@ -54,14 +51,23 @@ body {
     background-image: url('img/collapse.png');
 }
 
-.css-explorer-handle {
-    float: left;
-    width: 12px;
-    height: 12px;
-    cursor: move;
-    background-image: url('img/handle.png');
+/* Skip 20px per level (20px is the width of the expander) */
+.css-explorer-level-1 .css-explorer-expander { margin-left:  0px; }
+.css-explorer-level-2 .css-explorer-expander { margin-left: 20px; }
+.css-explorer-level-3 .css-explorer-expander { margin-left: 40px; }
+.css-explorer-level-4 .css-explorer-expander { margin-left: 50px; }
+.css-explorer-level-5 .css-explorer-expander { margin-left: 80px; }
+
+/* Class added by JQueryUI when dragging an item over a droppable item */
+.css-explorer-droppable {
+    background-color: #0000AA;
 }
 
+/* The name of the tag */
+.css-explorer-tag {
+}
+
+/* Footer of the page */
 #css-footer {
     margin-top: 20px;
     text-align: center;

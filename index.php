@@ -54,16 +54,17 @@
         <div id="css-explorer">
             <div id="css-explorer-item-25" class="css-explorer-item css-explorer-level-1" onclick="jsfunc_explorerSelectTag(25)">
                 <div class="css-explorer-handle"></div>
-                <div class="css-explorer-expand" onclick="jsfunc_explorerToggleTag(this, 25, 1)"></div>
+                <div class="css-explorer-expander css-explorer-expand" onclick="jsfunc_explorerToggleTag(this, 25, 1)"></div>
                 <div class="css-explorer-tag">Code</div>
             </div>
             <div id="css-explorer-item-0" class="css-explorer-item css-explorer-level-1" onclick="jsfunc_explorerSelectTag(0)">
                 <div class="css-explorer-handle"></div>
-                <div class="css-explorer-expand" onclick="jsfunc_explorerToggleTag(this, 0, 1)"></div>
+                <div class="css-explorer-expander css-explorer-expand" onclick="jsfunc_explorerToggleTag(this, 0, 1)"></div>
                 <div class="css-explorer-tag">Game</div>
             </div>
             <div id="css-explorer-item-59" class="css-explorer-item css-explorer-level-1" onclick="jsfunc_explorerSelectTag(59)">
                 <div class="css-explorer-handle"></div>
+                <div class="css-explorer-expander"></div>
                 <div class="css-explorer-tag">Tools</div>
             </div>
         </div>
