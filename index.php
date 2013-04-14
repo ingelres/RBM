@@ -44,6 +44,7 @@
 
         <style>
             <?php include("./css/rbm.css"); ?>
+            <?php include("./css/jqueryui.css"); ?>
         </style>
     </head>
 
@@ -51,7 +52,7 @@
 
         <button onclick="jsfunc_explorerExpandAll()">Expand All</button>
         <button onclick="jsfunc_explorerCollapseAll()">Collapse All</button>
-        <input type="text" onchange="jsfunc_explorerShowTag(this.value)" />
+        <input type="text" id="css-search-by-tag" class="css-search-box" onchange="jsfunc_explorerShowTag(this.value)" placeholder="<?=" " . _("Type a tag name...")?>"/>
 
         <div id="css-explorer">
             <div id="css-explorer-item-25" class="css-explorer-item css-explorer-level-1">

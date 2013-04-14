@@ -67,6 +67,14 @@ body {
 .css-explorer-tag {
 }
 
+/* Search boxes have a small search icon on the right side */
+.css-search-box {
+    padding-right: 20px;
+    background-repeat: no-repeat;
+    background-position: center right;
+    background-image: url('./img/search.png');
+}
+
 /* Footer of the page */
 #css-footer {
     margin-top: 20px;

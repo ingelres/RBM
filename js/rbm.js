@@ -158,6 +158,10 @@ $(document).ready(function(){
     jsfunc_explorerEnableItemDND(25);
     jsfunc_explorerEnableItemDND(59);
 
+/*
+    $("#css-search-by-tag").autocomplete({source: Object.keys(rbm_tname_to_tid)});
+*/
+
     // Default settings for AJAX requests
     $.ajaxSetup({
         url:   "ajax/ajax.php",
