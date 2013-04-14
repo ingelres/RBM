@@ -21,13 +21,25 @@ function jsfunc_explorerToggleTag(expander, ptid, lvl)
         $("<div id='" + name + "' style='display: none'></div>").insertAfter("#css-explorer-item-" + ptid);
 
         $.each(rbm_tid_children[ptid], function(idx, tid){
+
+            fnSelectTag = "jsfunc_explorerSelectTag(" + tid + ")";
+
             child = "<div id='css-explorer-item-" + tid + "' class='css-explorer-item css-explorer-level-" + childLvl + "'>"
                         + "<div class='css-explorer-handle'></div><div class='css-explorer-expander";
 
             if(rbm_tid_children[tid] != undefined)
-                child += " css-explorer-expand' onclick='jsfunc_explorerToggleTag(this, " + tid + ", " + childLvl + ")";
+            {
+                // Add code to expand/collapse this item
+                child += " css-explorer-expand' onclick='jsfunc_explorerToggleTag(this, " + tid + ", " + childLvl + ")'>";
+            }
+            else
+            {
+                // This item has no child, so we replace the expand/collapse code by the selectTag code
+                // This avoids a dead zone (i.e., clicking on the expander placeholder would have no effect otherwise)
+                child += "' onclick='" + fnSelectTag + "'>";
+            }
 
-            $(container).append(child + "'></div><div class='css-explorer-tag' onclick='jsfunc_explorerSelectTag(" + tid + ")'>" + rbm_tid_to_tname[tid] + "</div></div>");
+            $(container).append(child + "</div><div class='css-explorer-tag' onclick='" + fnSelectTag + "'>" + rbm_tid_to_tname[tid] + "</div></div>");
 
             // Enable item drag'n'drop now that the child has been added to the DOM
             jsfunc_explorerEnableItemDND(tid);
@@ -45,6 +57,8 @@ function jsfunc_explorerToggleTag(expander, ptid, lvl)
 
         // Remove the container once the animation over
         $(container).slideUp(rbm_consts.EXPLORER_ANIM_LEN, function(){ this.remove() });
+
+        // FIXME If one of the children is selected, selection should be updated
     }
 
     // Expand <-> Collapse

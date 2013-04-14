@@ -29,7 +29,6 @@ body {
     float: left;
     width: 20px;
     height: 26px;
-    cursor: move;
 
     background-repeat: no-repeat;
     background-position: center center;
@@ -40,6 +39,7 @@ body {
 }
 
 .css-explorer-item:hover .css-explorer-handle {
+    cursor: move;
     background-image: url('img/handle.png');
 }
 
