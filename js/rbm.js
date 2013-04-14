@@ -49,16 +49,18 @@ function jsfunc_explorerToggleTag(expander, ptid, lvl)
     }
     else
     {
-        var children = $(container + " .css-explorer-item");
+        var descendants = $(container + " .css-explorer-item");
 
-        // Destroy all draggable/droppable children
-        children.droppable("destroy");
-        children.draggable("destroy");
+        // Destroy all draggable/droppable descendants (not only the direct children)
+        descendants.droppable("destroy");
+        descendants.draggable("destroy");
 
         // Remove the container once the animation over
         $(container).slideUp(rbm_consts.EXPLORER_ANIM_LEN, function(){ this.remove() });
 
-        // FIXME If one of the children is selected, selection should be updated
+        // Clear selection if it's a descendant of the item we're collapsing
+        if(rbm_globals.explorerSelectedTag != -1 && jsfunc_tidIsDescendant(rbm_globals.explorerSelectedTag, ptid))
+            jsfunc_explorerSelectTag(-1);
     }
 
     // Expand <-> Collapse
@@ -103,7 +105,13 @@ function jsfunc_explorerSelectTag(tid)
     if(tid != rbm_globals.explorerSelectedTag)
     {
         $("#css-explorer-item-" + rbm_globals.explorerSelectedTag).removeClass("css-explorer-item-selected", rbm_consts.EXPLORER_ANIM_LEN);
-        $("#css-explorer-item-" + tid).addClass("css-explorer-item-selected");
+
+        if(tid == -1)
+        {
+            // TODO Should remove the things that depend on the selected tag (e.g., bookmarks)
+        }
+        else
+            $("#css-explorer-item-" + tid).addClass("css-explorer-item-selected");
 
         rbm_globals.explorerSelectedTag = tid;
     }

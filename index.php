@@ -38,6 +38,7 @@
 
         <script>
             <?php include("./js/sample-data.js"); ?>
+            <?php include("./js/libtags.js"); ?>
             <?php include("./js/rbm.js"); ?>
         </script>
 
