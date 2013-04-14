@@ -55,7 +55,7 @@ body {
 .css-explorer-level-1 .css-explorer-expander { margin-left:  0px; }
 .css-explorer-level-2 .css-explorer-expander { margin-left: 20px; }
 .css-explorer-level-3 .css-explorer-expander { margin-left: 40px; }
-.css-explorer-level-4 .css-explorer-expander { margin-left: 50px; }
+.css-explorer-level-4 .css-explorer-expander { margin-left: 60px; }
 .css-explorer-level-5 .css-explorer-expander { margin-left: 80px; }
 
 /* Class added by JQueryUI when dragging an item over a droppable item */
