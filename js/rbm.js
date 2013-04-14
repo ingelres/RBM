@@ -111,9 +111,44 @@ function jsfunc_explorerSelectTag(tid)
             // TODO Should remove the things that depend on the selected tag (e.g., bookmarks)
         }
         else
+        {
             $("#css-explorer-item-" + tid).addClass("css-explorer-item-selected");
 
+            // TODO Make an AJAX request to get the associated bookmarks
+        }
+
         rbm_globals.explorerSelectedTag = tid;
+    }
+}
+
+function jsfunc_explorerShowTag(tname)
+{
+    var tid = rbm_tname_to_tid[tname];
+
+    if(tid != undefined)
+    {
+        // Construct the tag hierarchy from the given tag to the top level
+        var ptid      = rbm_tid_parents[tid];
+        var hierarchy = [];
+
+        while(ptid != undefined)
+        {
+            hierarchy.unshift(ptid);
+            ptid = rbm_tid_parents[ptid];
+        }
+
+        // Go through the hierarchy of tags and open the collapsed ones
+        $.each(hierarchy, function(idx, val){
+            var expander = "#css-explorer-item-" + val + " > .css-explorer-expand";
+
+            if($(expander).length != 0)
+                jsfunc_explorerToggleTag(expander, val, idx+1);
+        });
+
+        // TODO Scroll to the tag
+
+        // Now that the hierarchy has been expanded, the item exists and can be selected
+        jsfunc_explorerSelectTag(tid);
     }
 }
 

@@ -51,6 +51,7 @@
 
         <button onclick="jsfunc_explorerExpandAll()">Expand All</button>
         <button onclick="jsfunc_explorerCollapseAll()">Collapse All</button>
+        <input type="text" onchange="jsfunc_explorerShowTag(this.value)" />
 
         <div id="css-explorer">
             <div id="css-explorer-item-25" class="css-explorer-item css-explorer-level-1">

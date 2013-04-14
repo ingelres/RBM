@@ -12,6 +12,20 @@ var rbm_tid_to_tname = {
     59: 'Tools',
 }
 
+var rbm_tname_to_tid = {
+    'Games':          0,
+    'DS':            11,
+    'PS3':           12,
+    'Dark Souls':    13,
+    'Borderlands 2': 24,
+    'Code':          25,
+    'C':             36,
+    'C++':           47,
+    'JavaScript':    48,
+    'Python':        58,
+    'Tools':         59,
+}
+
 var rbm_tid_children = {
      0: Array(11, 12),
     12: Array(24, 13),
