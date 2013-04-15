@@ -25,17 +25,19 @@ body {
 
 /* An handle for moving items around, visible only when the item is hovered */
 /* An expander to expand / collapse items */
-.css-explorer-handle, .css-explorer-expander {
+.css-explorer-handle,
+.css-explorer-expander-level-1,
+.css-explorer-expander-level-2,
+.css-explorer-expander-level-3,
+.css-explorer-expander-level-4,
+.css-explorer-expander-level-5 {
     float: left;
     width: 20px;
     height: 26px;
+    cursor: pointer;
 
     background-repeat: no-repeat;
     background-position: center center;
-}
-
-.css-explorer-expander {
-    cursor: pointer;
 }
 
 .css-explorer-item:hover .css-explorer-handle {
@@ -43,35 +45,28 @@ body {
     background-image: url('img/handle.png');
 }
 
-.css-explorer-expand {
-    background-image: url('img/expand.png');
-}
-
-.css-explorer-collapse {
-    background-image: url('img/collapse.png');
-}
-
 /* Skip 20px per level (20px is the width of the expander) */
-.css-explorer-level-1 .css-explorer-expander { margin-left:  0px; }
-.css-explorer-level-2 .css-explorer-expander { margin-left: 20px; }
-.css-explorer-level-3 .css-explorer-expander { margin-left: 40px; }
-.css-explorer-level-4 .css-explorer-expander { margin-left: 60px; }
-.css-explorer-level-5 .css-explorer-expander { margin-left: 80px; }
+.css-explorer-expander-level-2 { margin-left: 20px; }
+.css-explorer-expander-level-3 { margin-left: 40px; }
+.css-explorer-expander-level-4 { margin-left: 60px; }
+.css-explorer-expander-level-5 { margin-left: 80px; }
+
+/* Specific expand / collapse images */
+.css-explorer-expand   { background-image: url('img/expand.png');   }
+.css-explorer-collapse { background-image: url('img/collapse.png'); }
 
 /* Class added by JQueryUI when dragging an item over a droppable item */
 .css-explorer-droppable {
     background-color: #0000AA;
 }
 
-/* Search boxes have a small search icon on the right side */
-.css-search-box {
+#css-search-by-tag {
     padding: 5px 20px 5px 4px;
     background-repeat: no-repeat;
     background-position: center right;
     background-image: url('./img/search.png');
 }
 
-/* Footer of the page */
 #css-footer {
     margin-top: 20px;
     text-align: center;

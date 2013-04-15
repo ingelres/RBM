@@ -4,70 +4,64 @@ var rbm_consts = {
 }
 
 var rbm_globals = {
-    explorerSelectedTag: -1,
+    selectedTagId: -1,
 }
 
 function jsfunc_explorerToggleTag(ptid, lvl)
 {
-    var item        = "css-explorer-item-" + ptid;
-    var expander    = "#" + item + " > .css-explorer-expander";
-    var container   = item + "-children";
-    var containerId = "#" + container;
+    var itemName = "css-explorer-item-" + ptid;
+    var expander = $("#" + itemName + "-expander");
 
-    if($(expander).hasClass("css-explorer-expand"))
+    if(expander.hasClass("css-explorer-expand"))
     {
         var childLvl = Math.min(lvl+1, rbm_consts.EXPLORER_MAX_LVL);
-
-        // The container with the children is hidden at first so that we can show it with an animation
-        $("<div id='" + container + "' style='display: none'></div>").insertAfter("#css-explorer-item-" + ptid);
+        var children = "<div id='" + itemName + "-children' style='display: none'>";
 
         $.each(rbm_tid_children[ptid], function(idx, tid){
 
-            child = "<div id='css-explorer-item-" + tid + "' class='css-explorer-item css-explorer-level-" + childLvl + "'>"
-                + "<div class='css-explorer-handle'></div><div class='css-explorer-expander";
-
-            fnSelectTag = "jsfunc_explorerSelectTag(" + tid + ")";
+            children += "<div id='css-explorer-item-" + tid + "' class='css-explorer-item'>";
+            children += "<div class='css-explorer-handle'></div>";
+            children += "<div id='css-explorer-item-" + tid + "-expander' class='css-explorer-expander-level-" + childLvl;
 
             if(rbm_tid_children[tid] == undefined)
             {
                 // When an item has no child, use the selectTag code to avoid a dead zone (clicking on the expander placeholder would have no effect otherwise)
-                child += "' onclick='" + fnSelectTag + "'>";
+                children += "' onclick='jsfunc_explorerSelectTag(" + tid + ")'>";
             }
             else
-                child += " css-explorer-expand' onclick='jsfunc_explorerToggleTag(" + tid + ", " + childLvl + ")'>";
+                children += " css-explorer-expand' onclick='jsfunc_explorerToggleTag(" + tid + ", " + childLvl + ")'>";
 
-            $(containerId).append(child + "</div><div class='css-explorer-tag' onclick='" + fnSelectTag + "'>" + rbm_tid_to_tname[tid] + "</div></div>");
-
-            // Enable item drag'n'drop now that the child has been added to the DOM
-            jsfunc_explorerEnableItemDND(tid);
+            children += "</div><div onclick='jsfunc_explorerSelectTag(" + tid + ")''>" + rbm_tid_to_tname[tid] + "</div></div>";
         });
 
-        $(containerId).slideDown(rbm_consts.EXPLORER_ANIM_LEN);
+        $(children).insertAfter("#" + itemName).slideDown(rbm_consts.EXPLORER_ANIM_LEN);
+
+        // We must do this outside of the above loop, for the items must be present in the DOM when calling the function
+        $.each(rbm_tid_children[ptid], function(idx, tid){
+            jsfunc_explorerEnableItemDND(tid);
+        });
     }
     else
     {
-        var allDescendants = $(containerId + " .css-explorer-item");
-
         // Destroy all draggable/droppable descendants (not only the direct children)
-        allDescendants.droppable("destroy");
-        allDescendants.draggable("destroy");
+        $("#" + itemName + "-children .css-explorer-item").draggable("destroy").droppable("destroy");
 
         // Remove the container once the animation over
-        $(containerId).slideUp(rbm_consts.EXPLORER_ANIM_LEN, function(){ this.remove() });
+        $("#" + itemName + "-children").slideUp(rbm_consts.EXPLORER_ANIM_LEN, function(){ this.remove() });
 
         // Clear selection if it's a descendant of the item we're collapsing
-        if(jsfunc_tidIsDescendant(rbm_globals.explorerSelectedTag, ptid))
+        if(jsfunc_tidIsDescendant(rbm_globals.selectedTagId, ptid))
             jsfunc_explorerSelectTag(-1);
     }
 
     // Expand <-> Collapse
-    $(expander).toggleClass("css-explorer-expand css-explorer-collapse");
+    expander.toggleClass("css-explorer-expand css-explorer-collapse");
 }
 
 function jsfunc_explorerCollapseAll()
 {
     // Collapse all tags at level 1: That's sufficient to collapse everything no matter how deep the tree is opened
-    $(".css-explorer-level-1 > .css-explorer-collapse").trigger("click");
+    $(".css-explorer-expander-level-1.css-explorer-collapse").trigger("click");
 }
 
 function jsfunc_explorerExpandAll()
@@ -99,9 +93,9 @@ function jsfunc_explorerEnableItemDND(tid)
 function jsfunc_explorerSelectTag(tid)
 {
     // Clicking on the selected item should do nothing
-    if(tid != rbm_globals.explorerSelectedTag)
+    if(tid != rbm_globals.selectedTagId)
     {
-        $("#css-explorer-item-" + rbm_globals.explorerSelectedTag).removeClass("css-explorer-item-selected", rbm_consts.EXPLORER_ANIM_LEN);
+        $("#css-explorer-item-" + rbm_globals.selectedTagId).removeClass("css-explorer-item-selected", rbm_consts.EXPLORER_ANIM_LEN);
 
         if(tid == -1)
         {
@@ -114,7 +108,7 @@ function jsfunc_explorerSelectTag(tid)
             // TODO Make an AJAX request to get the associated bookmarks
         }
 
-        rbm_globals.explorerSelectedTag = tid;
+        rbm_globals.selectedTagId = tid;
     }
 }
 
@@ -126,7 +120,7 @@ function jsfunc_explorerScrollToTag(tname)
     {
         // Go through the hierarchy of tags and open the collapsed ones
         $.each(jsfunc_getHierarchy(tid), function(idx, val){
-            if($("#css-explorer-item-" + val + " > .css-explorer-expand").length != 0)
+            if($("#css-explorer-item-" + val + "-expander").hasClass("css-explorer-expand"))
                 jsfunc_explorerToggleTag(val, idx+1);
         });
 
