@@ -50,7 +50,7 @@ function jsfunc_explorerToggleTag(ptid, lvl)
         $("#" + itemName + "-children").slideUp(rbm_consts.EXPLORER_ANIM_LEN, function(){ this.remove() });
 
         // Clear selection if it's a descendant of the item we're collapsing
-        if(jsfunc_tidIsDescendant(rbm_globals.selectedTagId, ptid))
+        if(libtags.jsfunc_tidIsDescendant(rbm_globals.selectedTagId, ptid))
             jsfunc_explorerSelectTag(-1);
     }
 
@@ -119,7 +119,7 @@ function jsfunc_explorerScrollToTag(tname)
     if(tid != undefined)
     {
         // Go through the hierarchy of tags and open the collapsed ones
-        $.each(jsfunc_getHierarchy(tid), function(idx, val){
+        $.each(libtags.jsfunc_getParents(tid), function(idx, val){
             if($("#css-explorer-item-" + val + "-expander").hasClass("css-explorer-expand"))
                 jsfunc_explorerToggleTag(val, idx+1);
         });
