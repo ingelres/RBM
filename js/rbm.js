@@ -127,18 +127,8 @@ function jsfunc_explorerShowTag(tname)
 
     if(tid != undefined)
     {
-        // Construct the tag hierarchy from the given tag to the top level
-        var ptid      = rbm_tid_parents[tid];
-        var hierarchy = [];
-
-        while(ptid != undefined)
-        {
-            hierarchy.unshift(ptid);
-            ptid = rbm_tid_parents[ptid];
-        }
-
         // Go through the hierarchy of tags and open the collapsed ones
-        $.each(hierarchy, function(idx, val){
+        $.each(jsfunc_getHierarchy(tid), function(idx, val){
             var expander = "#css-explorer-item-" + val + " > .css-explorer-expand";
 
             if($(expander).length != 0)

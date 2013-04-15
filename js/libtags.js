@@ -9,3 +9,13 @@ function jsfunc_tidIsDescendant(tid, ptid)
         else                            tid = parentTid;
     }
 }
+
+function jsfunc_getHierarchy(tid)
+{
+    var hierarchy = [];
+
+    while((tid = rbm_tid_parents[tid]) != undefined)
+        hierarchy.push(tid);
+
+    return hierarchy.reverse();
+}
