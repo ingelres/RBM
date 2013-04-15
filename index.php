@@ -63,7 +63,7 @@
             <div id="css-explorer-item-0" class="css-explorer-item css-explorer-level-1">
                 <div class="css-explorer-handle"></div>
                 <div class="css-explorer-expander css-explorer-expand" onclick="jsfunc_explorerToggleTag(this, 0, 1)"></div>
-                <div class="css-explorer-tag" onclick="jsfunc_explorerSelectTag(0)">Game</div>
+                <div class="css-explorer-tag" onclick="jsfunc_explorerSelectTag(0)">Games</div>
             </div>
             <div id="css-explorer-item-59" class="css-explorer-item css-explorer-level-1">
                 <div class="css-explorer-handle"></div>
