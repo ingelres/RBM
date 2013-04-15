@@ -61,10 +61,10 @@ body {
 }
 
 #css-search-by-tag {
-    padding: 5px 20px 5px 4px;
-    background-repeat: no-repeat;
-    background-position: center right;
-    background-image: url('./img/search.png');
+    padding: 5px 26px 5px 6px;
+    background: #FFF url('./img/search.png') no-repeat center right;
+    border: 1px solid #CCC;
+    border-radius: 3px;
 }
 
 #css-footer {
