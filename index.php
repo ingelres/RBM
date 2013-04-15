@@ -52,7 +52,7 @@
 
         <button onclick="jsfunc_explorerExpandAll()">Expand All</button>
         <button onclick="jsfunc_explorerCollapseAll()">Collapse All</button>
-        <input type="text" id="css-search-by-tag" class="css-search-box" onchange="jsfunc_explorerShowTag(this.value)" placeholder="<?=" " . _("Type a tag name...")?>"/>
+        <input type="text" id="css-search-by-tag" class="css-search-box" onchange="jsfunc_explorerScrollToTag(this.value)" placeholder="<?=" " . _("Type a tag name...")?>"/>
 
         <div id="css-explorer">
             <div id="css-explorer-item-25" class="css-explorer-item css-explorer-level-1">
@@ -67,7 +67,7 @@
             </div>
             <div id="css-explorer-item-59" class="css-explorer-item css-explorer-level-1">
                 <div class="css-explorer-handle"></div>
-                <div class="css-explorer-expander"></div>
+                <div class="css-explorer-expander" onclick="jsfunc_explorerSelectTag(59)"></div>
                 <div class="css-explorer-tag" onclick="jsfunc_explorerSelectTag(59)">Tools</div>
             </div>
         </div>
