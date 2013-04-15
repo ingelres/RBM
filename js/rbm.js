@@ -133,9 +133,9 @@ function jsfunc_explorerScrollToTag(tname)
 
 $(document).ready(function(){
 
-    jsfunc_explorerEnableItemDND(0);
-    jsfunc_explorerEnableItemDND(25);
-    jsfunc_explorerEnableItemDND(59);
+    $.each(rbm_top_level_tid, function(idx, val){
+        jsfunc_explorerEnableItemDND(val);
+    });
 
 /*
     $("#css-search-by-tag").autocomplete({source: Object.keys(rbm_tname_to_tid)});

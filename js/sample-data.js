@@ -26,6 +26,8 @@ var rbm_tname_to_tid = {
     'Tools':         59,
 }
 
+var rbm_top_level_tid = Array(0, 25, 59);
+
 var rbm_tid_children = {
      0: Array(11, 12),
     12: Array(24, 13),
