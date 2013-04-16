@@ -127,7 +127,7 @@ function jsfunc_explorerEnableItemDND(tid, level)
     $(item).droppable({
         tolerance: "pointer",
         hoverClass: "css-explorer-droppable",
-        accept: function(elt){ return $(item).parents("#" + elt.attr("tid") + "-children").length == 0 },
+        accept: function(drg){ return !libtags.jsfunc_tidIsDescendant(tid, drg.data("tid")) && rbm_tid_parents[drg.data("tid")] != tid},
         drop: function(evt, ui){jsfunc_explorerReparent($(ui.draggable).data("tid"), tid)},
     });
 }
