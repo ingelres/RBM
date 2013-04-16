@@ -68,7 +68,7 @@
             </div>
             <div id="css-explorer-item-59" class="css-explorer-item">
                 <div class="css-explorer-handle"></div>
-                <div id="css-explorer-item-59-expander" class="css-explorer-expander-level-1" onclick="jsfunc_explorerSelectTag(59)"></div>
+                <div id="css-explorer-item-59-expander" class="css-explorer-expander-level-1" onclick="jsfunc_onExplorerExpander($(this), 59, 1)"></div>
                 <div onclick="jsfunc_explorerSelectTag(59)">Tools</div>
             </div>
         </div>
