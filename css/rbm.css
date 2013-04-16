@@ -25,12 +25,7 @@ body {
 
 /* An handle for moving items around, visible only when the item is hovered */
 /* An expander to expand / collapse items */
-.css-explorer-handle,
-.css-explorer-expander-level-1,
-.css-explorer-expander-level-2,
-.css-explorer-expander-level-3,
-.css-explorer-expander-level-4,
-.css-explorer-expander-level-5 {
+.css-explorer-handle, .css-explorer-expander {
     float: left;
     width: 20px;
     height: 26px;
@@ -44,12 +39,6 @@ body {
     cursor: move;
     background-image: url('img/handle.png');
 }
-
-/* Skip 20px per level (20px is the width of the expander) */
-.css-explorer-expander-level-2 { margin-left: 20px; }
-.css-explorer-expander-level-3 { margin-left: 40px; }
-.css-explorer-expander-level-4 { margin-left: 60px; }
-.css-explorer-expander-level-5 { margin-left: 80px; }
 
 /* Specific expand / collapse images */
 .css-explorer-expand   { background-image: url('img/expand.png');   }

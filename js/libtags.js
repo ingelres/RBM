@@ -93,6 +93,8 @@ var libtags = (function() {
             if(oldchildren.length == 1) delete rbm_tid_children[oldptid];
             else                        oldchildren.splice(oldchildren.indexOf(tid), 1);
         }
+        else
+            rbm_top_level_tid.splice(rbm_top_level_tid.indexOf(tid), 1);
 
         // Update the parent of tid
         rbm_tid_parents[tid] = ptid;

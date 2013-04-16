@@ -1,6 +1,7 @@
 var rbm_consts = {
-    EXPLORER_MAX_LVL:    5,
-    EXPLORER_ANIM_LEN: 200,
+    EXPLORER_MAX_LVL:               5,
+    EXPLORER_ANIM_LEN:            200,
+    EXPLORER_MARGIN_LEFT_PER_LVL:  20,
 }
 
 var rbm_globals = {
@@ -17,16 +18,16 @@ function jsfunc_onExplorerExpander(expander, tid)
 
 function jsfunc_explorerExpandTag(expander, ptid, animate)
 {
-    var childLvl = Math.min(libtags.jsfunc_getLevel(ptid)+1, rbm_consts.EXPLORER_MAX_LVL);
-    var children = "<div id='css-explorer-item-" + ptid + "-children' style='display: none'>";
+    var children   = "<div id='css-explorer-item-" + ptid + "-children' style='display: none'>";
+    var marginLeft = (Math.min(libtags.jsfunc_getLevel(ptid)+1, rbm_consts.EXPLORER_MAX_LVL)-1) * rbm_consts.EXPLORER_MARGIN_LEFT_PER_LVL;
 
     $.each(rbm_tid_children[ptid], function(idx, tid){
 
         children += "<div id='css-explorer-item-" + tid + "' class='css-explorer-item'><div class='css-explorer-handle'></div>";
-        children += "<div id='css-explorer-item-" + tid + "-expander' onclick='jsfunc_onExplorerExpander($(this), " + tid + ")' ";
+        children += "<div id='css-explorer-item-" + tid + "-expander' onclick='jsfunc_onExplorerExpander($(this), " + tid + ")' style='margin-left:" + marginLeft + "px' ";
 
-        if(rbm_tid_children[tid] == undefined) children += "class='css-explorer-expander-level-" + childLvl + "'></div>";
-        else                                   children += "class='css-explorer-expander-level-" + childLvl + " css-explorer-expand'></div>";
+        if(rbm_tid_children[tid] == undefined) children += "class='css-explorer-expander'></div>";
+        else                                   children += "class='css-explorer-expander css-explorer-expand'></div>";
 
         children += "<div onclick='jsfunc_explorerSelectTag(" + tid + ")''>" + rbm_tid_to_tname[tid] + "</div></div>";
     });
@@ -65,8 +66,10 @@ function jsfunc_explorerExpandAll()
 
 function jsfunc_explorerCollapseAll()
 {
-    // Collapse all tags at level 1: That's sufficient to collapse everything no matter how deep the tree is opened
-    $(".css-explorer-expander-level-1.css-explorer-collapse").trigger("click");
+    // Collapse all top-level tags
+    $.each(rbm_top_level_tid, function(idx, tid){
+        $("#css-explorer-item-" + tid + "-expander.css-explorer-collapse").trigger("click");
+    });
 }
 
 function jsfunc_explorerReparent(tid, ptid)
@@ -97,11 +100,17 @@ function jsfunc_explorerReparent(tid, ptid)
         item.after($("#css-explorer-item-" + tid + "-children"));
 
         // Here comes the pain... We have to adjust all levels
+        // Maybe we could find an easier way to manage levels...
         if(levelAfter != levelBefore)
         {
-            $("#css-explorer-item-" + tid + "-expander").removeClass("css-explorer-expander-level-" + levelBefore).addClass("css-explorer-expander-level-" + levelAfter);
+            $("#css-explorer-item-" + tid + "-expander").css("margin-left", (levelAfter-1) * rbm_consts.EXPLORER_MARGIN_LEFT_PER_LVL);
 
-            // FIXME The levels of all the children of the item are now incorrect...
+            // Now do it for all displayed children
+            var levelDiff = levelAfter - levelBefore;
+
+            $.each($("#css-explorer-item-" + tid + "-children .css-explorer-expander"), function(idx, elt){
+                $(elt).css("margin-left", parseInt($(elt).css("margin-left")) + levelDiff * rbm_consts.EXPLORER_MARGIN_LEFT_PER_LVL);
+            });
         }
     }
     else
