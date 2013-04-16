@@ -48,6 +48,27 @@ var libtags = (function() {
         return level;
     }
 
+    // Add tid to the children of ptid, keeping the list of children sorted by tname
+    function jsfunc_addToChildren(tid, ptid)
+    {
+        var tname    = rbm_tid_to_tname[tid].toLowerCase();
+        var children = rbm_tid_children[ptid];
+
+        var low = 0, high = children.length-1;
+
+        while(low <= high)
+        {
+            var middle     = Math.floor((low + high) / 2);
+            var comparison = tname.localeCompare(rbm_tid_to_tname[children[middle]].toLowerCase());
+
+            if(comparison > 0) low  = middle + 1;
+            else               high = middle - 1;
+        }
+
+        if(comparison > 0) children.splice(middle+1, 0, tid);
+        else               children.splice(middle, 0, tid);
+    }
+
     // Make tid a child of ptid
     my.jsfunc_reparent = function(tid, ptid)
     {
@@ -66,7 +87,7 @@ var libtags = (function() {
         if(rbm_tid_children[ptid] == undefined)
             rbm_tid_children[ptid] = Array();
 
-        rbm_tid_children[ptid].push(tid);
+        jsfunc_addToChildren(tid, ptid);
 
         // Now we just have to update the parent of tid
         rbm_tid_parents[tid] = ptid;
