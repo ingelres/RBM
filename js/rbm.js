@@ -90,13 +90,25 @@ function jsfunc_explorerReparent(tid, ptid)
 
     if(expander.hasClass("css-explorer-collapse"))
     {
-        var level = libtags.jsfunc_getLevel(ptid);
+        var level         = libtags.jsfunc_getLevel(ptid);
+        var oldSelectedId = rbm_globals.selectedTagId;
 
         jsfunc_explorerCollapseTag(expander, ptid, level, false);
         jsfunc_explorerExpandTag(expander, ptid, level, false);
+
+        if(oldSelectedId == tid)
+        {
+            rbm_globals.selectedTagId = oldSelectedId;
+            $("#css-explorer-item-" + tid).addClass("css-explorer-item-selected");
+        }
     }
     else
+    {
         expander.addClass("css-explorer-expand");
+
+        if(rbm_globals.selectedTagId == tid)
+            jsfunc_explorerSelectTag(-1);
+    }
 }
 
 function jsfunc_explorerEnableItemDND(tid, level)
