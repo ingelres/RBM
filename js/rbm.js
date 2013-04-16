@@ -137,9 +137,16 @@ $(document).ready(function(){
         jsfunc_explorerEnableItemDND(val);
     });
 
-/*
-    $("#css-search-by-tag").autocomplete({source: Object.keys(rbm_tname_to_tid)});
-*/
+    // Make the search-by-tag box an autocomplete widget
+    var searchByTag = $("#css-search-by-tag");
+
+    searchByTag.autocomplete({source: Object.keys(rbm_tname_to_tid), delay: 0});
+
+    searchByTag.keyup(function(event){
+        if(event.keyCode == 13){
+            jsfunc_explorerScrollToTag($("#css-search-by-tag").val());
+        }
+    });
 
     // Default settings for AJAX requests
     $.ajaxSetup({
