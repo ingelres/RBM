@@ -58,17 +58,17 @@
         <div id="css-explorer">
             <div id="css-explorer-item-25" class="css-explorer-item">
                 <div class="css-explorer-handle"></div>
-                <div id="css-explorer-item-25-expander" class="css-explorer-expander-level-1 css-explorer-expand" onclick="jsfunc_onExplorerExpander($(this), 25, 1)"></div>
+                <div id="css-explorer-item-25-expander" class="css-explorer-expander-level-1 css-explorer-expand" onclick="jsfunc_onExplorerExpander($(this), 25)"></div>
                 <div onclick="jsfunc_explorerSelectTag(25)">Code</div>
             </div>
             <div id="css-explorer-item-0" class="css-explorer-item">
                 <div class="css-explorer-handle"></div>
-                <div id="css-explorer-item-0-expander" class="css-explorer-expander-level-1 css-explorer-expand" onclick="jsfunc_onExplorerExpander($(this), 0, 1)"></div>
+                <div id="css-explorer-item-0-expander" class="css-explorer-expander-level-1 css-explorer-expand" onclick="jsfunc_onExplorerExpander($(this), 0)"></div>
                 <div onclick="jsfunc_explorerSelectTag(0)">Games</div>
             </div>
             <div id="css-explorer-item-59" class="css-explorer-item">
                 <div class="css-explorer-handle"></div>
-                <div id="css-explorer-item-59-expander" class="css-explorer-expander-level-1" onclick="jsfunc_onExplorerExpander($(this), 59, 1)"></div>
+                <div id="css-explorer-item-59-expander" class="css-explorer-expander-level-1" onclick="jsfunc_onExplorerExpander($(this), 59)"></div>
                 <div onclick="jsfunc_explorerSelectTag(59)">Tools</div>
             </div>
         </div>

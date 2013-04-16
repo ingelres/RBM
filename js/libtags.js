@@ -49,24 +49,35 @@ var libtags = (function() {
     }
 
     // Add tid to the children of ptid, keeping the list of children sorted by tname
+    // Return the new sibling after which tid has been inserted, or -1 if it's the first child
     function jsfunc_addToChildren(tid, ptid)
     {
-        var tname    = rbm_tid_to_tname[tid].toLowerCase();
-        var children = rbm_tid_children[ptid];
+        var children       = rbm_tid_children[ptid];
+        var insertionPoint = 0;
 
-        var low = 0, high = children.length-1;
-
-        while(low <= high)
+        // tid is the only child of ptid
+        if(children.length != 0)
         {
-            var middle     = Math.floor((low + high) / 2);
-            var comparison = tname.localeCompare(rbm_tid_to_tname[children[middle]].toLowerCase());
+            // There's at least one child, so we know that low <= high the first time
+            var tname = rbm_tid_to_tname[tid].toLowerCase(), low = 0, high = children.length-1;
 
-            if(comparison > 0) low  = middle + 1;
-            else               high = middle - 1;
+            while(low <= high)
+            {
+                var middle     = Math.floor((low + high) / 2);
+                var comparison = tname.localeCompare(rbm_tid_to_tname[children[middle]].toLowerCase());
+
+                if(comparison > 0) low  = middle + 1;
+                else               high = middle - 1;
+            }
+
+            if(comparison > 0) var insertionPoint = middle+1;
+            else               var insertionPoint = middle;
         }
 
-        if(comparison > 0) children.splice(middle+1, 0, tid);
-        else               children.splice(middle, 0, tid);
+        children.splice(insertionPoint, 0, tid);
+
+        if(insertionPoint == 0) return -1;
+        else                    return children[insertionPoint-1];
     }
 
     // Make tid a child of ptid
@@ -83,14 +94,14 @@ var libtags = (function() {
             else                        oldchildren.splice(oldchildren.indexOf(tid), 1);
         }
 
+        // Update the parent of tid
+        rbm_tid_parents[tid] = ptid;
+
         // Add the new child to ptid
         if(rbm_tid_children[ptid] == undefined)
             rbm_tid_children[ptid] = Array();
 
-        jsfunc_addToChildren(tid, ptid);
-
-        // Now we just have to update the parent of tid
-        rbm_tid_parents[tid] = ptid;
+        return jsfunc_addToChildren(tid, ptid);
     }
 
     return my;
