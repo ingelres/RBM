@@ -114,7 +114,7 @@ function jsfunc_explorerSelectTag(tid)
 
 function jsfunc_explorerScrollToTag(tname)
 {
-    var tid = rbm_tname_to_tid[tname];
+    var tid = rbm_tname_to_tid[tname.toLowerCase()];
 
     if(tid != undefined)
     {
@@ -140,11 +140,11 @@ $(document).ready(function(){
     // Make the search-by-tag box an autocomplete widget
     var searchByTag = $("#css-search-by-tag");
 
-    searchByTag.autocomplete({source: Object.keys(rbm_tname_to_tid), delay: 0});
+    searchByTag.autocomplete({source: rbm_all_tname, delay: 0});
 
     searchByTag.keyup(function(event){
         if(event.keyCode == 13){
-            jsfunc_explorerScrollToTag($("#css-search-by-tag").val());
+            jsfunc_explorerScrollToTag($("#css-search-by-tag").autocomplete("close").val());
         }
     });
 

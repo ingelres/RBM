@@ -1,3 +1,17 @@
+var rbm_all_tname = Array(
+    'Games',
+    'DS',
+    'PS3',
+    'Dark Souls',
+    'Borderlands 2',
+    'Code',
+    'C',
+    'C++',
+    'JavaScript',
+    'Python',
+    'Tools'
+);
+
 var rbm_tid_to_tname = {
      0: 'Games',
     11: 'DS',
@@ -13,17 +27,17 @@ var rbm_tid_to_tname = {
 }
 
 var rbm_tname_to_tid = {
-    'Games':          0,
-    'DS':            11,
-    'PS3':           12,
-    'Dark Souls':    13,
-    'Borderlands 2': 24,
-    'Code':          25,
-    'C':             36,
-    'C++':           47,
-    'JavaScript':    48,
-    'Python':        58,
-    'Tools':         59,
+    'games':          0,
+    'ds':            11,
+    'ps3':           12,
+    'dark souls':    13,
+    'borderlands 2': 24,
+    'code':          25,
+    'c':             36,
+    'c++':           47,
+    'javascript':    48,
+    'python':        58,
+    'tools':         59,
 }
 
 var rbm_top_level_tid = Array(0, 25, 59);
