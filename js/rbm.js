@@ -48,7 +48,7 @@ function jsfunc_explorerCollapseTag(expander, ptid, animate)
     // Destroy all draggable/droppable descendants (not only the direct children) before removing the container
     $("#css-explorer-item-" + ptid + "-children .css-explorer-item").draggable("destroy").droppable("destroy");
 
-    if(animate) $("#css-explorer-item-" + ptid + "-children").slideUp(rbm_consts.EXPLORER_ANIM_LEN, function(){ this.remove() });
+    if(animate) $("#css-explorer-item-" + ptid + "-children").slideUp(rbm_consts.EXPLORER_ANIM_LEN, function(){ $("#css-explorer-item-" + ptid + "-children").remove() });
     else        $("#css-explorer-item-" + ptid + "-children").remove();
 
     // Clear selection if it's a descendant of the item we're collapsing
