@@ -93,8 +93,9 @@ function jsfunc_explorerReparent(tid, ptid)
         var levelAfter = libtags.jsfunc_getLevel(tid);
 
         // Move the item
-        if(newSibling == -1) item.prependTo("#css-explorer-item-" + ptid + "-children");
-        else                 item.insertAfter("#css-explorer-item-" + newSibling);
+             if(newSibling == -1)                                                item.prependTo("#css-explorer-item-" + ptid + "-children");
+        else if($("#css-explorer-item-" + newSibling + "-children").length != 0) item.insertAfter("#css-explorer-item-" + newSibling + "-children");
+        else                                                                     item.insertAfter("#css-explorer-item-" + newSibling);
 
         // Move the children (if any)
         item.after($("#css-explorer-item-" + tid + "-children"));
