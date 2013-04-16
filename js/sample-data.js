@@ -1,17 +1,3 @@
-var rbm_all_tname = Array(
-    'Games',
-    'DS',
-    'PS3',
-    'Dark Souls',
-    'Borderlands 2',
-    'Code',
-    'C',
-    'C++',
-    'JavaScript',
-    'Python',
-    'Tools'
-);
-
 var rbm_tid_to_tname = {
      0: 'Games',
     11: 'DS',

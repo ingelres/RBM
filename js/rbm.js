@@ -140,7 +140,7 @@ $(document).ready(function(){
     // Make the search-by-tag box an autocomplete widget
     var searchByTag = $("#css-search-by-tag");
 
-    searchByTag.autocomplete({source: rbm_all_tname, delay: 0});
+    searchByTag.autocomplete({source: libtags.jsfunc_getAllTagNames(), delay: 0});
 
     searchByTag.keyup(function(event){
         if(event.keyCode == 13){
