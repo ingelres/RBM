@@ -2,7 +2,15 @@ var libtags = (function() {
 
     var my = {};
 
-    // Return true if tid is a descendant of ptid (it doesn't have to be a direct child)
+
+    /**
+     * Check whether a tag is a descendant of another tag (not necessary a direct child).
+     *
+     * @param tid  The ID of the potential descendant.
+     * @param ptid The ID of the potential ancestor.
+     *
+     * @return true or false.
+    **/
     my.jsfunc_tidIsDescendant = function(tid, ptid)
     {
         while((tid = rbm_tid_parents[tid]) != undefined)
@@ -14,7 +22,14 @@ var libtags = (function() {
         return false;
     }
 
-    // Return an array with all the tags Id from the top-level to tid (tid is not included in the array)
+
+    /**
+     * Return all the parents of a tag from the top level.
+     *
+     * @param tid The ID of the tag.
+     *
+     * @return The array of the parents ID.
+    **/
     my.jsfunc_getParents = function(tid)
     {
         var parents = [];
@@ -25,7 +40,12 @@ var libtags = (function() {
         return parents.reverse();
     }
 
-    // Return an unsorted array with all the tag names
+
+    /**
+     * @return An array with the name of all the tags.
+     *
+     * @note The array is not sorted.
+    **/
     my.jsfunc_getAllTagNames = function()
     {
         var tnames = [];
@@ -36,7 +56,10 @@ var libtags = (function() {
         return tnames;
     }
 
-    // Return the level of tid (top-level is level 1)
+
+    /**
+     * @return The level of a tag starting from the top level (top-level is level 1)
+    **/
     my.jsfunc_getLevel = function(tid)
     {
         var level = 1;
@@ -47,8 +70,15 @@ var libtags = (function() {
         return level;
     }
 
-    // Add tid to the children of ptid, keeping the list of children sorted by tname
-    // Return the new sibling after which tid has been inserted, or -1 if it's the first child
+
+    /**
+     * Add a tag to the children of another tag, keeping the list of children sorted by their name.
+     *
+     * @param tid  The ID of the tag.
+     * @param ptid The ID of the new parent.
+     *
+     * @return The ID of the new sibling after which the tag has been inserted, or -1 if it's the first child of the list.
+    **/
     function jsfunc_addToChildren(tid, ptid)
     {
         var children       = rbm_tid_children[ptid];
@@ -80,7 +110,15 @@ var libtags = (function() {
         else                    return children[insertionPoint-1];
     }
 
-    // Make tid a child of ptid
+
+    /**
+     * Reparent a tag.
+     *
+     * @param tid  The ID of the tag to reparent.
+     * @param ptid The ID of the new parent.
+     *
+     * @return The ID of the new sibling after which the tag has been inserted, or -1 if it's the first child of the new parent.
+    **/
     my.jsfunc_reparent = function(tid, ptid)
     {
         // If tid already had a parent, remove it from this parent's children
