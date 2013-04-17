@@ -18,7 +18,7 @@ var libexp = (function(){
     // A click on an expander expands, collapse, or selects the corresponding tag
     my.jsfunc_onExpanderClick = function(tid)
     {
-        var expander = $("#css-explorer-item-" + tid + "-expander");
+        var expander = $("#css-explorer-expander-" + tid);
 
              if(expander.hasClass("css-explorer-expand"))   jsfunc_expandTag(expander, tid, true);
         else if(expander.hasClass("css-explorer-collapse")) jsfunc_collapseTag(expander, tid, true);
@@ -28,7 +28,7 @@ var libexp = (function(){
     // Expand the given tag (It is assumed that the tag has some children and is currently collapsed)
     function jsfunc_expandTag(expander, ptid, animate)
     {
-        var code       = "<div id='css-explorer-item-" + ptid + "-children' style='display: none'>";
+        var code       = "<div id='css-explorer-children-" + ptid + "' style='display: none'>";
         var children   = rbm_tid_children[ptid];
         var nbChildren = children.length;
         var marginLeft = (Math.min(libtags.jsfunc_getLevel(ptid)+1, MAX_ITEM_LVL)-1) * MARGIN_LEFT_PER_LVL;
@@ -38,7 +38,7 @@ var libexp = (function(){
             var tid = children[i];
 
             code += "<div id='css-explorer-item-" + tid + "' class='css-explorer-item'><div class='css-explorer-handle'></div>";
-            code += "<div id='css-explorer-item-" + tid + "-expander' onclick='libexp.jsfunc_onExpanderClick(" + tid + ")' style='margin-left:" + marginLeft + "px' ";
+            code += "<div id='css-explorer-expander-" + tid + "' onclick='libexp.jsfunc_onExpanderClick(" + tid + ")' style='margin-left:" + marginLeft + "px' ";
 
             if(rbm_tid_children[tid] == undefined) code += "class='css-explorer-expander'></div>";
             else                                   code += "class='css-explorer-expander css-explorer-expand'></div>";
@@ -60,10 +60,10 @@ var libexp = (function(){
     function jsfunc_collapseTag(expander, ptid, animate)
     {
         // Destroy all draggable/droppable descendants (not only the direct children) before removing the container
-        $("#css-explorer-item-" + ptid + "-children").find(".css-explorer-item").draggable("destroy").droppable("destroy");
+        $("#css-explorer-children-" + ptid).find(".css-explorer-item").draggable("destroy").droppable("destroy");
 
-        if(animate) $("#css-explorer-item-" + ptid + "-children").slideUp(ANIMATION_LEN, function(){ $("#css-explorer-item-" + ptid + "-children").remove() });
-        else        $("#css-explorer-item-" + ptid + "-children").remove();
+        if(animate) $("#css-explorer-children-" + ptid).slideUp(ANIMATION_LEN, function(){ $("#css-explorer-children-" + ptid).remove() });
+        else        $("#css-explorer-children-" + ptid).remove();
 
         // Clear selection if it's a descendant of the item we're collapsing
         if(libtags.jsfunc_tidIsDescendant(selectedTagId, ptid))
@@ -84,7 +84,7 @@ var libexp = (function(){
         var nbTopLvlItems = rbm_top_level_tid.length;
 
         for(var i=0; i<nbTopLvlItems; ++i)
-            $("#css-explorer-item-" + rbm_top_level_tid[i] + "-expander.css-explorer-collapse").trigger("click");
+            $("#css-explorer-expander-" + rbm_top_level_tid[i] + ".css-explorer-collapse").trigger("click");
     }
 
     // Make tid a child of ptid: Update the GUI as well as the internal structures
@@ -94,14 +94,14 @@ var libexp = (function(){
         var oldptid = rbm_tid_parents[tid];
 
         if(oldptid != undefined && rbm_tid_children[oldptid].length == 1)
-            $("#css-explorer-item-" + oldptid + "-expander").removeClass("css-explorer-expand").removeClass("css-explorer-collapse");
+            $("#css-explorer-expander-" + oldptid).removeClass("css-explorer-expand").removeClass("css-explorer-collapse");
 
         // Reparent the tag
         var levelBefore = libtags.jsfunc_getLevel(tid);
         var newSibling  = libtags.jsfunc_reparent(tid, ptid);
 
         // If the new parent is already expanded, just move things around in the DOM
-        var expander = $("#css-explorer-item-" + ptid + "-expander");
+        var expander = $("#css-explorer-expander-" + ptid);
 
         if(expander.hasClass("css-explorer-collapse"))
         {
@@ -109,20 +109,20 @@ var libexp = (function(){
             var levelAfter = libtags.jsfunc_getLevel(tid);
 
             // First move the item
-                 if(newSibling == -1)                                                item.prependTo("#css-explorer-item-" + ptid + "-children");
-            else if($("#css-explorer-item-" + newSibling + "-children").length != 0) item.insertAfter("#css-explorer-item-" + newSibling + "-children");
-            else                                                                     item.insertAfter("#css-explorer-item-" + newSibling);
+                 if(newSibling == -1)                                      item.prependTo("#css-explorer-children-" + ptid);
+            else if($("#css-explorer-children-" + newSibling).length != 0) item.insertAfter("#css-explorer-children-" + newSibling);
+            else                                                           item.insertAfter("#css-explorer-item-" + newSibling);
 
             // Then move the children (if any)
-            item.after($("#css-explorer-item-" + tid + "-children"));
+            item.after($("#css-explorer-children-" + tid));
 
             // Here comes the pain... We have to adjust all levels
             if(levelAfter != levelBefore)
             {
-                $("#css-explorer-item-" + tid + "-expander").css("margin-left", (levelAfter-1) * MARGIN_LEFT_PER_LVL);
+                $("#css-explorer-expander-" + tid).css("margin-left", (levelAfter-1) * MARGIN_LEFT_PER_LVL);
 
                 // Now do it for all displayed children
-                var subItems   = $("#css-explorer-item-" + tid + "-children").find(".css-explorer-expander");
+                var subItems   = $("#css-explorer-children-" + tid).find(".css-explorer-expander");
                 var nbSubItems = subItems.length;
                 var marginDiff = (levelAfter - levelBefore) * MARGIN_LEFT_PER_LVL;
 
@@ -139,8 +139,8 @@ var libexp = (function(){
             expander.addClass("css-explorer-expand");
 
             // Remove the dragged element and all its descendants (if any)
-            $("#css-explorer-item-" + tid + "-children").find(".css-explorer-item").draggable("destroy").droppable("destroy");
-            $("#css-explorer-item-" + tid + "-children").remove();
+            $("#css-explorer-children-" + tid).find(".css-explorer-item").draggable("destroy").droppable("destroy");
+            $("#css-explorer-children-" + tid).remove();
             $("#css-explorer-item-" + tid).draggable("destroy").droppable("destroy").remove();
 
             // Clear selection if needed
@@ -208,7 +208,7 @@ var libexp = (function(){
             for(var i=0; i<nbParents; ++i)
             {
                 var ptid     = parents[i];
-                var expander = $("#css-explorer-item-" + ptid + "-expander");
+                var expander = $("#css-explorer-expander-" + ptid);
 
                 if(expander.hasClass("css-explorer-expand"))
                     jsfunc_expandTag(expander, ptid, i+1, true);

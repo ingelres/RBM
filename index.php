@@ -55,17 +55,17 @@
         <div id="css-explorer">
             <div id="css-explorer-item-25" class="css-explorer-item">
                 <div class="css-explorer-handle"></div>
-                <div id="css-explorer-item-25-expander" class="css-explorer-expander css-explorer-expand" onclick="libexp.jsfunc_onExpanderClick(25)"></div>
+                <div id="css-explorer-expander-25" class="css-explorer-expander css-explorer-expand" onclick="libexp.jsfunc_onExpanderClick(25)"></div>
                 <div onclick="libexp.jsfunc_selectTag(25)">Code</div>
             </div>
             <div id="css-explorer-item-0" class="css-explorer-item">
                 <div class="css-explorer-handle"></div>
-                <div id="css-explorer-item-0-expander" class="css-explorer-expander css-explorer-expand" onclick="libexp.jsfunc_onExpanderClick(0)"></div>
+                <div id="css-explorer-expander-0" class="css-explorer-expander css-explorer-expand" onclick="libexp.jsfunc_onExpanderClick(0)"></div>
                 <div onclick="libexp.jsfunc_selectTag(0)">Games</div>
             </div>
             <div id="css-explorer-item-59" class="css-explorer-item">
                 <div class="css-explorer-handle"></div>
-                <div id="css-explorer-item-59-expander" class="css-explorer-expander" onclick="libexp.jsfunc_onExpanderClick(59)"></div>
+                <div id="css-explorer-expander-59" class="css-explorer-expander" onclick="libexp.jsfunc_onExpanderClick(59)"></div>
                 <div onclick="libexp.jsfunc_selectTag(59)">Tools</div>
             </div>
         </div>
