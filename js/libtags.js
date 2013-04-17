@@ -30,9 +30,8 @@ var libtags = (function() {
     {
         var tnames = Array();
 
-        $.each(rbm_tid_to_tname, function(tid, tname){
-            tnames.push(tname);
-        });
+        for(tid in rbm_tid_to_tname)
+            tnames.push(rbm_tid_to_tname[tid]);
 
         return tnames;
     }

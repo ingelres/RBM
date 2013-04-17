@@ -18,27 +18,30 @@ function jsfunc_onExplorerExpander(expander, tid)
 
 function jsfunc_explorerExpandTag(expander, ptid, animate)
 {
-    var children   = "<div id='css-explorer-item-" + ptid + "-children' style='display: none'>";
+    var code       = "<div id='css-explorer-item-" + ptid + "-children' style='display: none'>";
+    var children   = rbm_tid_children[ptid];
+    var nbChildren = children.length;
     var marginLeft = (Math.min(libtags.jsfunc_getLevel(ptid)+1, rbm_consts.EXPLORER_MAX_LVL)-1) * rbm_consts.EXPLORER_MARGIN_LEFT_PER_LVL;
 
-    $.each(rbm_tid_children[ptid], function(idx, tid){
+    for(var i=0; i<nbChildren; ++i)
+    {
+        var tid = children[i];
 
-        children += "<div id='css-explorer-item-" + tid + "' class='css-explorer-item'><div class='css-explorer-handle'></div>";
-        children += "<div id='css-explorer-item-" + tid + "-expander' onclick='jsfunc_onExplorerExpander($(this), " + tid + ")' style='margin-left:" + marginLeft + "px' ";
+        code += "<div id='css-explorer-item-" + tid + "' class='css-explorer-item'><div class='css-explorer-handle'></div>";
+        code += "<div id='css-explorer-item-" + tid + "-expander' onclick='jsfunc_onExplorerExpander($(this), " + tid + ")' style='margin-left:" + marginLeft + "px' ";
 
-        if(rbm_tid_children[tid] == undefined) children += "class='css-explorer-expander'></div>";
-        else                                   children += "class='css-explorer-expander css-explorer-expand'></div>";
+        if(rbm_tid_children[tid] == undefined) code += "class='css-explorer-expander'></div>";
+        else                                   code += "class='css-explorer-expander css-explorer-expand'></div>";
 
-        children += "<div onclick='jsfunc_explorerSelectTag(" + tid + ")''>" + rbm_tid_to_tname[tid] + "</div></div>";
-    });
+        code += "<div onclick='jsfunc_explorerSelectTag(" + tid + ")''>" + rbm_tid_to_tname[tid] + "</div></div>";
+    }
 
-    if(animate) $(children + "</div>").insertAfter("#css-explorer-item-" + ptid).slideDown(rbm_consts.EXPLORER_ANIM_LEN);
-    else        $(children + "</div>").insertAfter("#css-explorer-item-" + ptid).show();
+    if(animate) $(code + "</div>").insertAfter("#css-explorer-item-" + ptid).slideDown(rbm_consts.EXPLORER_ANIM_LEN);
+    else        $(code + "</div>").insertAfter("#css-explorer-item-" + ptid).show();
 
     // We must do this outside of the above loop, for the items must be present in the DOM when calling the function
-    $.each(rbm_tid_children[ptid], function(idx, tid){
-        jsfunc_explorerEnableItemDND(tid);
-    });
+    for(var i=0; i<nbChildren; ++i)
+        jsfunc_explorerEnableItemDND(children[i]);
 
     expander.removeClass("css-explorer-expand").addClass("css-explorer-collapse");
 }
@@ -67,9 +70,10 @@ function jsfunc_explorerExpandAll()
 function jsfunc_explorerCollapseAll()
 {
     // Collapse all top-level tags
-    $.each(rbm_top_level_tid, function(idx, tid){
-        $("#css-explorer-item-" + tid + "-expander.css-explorer-collapse").trigger("click");
-    });
+    var nbTopLvlItems = rbm_top_level_tid.length;
+
+    for(var i=0; i<nbTopLvlItems; ++i)
+        $("#css-explorer-item-" + rbm_top_level_tid[i] + "-expander.css-explorer-collapse").trigger("click");
 }
 
 function jsfunc_explorerReparent(tid, ptid)
@@ -109,7 +113,7 @@ function jsfunc_explorerReparent(tid, ptid)
             // Now do it for all displayed children
             var levelDiff = levelAfter - levelBefore;
 
-            $.each($("#css-explorer-item-" + tid + "-children .css-explorer-expander"), function(idx, elt){
+            $.each($(".css-explorer-expander", "#css-explorer-item-" + tid + "-children"), function(idx, elt){
                 $(elt).css("margin-left", parseInt($(elt).css("margin-left")) + levelDiff * rbm_consts.EXPLORER_MARGIN_LEFT_PER_LVL);
             });
         }
@@ -119,7 +123,7 @@ function jsfunc_explorerReparent(tid, ptid)
         expander.addClass("css-explorer-expand");
 
         // Remove the dragged element and all its descendants (if any)
-        $("#css-explorer-item-" + tid + "-children .css-explorer-item").draggable("destroy").droppable("destroy");
+        $(".css-explorer-item", "#css-explorer-item-" + tid + "-children").draggable("destroy").droppable("destroy");
         $("#css-explorer-item-" + tid + "-children").remove();
         $("#css-explorer-item-" + tid).draggable("destroy").droppable("destroy").remove();
 
@@ -179,12 +183,17 @@ function jsfunc_explorerScrollToTag(tname)
     if(tid != undefined)
     {
         // Go through the hierarchy of tags and open the collapsed ones
-        $.each(libtags.jsfunc_getParents(tid), function(idx, val){
-            var expander = $("#css-explorer-item-" + val + "-expander");
+        var parents   = libtags.jsfunc_getParents(tid);
+        var nbParents = parents.length;
+
+        for(var i=0; i<nbParents; ++i)
+        {
+            var ptid     = parents[i];
+            var expander = $("#css-explorer-item-" + ptid + "-expander");
 
             if(expander.hasClass("css-explorer-expand"))
-                jsfunc_explorerExpandTag(expander, val, idx+1, true);
-        });
+                jsfunc_explorerExpandTag(expander, ptid, i+1, true);
+        }
 
         // TODO Scroll to the tag
 
@@ -195,9 +204,10 @@ function jsfunc_explorerScrollToTag(tname)
 
 $(document).ready(function(){
 
-    $.each(rbm_top_level_tid, function(idx, val){
-        jsfunc_explorerEnableItemDND(val);
-    });
+    var nbTopLvlItems = rbm_top_level_tid.length;
+
+    for(var i=0; i<nbTopLvlItems; ++i)
+        jsfunc_explorerEnableItemDND(rbm_top_level_tid[i]);
 
     // Make the search-by-tag box an autocomplete widget
     var searchByTag = $("#css-search-by-tag");
