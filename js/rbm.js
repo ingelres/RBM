@@ -49,7 +49,7 @@ function jsfunc_explorerExpandTag(expander, ptid, animate)
 function jsfunc_explorerCollapseTag(expander, ptid, animate)
 {
     // Destroy all draggable/droppable descendants (not only the direct children) before removing the container
-    $(".css-explorer-item", "#css-explorer-item-" + ptid + "-children").draggable("destroy").droppable("destroy");
+    $("#css-explorer-item-" + ptid + "-children").find(".css-explorer-item").draggable("destroy").droppable("destroy");
 
     if(animate) $("#css-explorer-item-" + ptid + "-children").slideUp(rbm_consts.EXPLORER_ANIM_LEN, function(){ $("#css-explorer-item-" + ptid + "-children").remove() });
     else        $("#css-explorer-item-" + ptid + "-children").remove();
@@ -110,7 +110,7 @@ function jsfunc_explorerReparent(tid, ptid)
             $("#css-explorer-item-" + tid + "-expander").css("margin-left", (levelAfter-1) * rbm_consts.EXPLORER_MARGIN_LEFT_PER_LVL);
 
             // Now do it for all displayed children
-            var subItems   = $(".css-explorer-expander", "#css-explorer-item-" + tid + "-children");
+            var subItems   = $("#css-explorer-item-" + tid + "-children").find(".css-explorer-expander");
             var nbSubItems = subItems.length;
             var marginDiff = (levelAfter - levelBefore) * rbm_consts.EXPLORER_MARGIN_LEFT_PER_LVL;
 
@@ -127,7 +127,7 @@ function jsfunc_explorerReparent(tid, ptid)
         expander.addClass("css-explorer-expand");
 
         // Remove the dragged element and all its descendants (if any)
-        $(".css-explorer-item", "#css-explorer-item-" + tid + "-children").draggable("destroy").droppable("destroy");
+        $("#css-explorer-item-" + tid + "-children").find(".css-explorer-item").draggable("destroy").droppable("destroy");
         $("#css-explorer-item-" + tid + "-children").remove();
         $("#css-explorer-item-" + tid).draggable("destroy").droppable("destroy").remove();
 
