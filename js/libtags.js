@@ -17,18 +17,18 @@ var libtags = (function() {
     // Return an array with all the tags Id from the top-level to tid (tid is not included in the array)
     my.jsfunc_getParents = function(tid)
     {
-        var hierarchy = Array();
+        var parents = [];
 
         while((tid = rbm_tid_parents[tid]) != undefined)
-            hierarchy.push(tid);
+            parents.push(tid);
 
-        return hierarchy.reverse();
+        return parents.reverse();
     }
 
-    // Return an array with all the tag names (not sorted)
+    // Return an unsorted array with all the tag names
     my.jsfunc_getAllTagNames = function()
     {
-        var tnames = Array();
+        var tnames = [];
 
         for(tid in rbm_tid_to_tname)
             tnames.push(rbm_tid_to_tname[tid]);
@@ -54,8 +54,7 @@ var libtags = (function() {
         var children       = rbm_tid_children[ptid];
         var insertionPoint = 0;
 
-        // tid is the only child of ptid
-        if(children.length != 0)
+        if(children != undefined)
         {
             // There's at least one child, so we know that low <= high the first time
             var tname = rbm_tid_to_tname[tid].toLowerCase(), low = 0, high = children.length-1;
@@ -71,9 +70,11 @@ var libtags = (function() {
 
             if(comparison > 0) var insertionPoint = middle+1;
             else               var insertionPoint = middle;
-        }
 
-        children.splice(insertionPoint, 0, tid);
+            children.splice(insertionPoint, 0, tid);
+        }
+        else
+            rbm_tid_children[ptid] = [tid];
 
         if(insertionPoint == 0) return -1;
         else                    return children[insertionPoint-1];
@@ -99,9 +100,6 @@ var libtags = (function() {
         rbm_tid_parents[tid] = ptid;
 
         // Add the new child to ptid
-        if(rbm_tid_children[ptid] == undefined)
-            rbm_tid_children[ptid] = Array();
-
         return jsfunc_addToChildren(tid, ptid);
     }
 
