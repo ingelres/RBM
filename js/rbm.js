@@ -6,7 +6,7 @@ $(function(){
         source: libtags.jsfunc_getAllTagNames(),
     }).keyup(function(evt){
         if(evt.keyCode == 13){
-            libexp.jsfunc_scrollToTag($("#css-search-by-tag").autocomplete("close").val());
+            libexp.jsfunc_showAndSelectTag($("#css-search-by-tag").autocomplete("close").val());
         }
     });
 
