@@ -38,38 +38,35 @@
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
 
         <script>
-            <?php include("./js/sample-data.js"); ?>
-            <?php include("./js/libtags.js"); ?>
-            <?php include("./js/rbm.js"); ?>
+            <?php include("./js/sample-data.js"); include("./js/libtags.js"); include("./js/libexp.js"); include("./js/rbm.js"); ?>
         </script>
 
         <style>
-            <?php include("./css/rbm.css"); ?>
-            <?php include("./css/jqueryui.css"); ?>
+            <?php include("./css/rbm.css"); include("./css/jqueryui.css"); ?>
         </style>
     </head>
 
     <body>
 
-        <button onclick="jsfunc_explorerExpandAll()">Expand All</button>
-        <button onclick="jsfunc_explorerCollapseAll()">Collapse All</button>
-        <input type="text" id="css-search-by-tag" onchange="jsfunc_explorerScrollToTag(this.value)" placeholder="<?=_("Type a tag name...")?>"/>
+        <button onclick="libexp.jsfunc_expandAll()">Expand All</button>
+        <button onclick="libexp.jsfunc_collapseAll()">Collapse All</button>
+        <input type="text" id="css-search-by-tag" onchange="libexp.jsfunc_scrollToTag(this.value)" placeholder="<?=_("Type a tag name...")?>"/>
 
         <div id="css-explorer">
             <div id="css-explorer-item-25" class="css-explorer-item">
                 <div class="css-explorer-handle"></div>
-                <div id="css-explorer-item-25-expander" class="css-explorer-expander css-explorer-expand" onclick="jsfunc_onExplorerExpander($(this), 25)"></div>
-                <div onclick="jsfunc_explorerSelectTag(25)">Code</div>
+                <div id="css-explorer-item-25-expander" class="css-explorer-expander css-explorer-expand" onclick="libexp.jsfunc_onExpanderClick(25)"></div>
+                <div onclick="libexp.jsfunc_selectTag(25)">Code</div>
             </div>
             <div id="css-explorer-item-0" class="css-explorer-item">
                 <div class="css-explorer-handle"></div>
-                <div id="css-explorer-item-0-expander" class="css-explorer-expander css-explorer-expand" onclick="jsfunc_onExplorerExpander($(this), 0)"></div>
-                <div onclick="jsfunc_explorerSelectTag(0)">Games</div>
+                <div id="css-explorer-item-0-expander" class="css-explorer-expander css-explorer-expand" onclick="libexp.jsfunc_onExpanderClick(0)"></div>
+                <div onclick="libexp.jsfunc_selectTag(0)">Games</div>
             </div>
             <div id="css-explorer-item-59" class="css-explorer-item">
                 <div class="css-explorer-handle"></div>
-                <div id="css-explorer-item-59-expander" class="css-explorer-expander" onclick="jsfunc_onExplorerExpander($(this), 59)"></div>
-                <div onclick="jsfunc_explorerSelectTag(59)">Tools</div>
+                <div id="css-explorer-item-59-expander" class="css-explorer-expander" onclick="libexp.jsfunc_onExpanderClick(59)"></div>
+                <div onclick="libexp.jsfunc_selectTag(59)">Tools</div>
             </div>
         </div>
 
