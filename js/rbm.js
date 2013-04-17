@@ -49,7 +49,7 @@ function jsfunc_explorerExpandTag(expander, ptid, animate)
 function jsfunc_explorerCollapseTag(expander, ptid, animate)
 {
     // Destroy all draggable/droppable descendants (not only the direct children) before removing the container
-    $("#css-explorer-item-" + ptid + "-children .css-explorer-item").draggable("destroy").droppable("destroy");
+    $(".css-explorer-item", "#css-explorer-item-" + ptid + "-children").draggable("destroy").droppable("destroy");
 
     if(animate) $("#css-explorer-item-" + ptid + "-children").slideUp(rbm_consts.EXPLORER_ANIM_LEN, function(){ $("#css-explorer-item-" + ptid + "-children").remove() });
     else        $("#css-explorer-item-" + ptid + "-children").remove();
