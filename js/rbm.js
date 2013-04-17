@@ -96,26 +96,30 @@ function jsfunc_explorerReparent(tid, ptid)
         var item       = $("#css-explorer-item-" + tid).css("top", "");
         var levelAfter = libtags.jsfunc_getLevel(tid);
 
-        // Move the item
+        // First move the item
              if(newSibling == -1)                                                item.prependTo("#css-explorer-item-" + ptid + "-children");
         else if($("#css-explorer-item-" + newSibling + "-children").length != 0) item.insertAfter("#css-explorer-item-" + newSibling + "-children");
         else                                                                     item.insertAfter("#css-explorer-item-" + newSibling);
 
-        // Move the children (if any)
+        // Then move the children (if any)
         item.after($("#css-explorer-item-" + tid + "-children"));
 
         // Here comes the pain... We have to adjust all levels
-        // Maybe we could find an easier way to manage levels...
         if(levelAfter != levelBefore)
         {
             $("#css-explorer-item-" + tid + "-expander").css("margin-left", (levelAfter-1) * rbm_consts.EXPLORER_MARGIN_LEFT_PER_LVL);
 
             // Now do it for all displayed children
-            var levelDiff = levelAfter - levelBefore;
+            var subItems   = $(".css-explorer-expander", "#css-explorer-item-" + tid + "-children");
+            var nbSubItems = subItems.length;
+            var marginDiff = (levelAfter - levelBefore) * rbm_consts.EXPLORER_MARGIN_LEFT_PER_LVL;
 
-            $.each($(".css-explorer-expander", "#css-explorer-item-" + tid + "-children"), function(idx, elt){
-                $(elt).css("margin-left", parseInt($(elt).css("margin-left")) + levelDiff * rbm_consts.EXPLORER_MARGIN_LEFT_PER_LVL);
-            });
+            for(var i=0; i<nbSubItems; ++i)
+            {
+                var subItem = $(subItems[i]);
+
+                subItem.css("margin-left", parseInt(subItem.css("margin-left")) + marginDiff);
+            }
         }
     }
     else
