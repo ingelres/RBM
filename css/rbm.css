@@ -25,7 +25,7 @@ body {
 
 /* An handle for moving items around, visible only when the item is hovered */
 /* An expander to expand / collapse items */
-.css-explorer-handle, .css-explorer-expander {
+.css-explorer-handle, .css-explorer-toolbox, .css-explorer-expander {
     float: left;
     width: 20px;
     height: 26px;
@@ -33,6 +33,10 @@ body {
 
     background-repeat: no-repeat;
     background-position: center center;
+}
+
+.css-explorer-item:hover .css-explorer-toolbox {
+    background-image: url('img/toolbox.png');
 }
 
 .css-explorer-item:hover .css-explorer-handle {

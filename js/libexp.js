@@ -15,25 +15,54 @@ var libexp = (function(){
         var nbTopLvlItems = rbm_top_level_tid.length;
 
         for(var i=0; i<nbTopLvlItems; ++i)
-            jsfunc_makeDNDItem(rbm_top_level_tid[i]);
+        {
+            var tid = rbm_top_level_tid[i];
+
+            jsfunc_makeDNDItem(tid);
+
+            // We use JQuery handler system instead of simple onclick handlers
+            // to manage difference between browsers (e.g., Firefox doesn't know what window.event is)
+            $("#css-explorer-item-" + tid).on("click", tid, my.jsfunc_onItemClicked);
+        }
     });
 
 
     /**
-     * Handler for clicks on expander elements. It will:
-     *  - Expand the tag if it has children and is currently collapsed.
-     *  - Collapse the tag if it has children and is currently expanded.
-     *  - Select the tag if it has no children (this avoids a deadzone over expanders).
+     * Handler for clicks on items. The action depends on the actual element clicked.
      *
-     * @param tid The ID of the tag the expander is associated with.
+     * @param evt The click event.
     **/
-    my.jsfunc_onExpanderClick = function(tid)
+    my.jsfunc_onItemClicked = function(evt)
     {
-        var expander = $("#css-explorer-expander-" + tid);
+        var tid    = evt.data;
+        var target = $(evt.target);
 
-             if(expander.hasClass("css-explorer-expand"))   jsfunc_expandTag(tid, expander);
-        else if(expander.hasClass("css-explorer-collapse")) jsfunc_collapseTag(tid, expander);
-        else                                                my.jsfunc_selectTag(tid);
+        if(target.hasClass("css-explorer-expander"))
+        {
+            var expander = $("#css-explorer-expander-" + tid);
+
+                 if(expander.hasClass("css-explorer-expand"))   jsfunc_expandTag(tid, expander);
+            else if(expander.hasClass("css-explorer-collapse")) jsfunc_collapseTag(tid, expander);
+            else                                                jsfunc_selectTag(tid);
+        }
+        else if(target.hasClass("css-explorer-toolbox"))
+        {
+            jsfunc_showToolbox(tid);
+        }
+        else if(!target.hasClass("css-explorer-handle"))
+        {
+            jsfunc_selectTag(tid);
+        }
+    }
+
+
+    /**
+     * Show a toolbox with a few options to manipulate a tag.
+     *
+     * @param tid The ID of the tag.
+    **/
+    function jsfunc_showToolbox(tid)
+    {
     }
 
 
@@ -57,19 +86,25 @@ var libexp = (function(){
 
             code += "<div id='css-explorer-item-" + tid + "' class='css-explorer-item'>";
             code += "<div class='css-explorer-handle'></div>";
-            code += "<div id='css-explorer-expander-" + tid + "' onclick='libexp.jsfunc_onExpanderClick(" + tid + ")' style='margin-left:" + marginLeft + "px' ";
+            code += "<div class='css-explorer-toolbox'></div>";
+            code += "<div id='css-explorer-expander-" + tid + "' style='margin-left:" + marginLeft + "px' ";
 
             if(rbm_tid_children[tid] == undefined) code += "class='css-explorer-expander'></div>";
             else                                   code += "class='css-explorer-expander css-explorer-expand'></div>";
 
-            code += "<div onclick='libexp.jsfunc_selectTag(" + tid + ")'>" + rbm_tid_to_tname[tid] + "</div></div>";
+            code += rbm_tid_to_tname[tid] + "</div>";
         }
 
         $(code + "</div>").insertAfter("#css-explorer-item-" + ptid).slideDown(ANIMATION_LEN);
 
-        // We must do this outside of the above loop, for the items must be present in the DOM when calling the function
+        // We must do this outside of the above loop, for the items must be present in the DOM when calling these functions
         for(var i=0; i<nbChildren; ++i)
-            jsfunc_makeDNDItem(children[i]);
+        {
+            var tid = children[i];
+
+            jsfunc_makeDNDItem(tid);
+            $("#css-explorer-item-" + tid).on("click", tid, my.jsfunc_onItemClicked);
+        }
 
         // Expand -> collapse
         expander.removeClass("css-explorer-expand").addClass("css-explorer-collapse");
@@ -92,7 +127,7 @@ var libexp = (function(){
 
         // Clear selection if it's a descendant of the item we're collapsing
         if(libtags.jsfunc_tidIsDescendant(selectedTagId, ptid))
-            my.jsfunc_selectTag(-1);
+            jsfunc_selectTag(-1);
 
         // Collapse -> expand
         expander.removeClass("css-explorer-collapse").addClass("css-explorer-expand");
@@ -185,7 +220,7 @@ var libexp = (function(){
 
             // Clear selection if needed
             if(tid == selectedTagId || libtags.jsfunc_tidIsDescendant(selectedTagId, tid))
-                my.jsfunc_selectTag(-1);
+                jsfunc_selectTag(-1);
         }
     }
 
@@ -226,7 +261,7 @@ var libexp = (function(){
      *
      * @param tid The ID of the tag.
     **/
-    my.jsfunc_selectTag = function(tid)
+    function jsfunc_selectTag(tid)
     {
         // Clicking on the selected item should do nothing
         if(tid != selectedTagId)
@@ -279,7 +314,7 @@ var libexp = (function(){
             // TODO Scroll to the tag
 
             // Now that the hierarchy has been expanded, the item exists and can be selected
-            my.jsfunc_selectTag(tid);
+            jsfunc_selectTag(tid);
         }
     }
 
