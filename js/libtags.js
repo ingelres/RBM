@@ -141,6 +141,20 @@ var libtags = (function() {
         return jsfunc_addToChildren(tid, ptid);
     }
 
+    /**
+     * Rename a tag.
+     *
+     * @param tid   The ID of the tag to be renamed.
+     * @param tname The new name of the tag.
+    **/
+    my.jsfunc_rename = function(tid, tname)
+    {
+        delete rbm_tname_to_tid[rbm_tid_to_tname[tid].toLowerCase()];
+
+        rbm_tid_to_tname[tid]                = tname;
+        rbm_tname_to_tid[name.toLowerCase()] = tid;
+    }
+
     return my;
 
 }());

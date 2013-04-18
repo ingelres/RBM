@@ -4,6 +4,12 @@ body {
     font-family: Arial, sans-serif;
 }
 
+input[type="text"] {
+    border-radius: 3px;
+    border: 1px solid #CCC;
+    padding: 5px 26px 5px 6px;
+}
+
 #css-explorer {
     width: 300px;
 }
@@ -53,13 +59,45 @@ body {
     background-color: #0000AA;
 }
 
+/* Search boxes */
 #css-search-by-tag {
-    padding: 5px 26px 5px 6px;
     background: #FFF url('./img/search.png') no-repeat center right;
-    border: 1px solid #CCC;
-    border-radius: 3px;
 }
 
+/* Popup menus */
+.popup-menu {
+    position: absolute;
+    z-index: 100;
+    width: 100px;
+    display: none;
+    padding: 0px;
+    cursor: pointer;
+    list-style-type: none;
+    background-color: #FFF;
+    border: 1px solid #777;
+}
+
+.popup-menu li {
+    padding: 5px;
+}
+
+.popup-menu li:hover {
+    color: #FFF;
+    background-color: #87AFFF;
+}
+
+/* The style of errors displayed on top of buttons in dialog boxes */
+.css-dialog-errmsg {
+    border: 1px solid #CD0A0A;
+    border-radius: 3px;
+    background-color: #FFF7F4;
+    color: #CD0A0A;
+    text-align: center;
+    line-height: 26px;
+    margin-top: 10px;
+}
+
+/* Footer of the page */
 #css-footer {
     margin-top: 20px;
     text-align: center;

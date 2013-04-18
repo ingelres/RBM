@@ -24,6 +24,34 @@ var libexp = (function(){
             // to manage difference between browsers (e.g., Firefox doesn't know what window.event is)
             $("#css-explorer-item-" + tid).on("click", tid, my.jsfunc_onItemClicked);
         }
+
+        // Create the dialog box used to rename a tag
+        $("#css-explorer-dialog-rename").dialog({
+            modal:true,
+            autoOpen:false,
+            buttons:[{
+                text: L10N.rename,
+                click: function(){
+                    var name   = $("#css-explorer-tag-new-name").val();
+                    var errmsg = $("#css-explorer-dialog-rename-errmsg");
+                    var tid    = rbm_tname_to_tid[name.toLowerCase()];
+
+                         if(name.length == 0)                               errmsg.html(L10N.empty_name).css("visibility", "visible");
+                    else if(tid != undefined && tid != $(this).data("tid")) errmsg.html(L10N.name_exists).css("visibility", "visible");
+                    else                                                    jsfunc_renameTag($(this).dialog("close").data("tid"), name);
+                }},{
+                text: L10N.cancel,
+                click: function(){
+                    $(this).dialog("close");
+                }}
+            ]
+        });
+
+        $("#css-explorer-tag-new-name").keyup(function(evt){
+            if(evt.keyCode == 13){
+                $("#css-explorer-dialog-rename").dialog('option', 'buttons')[0].click.apply($("#css-explorer-dialog-rename"));
+            }
+        });
     });
 
 
@@ -63,6 +91,28 @@ var libexp = (function(){
     **/
     function jsfunc_showToolbox(tid)
     {
+        var popup = $("#css-explorer-toolbox-popup");
+
+        // Show the popup right below the corresponding item
+        popup.show().position({my: "left top", at: "left bottom", of: $("#css-explorer-item-" + tid).find(".css-explorer-toolbox")});
+
+        // We need to remove the previous handler first, otherwise they just keep being added one to another
+        popup.off("click").on("click", function(evt){
+
+            var target = $(evt.target);
+
+            popup.hide();
+
+            if(target.is("#css-explorer-toolbox-delete"))
+            {
+            }
+            else
+            {
+                $("#css-explorer-tag-new-name").val("").attr("placeholder", rbm_tid_to_tname[tid]);
+                $("#css-explorer-dialog-rename-errmsg").css("visibility", "hidden");
+                $("#css-explorer-dialog-rename").dialog("open").data("tid", tid);
+            }
+        });
     }
 
 
@@ -92,7 +142,7 @@ var libexp = (function(){
             if(rbm_tid_children[tid] == undefined) code += "class='css-explorer-expander'></div>";
             else                                   code += "class='css-explorer-expander css-explorer-expand'></div>";
 
-            code += rbm_tid_to_tname[tid] + "</div>";
+            code += "<div class='css-explorer-tag-name'>" + rbm_tid_to_tname[tid] + "</div></div>";
         }
 
         $(code + "</div>").insertAfter("#css-explorer-item-" + ptid).slideDown(ANIMATION_LEN);
@@ -316,6 +366,20 @@ var libexp = (function(){
             // Now that the hierarchy has been expanded, the item exists and can be selected
             jsfunc_selectTag(tid);
         }
+    }
+
+
+    /**
+    * Rename a tag.
+    *
+    * @param tid   The ID of the tag to be renamed.
+    * @param tname The new name of the tag.
+    **/
+    function jsfunc_renameTag(tid, tname)
+    {
+        libtags.jsfunc_rename(tid, tname);
+        $("#css-explorer-item-" + tid).find(".css-explorer-tag-name").html(tname);
+        $("#css-search-by-tag").autocomplete("option", "source", libtags.jsfunc_getAllTagNames());
     }
 
     return my;
