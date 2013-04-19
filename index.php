@@ -50,6 +50,7 @@
 
                 include("./js/sample-data.js");
                 include("./js/libtags.js");
+                include("./js/libsearch.js");
                 include("./js/libexp.js");
                 include("./js/rbm.js");
 

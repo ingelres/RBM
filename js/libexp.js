@@ -378,8 +378,9 @@ var libexp = (function(){
     function jsfunc_renameTag(tid, tname)
     {
         libtags.jsfunc_rename(tid, tname);
+        libsearch.jsfunc_updateSourceTags();
+
         $("#css-explorer-item-" + tid).find(".css-explorer-tag-name").html(tname);
-        $("#css-search-by-tag").autocomplete("option", "source", libtags.jsfunc_getAllTagNames());
     }
 
     return my;
