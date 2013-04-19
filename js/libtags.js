@@ -151,8 +151,8 @@ var libtags = (function() {
     {
         delete rbm_tname_to_tid[rbm_tid_to_tname[tid].toLowerCase()];
 
-        rbm_tid_to_tname[tid]                = tname;
-        rbm_tname_to_tid[name.toLowerCase()] = tid;
+        rbm_tid_to_tname[tid]                 = tname;
+        rbm_tname_to_tid[tname.toLowerCase()] = tid;
     }
 
     return my;
