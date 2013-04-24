@@ -12,11 +12,13 @@ var libexp = (function(){
      * Initialization code.
     **/
     $(function(){
-        var nbTopLvlItems = rbm_top_level_tid.length;
+
+        var topLvlItems   = rbm_tid_children[0];
+        var nbTopLvlItems = topLvlItems.length;
 
         for(var i=0; i<nbTopLvlItems; ++i)
         {
-            var tid = rbm_top_level_tid[i];
+            var tid = topLvlItems[i];
 
             jsfunc_makeDNDItem(tid);
 
@@ -36,7 +38,7 @@ var libexp = (function(){
                     var errmsg = $("#css-explorer-dialog-rename-errmsg");
                     var tid    = rbm_tname_to_tid[name.toLowerCase()];
 
-                         if(name.length == 0)                               errmsg.html(L10N.empty_name).css("visibility", "visible");
+                         if(name.length == 0)                               errmsg.html(L10N.name_empty).css("visibility", "visible");
                     else if(tid != undefined && tid != $(this).data("tid")) errmsg.html(L10N.name_exists).css("visibility", "visible");
                     else                                                    jsfunc_renameTag($(this).dialog("close").data("tid"), name);
                 }},{
@@ -51,6 +53,23 @@ var libexp = (function(){
             if(evt.keyCode == 13){
                 $("#css-explorer-dialog-rename").dialog('option', 'buttons')[0].click.apply($("#css-explorer-dialog-rename"));
             }
+        });
+
+        // Create the dialog box used to delete a tag
+        $("#css-explorer-dialog-delete").dialog({
+            modal:true,
+            width: 400,
+            autoOpen:false,
+            buttons: [{
+                text: L10N.delete,
+                click: function(){
+                    jsfunc_deleteTag($(this).dialog("close").data("tid"));
+                }},{
+                text: L10N.cancel,
+                click: function(){
+                    $(this).dialog("close");
+                }}
+            ],
         });
     });
 
@@ -99,19 +118,24 @@ var libexp = (function(){
         // We need to remove the previous handler first, otherwise they just keep being added one to another
         popup.off("click").on("click", function(evt){
 
+            var tname  = rbm_tid_to_tname[tid];
             var target = $(evt.target);
-
-            popup.hide();
 
             if(target.is("#css-explorer-toolbox-delete"))
             {
+                if(rbm_tid_children[tid] == undefined) $("#css-explorer-dialog-delete-msg").html(L10N.confirm_delete_tag);
+                else                                   $("#css-explorer-dialog-delete-msg").html(L10N.confirm_delete_tag_subtags);
+
+                $("#css-explorer-dialog-delete").data("tid", tid).dialog("open");
             }
             else
             {
-                $("#css-explorer-tag-new-name").val("").attr("placeholder", rbm_tid_to_tname[tid]);
+                $("#css-explorer-tag-new-name").val("").attr("placeholder", tname);
                 $("#css-explorer-dialog-rename-errmsg").css("visibility", "hidden");
-                $("#css-explorer-dialog-rename").dialog("open").data("tid", tid);
+                $("#css-explorer-dialog-rename").data("tid", tid).dialog("open");
             }
+
+            popup.hide();
         });
     }
 
@@ -176,7 +200,7 @@ var libexp = (function(){
         children.slideUp(ANIMATION_LEN, function(){ $(this).remove() });
 
         // Clear selection if it's a descendant of the item we're collapsing
-        if(libtags.jsfunc_tidIsDescendant(selectedTagId, ptid))
+        if(selectedTagId != -1 && libtags.jsfunc_tidIsDescendant(selectedTagId, ptid))
             jsfunc_selectTag(-1);
 
         // Collapse -> expand
@@ -198,10 +222,11 @@ var libexp = (function(){
     **/
     my.jsfunc_collapseAll = function()
     {
-        var nbTopLvlItems = rbm_top_level_tid.length;
+        var topLvlItems   = rbm_tid_children[0];
+        var nbTopLvlItems = topLvlItems.length;
 
         for(var i=0; i<nbTopLvlItems; ++i)
-            $("#css-explorer-expander-" + rbm_top_level_tid[i] + ".css-explorer-collapse").trigger("click");
+            $("#css-explorer-expander-" + topLvlItems[i] + ".css-explorer-collapse").trigger("click");
     }
 
 
@@ -219,7 +244,7 @@ var libexp = (function(){
         // Update the current parent (if any) by removing the expand/collapse icon if it has no more child after the reparenting
         var oldptid = rbm_tid_parents[tid];
 
-        if(oldptid != undefined && rbm_tid_children[oldptid].length == 1)
+        if(oldptid != 0 && rbm_tid_children[oldptid].length == 1)
             $("#css-explorer-expander-" + oldptid).removeClass("css-explorer-expand").removeClass("css-explorer-collapse");
 
         // Reparent the tag internally
@@ -381,6 +406,20 @@ var libexp = (function(){
         libsearch.jsfunc_updateSourceTags();
 
         $("#css-explorer-item-" + tid).find(".css-explorer-tag-name").html(tname);
+    }
+
+
+    /**
+     * Delete a tag.
+     *
+     * @param tid The ID of the tag.
+    **/
+    function jsfunc_deleteTag(tid)
+    {
+        libtags.jsfunc_delete(tid);
+
+        $("#css-explorer-children-" + tid).slideUp(ANIMATION_LEN, function(){ $(this).remove() });
+        $("#css-explorer-item-" + tid).slideUp(ANIMATION_LEN, function(){ $(this).remove() });
     }
 
     return my;

@@ -1,5 +1,5 @@
 var rbm_tid_to_tname = {
-     0: 'Games',
+     5: 'Games',
     11: 'DS',
     12: 'PS3',
     13: 'Dark Souls',
@@ -13,7 +13,7 @@ var rbm_tid_to_tname = {
 }
 
 var rbm_tname_to_tid = {
-    'games':          0,
+    'games':          5,
     'ds':            11,
     'ps3':           12,
     'dark souls':    13,
@@ -26,21 +26,23 @@ var rbm_tname_to_tid = {
     'tools':         59,
 }
 
-var rbm_top_level_tid = [0, 25, 59];
-
 var rbm_tid_children = {
-     0: [11, 12],
+     0: [25, 5, 59],
+     5: [11, 12],
     12: [24, 13],
     25: [36, 47, 48, 58],
 }
 
 var rbm_tid_parents = {
-    11: 0,
-    12: 0,
+     5:  0,
+    11:  5,
+    12:  5,
     13: 12,
     24: 12,
+    25:  0,
     36: 25,
     47: 25,
     48: 25,
     58: 25,
+    59:  0,
 }

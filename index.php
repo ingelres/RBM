@@ -39,14 +39,9 @@
 
         <script type="text/javascript">
 
-                var L10N = {
-                    rename:      "<?=_('Rename')?>",
-                    cancel:      "<?=_('Cancel')?>",
-                    empty_name:  "<?=_('Please enter a name')?>",
-                    name_exists: "<?=_('This name is already used')?>",
-                };
-
             <?php
+
+                include("./inc/l10n.php");
 
                 include("./js/sample-data.js");
                 include("./js/libtags.js");
@@ -75,10 +70,10 @@
                 <div id="css-explorer-expander-25" class="css-explorer-expander css-explorer-expand"></div>
                 <div class="css-explorer-tag-name">Code</div>
             </div>
-            <div id="css-explorer-item-0" class="css-explorer-item">
+            <div id="css-explorer-item-5" class="css-explorer-item">
                 <div class="css-explorer-handle"></div>
                 <div class="css-explorer-toolbox"></div>
-                <div id="css-explorer-expander-0" class="css-explorer-expander css-explorer-expand"></div>
+                <div id="css-explorer-expander-5" class="css-explorer-expander css-explorer-expand"></div>
                 <div class="css-explorer-tag-name">Games</div>
             </div>
             <div id="css-explorer-item-59" class="css-explorer-item">
@@ -100,10 +95,15 @@
         </ul>
 
         <!-- The dialog box for renaming a tag -->
-        <div id="css-explorer-dialog-rename" title="<?=_('Rename a Tag')?>">
+        <div id="css-explorer-dialog-rename" title="<?=_('Rename Tag')?>">
             <?=_("New name:")?><br />
             <input type="text" id="css-explorer-tag-new-name" /><br />
             <div id="css-explorer-dialog-rename-errmsg" class="css-dialog-errmsg">An error occurred</div>
+        </div>
+
+        <!-- The dialog box for confirmation when deleting a tag -->
+        <div id="css-explorer-dialog-delete" title="<?=_('Delete tag')?>">
+            <div id="css-explorer-dialog-delete-msg"></div>
         </div>
 
     </body>
