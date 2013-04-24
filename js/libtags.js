@@ -157,35 +157,24 @@ var libtags = (function() {
     **/
     my.jsfunc_delete = function(tid)
     {
-        // Delete tags from bottom to top to avoid issues while manipulating hierarchy
-        var tags         = [];
-        var toBeExplored = [tid];
+        // Delete the tag from its parent's children
+        var ptid     = rbm_tid_parents[tid];
+        var children = rbm_tid_children[ptid];
 
-        while(toBeExplored.length != 0)
+        if(children.length == 1 && ptid != 0) delete rbm_tid_children[ptid];
+        else                                  children.splice(children.indexOf(tid), 1);
+
+        // Delete the tag and its subtags
+        var tags = [tid];
+
+        while(tags.length != 0)
         {
-            var tid      = toBeExplored.shift();
-            var children = rbm_tid_children[tid];
-
-            tags.push(tid);
+            tid      = tags.shift();
+            children = rbm_tid_children[tid];
 
             if(children != undefined)
-                toBeExplored = toBeExplored.concat(children);
-        }
+                tags = tags.concat(children);
 
-        tags = tags.reverse();
-
-        for(var i=0; i<tags.length; ++i)
-        {
-            var tid = tags[i];
-
-            // Delete the tag from its parent's children
-            var ptid     = rbm_tid_parents[tid];
-            var children = rbm_tid_children[ptid];
-
-            if(children.length == 1) delete rbm_tid_children[ptid];
-            else                     children.splice(children.indexOf(tid), 1);
-
-            // Delete the tag itself
             delete rbm_tname_to_tid[rbm_tid_to_tname[tid]];
             delete rbm_tid_to_tname[tid];
             delete rbm_tid_children[tid];
