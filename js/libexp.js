@@ -417,6 +417,7 @@ var libexp = (function(){
     function jsfunc_deleteTag(tid)
     {
         libtags.jsfunc_delete(tid);
+        libsearch.jsfunc_updateSourceTags();
 
         $("#css-explorer-children-" + tid).slideUp(ANIMATION_LEN, function(){ $(this).remove() });
         $("#css-explorer-item-" + tid).slideUp(ANIMATION_LEN, function(){ $(this).remove() });
