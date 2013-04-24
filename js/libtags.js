@@ -50,7 +50,7 @@ var libtags = (function() {
     {
         var tnames = [];
 
-        for(tid in rbm_tid_to_tname)
+        for(var tid in rbm_tid_to_tname)
             tnames.push(rbm_tid_to_tname[tid]);
 
         return tnames;
@@ -58,7 +58,7 @@ var libtags = (function() {
 
 
     /**
-     * @return The level of a tag starting from the top level (top-level is level 1)
+     * @return The level of a tag starting from the top level (top-level is level 0)
     **/
     my.jsfunc_getLevel = function(tid)
     {
@@ -134,6 +134,7 @@ var libtags = (function() {
         // Add the new child to ptid
         return jsfunc_addToChildren(tid, ptid);
     }
+
 
     /**
      * Rename a tag.
