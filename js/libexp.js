@@ -71,6 +71,11 @@ var libexp = (function(){
                 }}
             ],
         });
+
+        // Hide the popup menu
+        $("html").on("click", function(evt){
+            $("#css-explorer-toolbox-popup").hide();
+        });
     });
 
 
@@ -95,6 +100,10 @@ var libexp = (function(){
         else if(target.hasClass("css-explorer-toolbox"))
         {
             jsfunc_showToolbox(tid);
+
+            // Click events eventually end up in the global handler that closes the popup menu
+            // We don't want that to happen when we open the menu, otherwise it would be immediately closed
+            evt.stopPropagation();
         }
         else if(!target.hasClass("css-explorer-handle"))
         {
