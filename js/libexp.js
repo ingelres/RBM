@@ -369,7 +369,7 @@ var libexp = (function(){
     **/
     my.jsfunc_showAndSelectTag = function(tname)
     {
-        var tid = libtags.jsfunc_getName(tname);
+        var tid = libtags.jsfunc_getIdFromName(tname);
 
         if(tid != undefined)
         {
