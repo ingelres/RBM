@@ -13,7 +13,7 @@ var libexp = (function(){
     **/
     $(function(){
 
-        var topLvlItems   = rbm_tid_children[0];
+        var topLvlItems   = libtags.jsfunc_getTopLevelTags();
         var nbTopLvlItems = topLvlItems.length;
 
         for(var i=0; i<nbTopLvlItems; ++i)
@@ -36,7 +36,7 @@ var libexp = (function(){
                 click: function(){
                     var name   = $("#css-explorer-tag-new-name").val();
                     var errmsg = $("#css-explorer-dialog-rename-errmsg");
-                    var tid    = rbm_tname_to_tid[name.toLowerCase()];
+                    var tid    = libtags.jsfunc_getIdFromName(name);
 
                          if(name.length == 0)                               errmsg.html(L10N.name_empty).css("visibility", "visible");
                     else if(tid != undefined && tid != $(this).data("tid")) errmsg.html(L10N.name_exists).css("visibility", "visible");
@@ -118,13 +118,13 @@ var libexp = (function(){
         // We need to remove the previous handler first, otherwise they just keep being added one to another
         popup.off("click").on("click", function(evt){
 
-            var tname  = rbm_tid_to_tname[tid];
+            var tname  = libtags.jsfunc_getName(tid);
             var target = $(evt.target);
 
             if(target.is("#css-explorer-toolbox-delete"))
             {
-                if(rbm_tid_children[tid] == undefined) $("#css-explorer-dialog-delete-msg").html(L10N.confirm_delete_tag);
-                else                                   $("#css-explorer-dialog-delete-msg").html(L10N.confirm_delete_tag_subtags);
+                if(libtags.jsfunc_hasSubTags(tid)) $("#css-explorer-dialog-delete-msg").html(L10N.confirm_delete_tag_subtags);
+                else                               $("#css-explorer-dialog-delete-msg").html(L10N.confirm_delete_tag);
 
                 $("#css-explorer-dialog-delete").data("tid", tid).dialog("open");
             }
@@ -149,7 +149,7 @@ var libexp = (function(){
     function jsfunc_expandTag(ptid, expander)
     {
         var code       = "<div id='css-explorer-children-" + ptid + "' style='display: none'>";
-        var children   = rbm_tid_children[ptid];
+        var children   = libtags.jsfunc_getSubTags(ptid);
         var nbChildren = children.length;
         var marginLeft = (Math.min(libtags.jsfunc_getLevel(ptid)+1, MAX_ITEM_LVL)-1) * MARGIN_LEFT_PER_LVL;
 
@@ -163,10 +163,10 @@ var libexp = (function(){
             code += "<div class='css-explorer-toolbox'></div>";
             code += "<div id='css-explorer-expander-" + tid + "' style='margin-left:" + marginLeft + "px' ";
 
-            if(rbm_tid_children[tid] == undefined) code += "class='css-explorer-expander'></div>";
-            else                                   code += "class='css-explorer-expander css-explorer-expand'></div>";
+            if(libtags.jsfunc_hasSubTags(tid)) code += "class='css-explorer-expander css-explorer-expand'></div>";
+            else                               code += "class='css-explorer-expander'></div>";
 
-            code += "<div class='css-explorer-tag-name'>" + rbm_tid_to_tname[tid] + "</div></div>";
+            code += "<div class='css-explorer-tag-name'>" + libtags.jsfunc_getName(tid) + "</div></div>";
         }
 
         $(code + "</div>").insertAfter("#css-explorer-item-" + ptid).slideDown(ANIMATION_LEN);
@@ -222,7 +222,7 @@ var libexp = (function(){
     **/
     my.jsfunc_collapseAll = function()
     {
-        var topLvlItems   = rbm_tid_children[0];
+        var topLvlItems   = libtags.jsfunc_getTopLevelTags();
         var nbTopLvlItems = topLvlItems.length;
 
         for(var i=0; i<nbTopLvlItems; ++i)
@@ -242,9 +242,9 @@ var libexp = (function(){
     my.jsfunc_reparent = function(tid, ptid)
     {
         // Update the current parent (if any) by removing the expand/collapse icon if it has no more child after the reparenting
-        var oldptid = rbm_tid_parents[tid];
+        var oldptid = libtags.jsfunc_getParent(tid);
 
-        if(oldptid != 0 && rbm_tid_children[oldptid].length == 1)
+        if(oldptid != 0 && libtags.jsfunc_getSubTags(oldptid).length == 1)
             $("#css-explorer-expander-" + oldptid).removeClass("css-explorer-expand").removeClass("css-explorer-collapse");
 
         // Reparent the tag internally
@@ -323,7 +323,7 @@ var libexp = (function(){
         item.droppable({
             tolerance: "pointer",
             hoverClass: "css-explorer-droppable",
-            accept: function(drg){ return !libtags.jsfunc_tidIsDescendant(tid, drg.data("tid")) && rbm_tid_parents[drg.data("tid")] != tid},
+            accept: function(drg){ return !libtags.jsfunc_tidIsDescendant(tid, drg.data("tid")) && libtags.jsfunc_getParent(drg.data("tid")) != tid},
             drop: function(evt, ui){libexp.jsfunc_reparent($(ui.draggable).data("tid"), tid)},
         });
     }
@@ -369,7 +369,7 @@ var libexp = (function(){
     **/
     my.jsfunc_showAndSelectTag = function(tname)
     {
-        var tid = rbm_tname_to_tid[tname.toLowerCase()];
+        var tid = libtags.jsfunc_getName(tname);
 
         if(tid != undefined)
         {

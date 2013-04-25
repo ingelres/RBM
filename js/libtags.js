@@ -4,6 +4,80 @@ var libtags = (function() {
 
 
     /**
+     * @return An array with all the top-level tags.
+    **/
+    my.jsfunc_getTopLevelTags = function()
+    {
+        return tags.tid_children[0];
+    }
+
+
+    /**
+     * Return the ID of a tag from its name.
+     *
+     * @param tname The name of the tag.
+     *
+     * @return The ID of the tag.
+    **/
+    my.jsfunc_getIdFromName = function(tname)
+    {
+        return tags.tname_to_tid[tname.toLowerCase()];
+    }
+
+
+    /**
+     * Return the name of a tag.
+     *
+     * @param tid The ID of the tag.
+     *
+     * @return The name of the tag.
+    **/
+    my.jsfunc_getName = function(tid)
+    {
+        return tags.tid_to_tname[tid];
+    }
+
+
+    /**
+     * Return whether a tag has subtags.
+     *
+     * @param tid The ID of the tag.
+     *
+     * @return true if the tag has subtags, false otherwise.
+    **/
+    my.jsfunc_hasSubTags = function(tid)
+    {
+        return tags.tid_children[tid] != undefined;
+    }
+
+
+    /**
+     * Get the subtags of a tag.
+     *
+     * @param tid The ID of the tag.
+     *
+     * @return An array with the ID of the subtags, or undefined if the tag has no subtags.
+    **/
+    my.jsfunc_getSubTags = function(tid)
+    {
+        return tags.tid_children[tid];
+    }
+
+
+    /**
+     * Get the parent of a tag.
+     *
+     * @param tid The ID of the tag.
+     *
+     * @return The ID of the parent.
+    **/
+    my.jsfunc_getParent = function(tid)
+    {
+        return tags.tid_parents[tid];
+    }
+
+
+    /**
      * Check whether a tag is a descendant of another tag (not necessary a direct child).
      *
      * @param tid  The ID of the potential descendant.
@@ -13,7 +87,7 @@ var libtags = (function() {
     **/
     my.jsfunc_tidIsDescendant = function(tid, ptid)
     {
-        while((tid = rbm_tid_parents[tid]) != 0)
+        while((tid = tags.tid_parents[tid]) != 0)
         {
             if(tid == ptid)
                 return true;
@@ -34,7 +108,7 @@ var libtags = (function() {
     {
         var parents = [];
 
-        while((tid = rbm_tid_parents[tid]) != 0)
+        while((tid = tags.tid_parents[tid]) != 0)
             parents.push(tid);
 
         return parents.reverse();
@@ -42,7 +116,7 @@ var libtags = (function() {
 
 
     /**
-     * @return An array with the name of all the tags.
+     * @return An array with all the tag names.
      *
      * @note The array is not sorted.
     **/
@@ -50,8 +124,8 @@ var libtags = (function() {
     {
         var tnames = [];
 
-        for(var tid in rbm_tid_to_tname)
-            tnames.push(rbm_tid_to_tname[tid]);
+        for(var tid in tags.tid_to_tname)
+            tnames.push(tags.tid_to_tname[tid]);
 
         return tnames;
     }
@@ -64,7 +138,7 @@ var libtags = (function() {
     {
         var level = 1;
 
-        while((tid = rbm_tid_parents[tid]) != 0)
+        while((tid = tags.tid_parents[tid]) != 0)
             ++level;
 
         return level;
@@ -81,18 +155,18 @@ var libtags = (function() {
     **/
     function jsfunc_addToChildren(tid, ptid)
     {
-        var children       = rbm_tid_children[ptid];
+        var children       = tags.tid_children[ptid];
         var insertionPoint = 0;
 
         if(children != undefined)
         {
             // There's at least one child, so we know that low <= high the first time
-            var tname = rbm_tid_to_tname[tid].toLowerCase(), low = 0, high = children.length-1;
+            var tname = tags.tid_to_tname[tid].toLowerCase(), low = 0, high = children.length-1;
 
             while(low <= high)
             {
                 var middle     = Math.floor((low + high) / 2);
-                var comparison = tname.localeCompare(rbm_tid_to_tname[children[middle]].toLowerCase());
+                var comparison = tname.localeCompare(tags.tid_to_tname[children[middle]].toLowerCase());
 
                 if(comparison > 0) low  = middle + 1;
                 else               high = middle - 1;
@@ -104,7 +178,7 @@ var libtags = (function() {
             children.splice(insertionPoint, 0, tid);
         }
         else
-            rbm_tid_children[ptid] = [tid];
+            tags.tid_children[ptid] = [tid];
 
         if(insertionPoint == 0) return -1;
         else                    return children[insertionPoint-1];
@@ -122,14 +196,14 @@ var libtags = (function() {
     my.jsfunc_reparent = function(tid, ptid)
     {
         // Delete tid from its parent's children
-        var oldptid     = rbm_tid_parents[tid];
-        var oldchildren = rbm_tid_children[oldptid];
+        var oldptid     = tags.tid_parents[tid];
+        var oldchildren = tags.tid_children[oldptid];
 
-        if(oldchildren.length == 1) delete rbm_tid_children[oldptid];
+        if(oldchildren.length == 1) delete tags.tid_children[oldptid];
         else                        oldchildren.splice(oldchildren.indexOf(tid), 1);
 
         // Update the parent of tid
-        rbm_tid_parents[tid] = ptid;
+        tags.tid_parents[tid] = ptid;
 
         // Add the new child to ptid
         return jsfunc_addToChildren(tid, ptid);
@@ -144,10 +218,10 @@ var libtags = (function() {
     **/
     my.jsfunc_rename = function(tid, tname)
     {
-        delete rbm_tname_to_tid[rbm_tid_to_tname[tid].toLowerCase()];
+        delete tags.tname_to_tid[tags.tid_to_tname[tid].toLowerCase()];
 
-        rbm_tid_to_tname[tid]                 = tname;
-        rbm_tname_to_tid[tname.toLowerCase()] = tid;
+        tags.tid_to_tname[tid]                 = tname;
+        tags.tname_to_tid[tname.toLowerCase()] = tid;
     }
 
 
@@ -159,27 +233,27 @@ var libtags = (function() {
     my.jsfunc_delete = function(tid)
     {
         // Delete the tag from its parent's children
-        var ptid     = rbm_tid_parents[tid];
-        var children = rbm_tid_children[ptid];
+        var ptid     = tags.tid_parents[tid];
+        var children = tags.tid_children[ptid];
 
-        if(children.length == 1 && ptid != 0) delete rbm_tid_children[ptid];
+        if(children.length == 1 && ptid != 0) delete tags.tid_children[ptid];
         else                                  children.splice(children.indexOf(tid), 1);
 
         // Delete the tag and its subtags
-        var tags = [tid];
+        var alltags = [tid];
 
-        while(tags.length != 0)
+        while(alltags.length != 0)
         {
-            tid      = tags.shift();
-            children = rbm_tid_children[tid];
+            tid      = alltags.shift();
+            children = tags.tid_children[tid];
 
             if(children != undefined)
-                tags = tags.concat(children);
+                alltags = alltags.concat(children);
 
-            delete rbm_tname_to_tid[rbm_tid_to_tname[tid]];
-            delete rbm_tid_to_tname[tid];
-            delete rbm_tid_children[tid];
-            delete rbm_tid_parents[tid];
+            delete tags.tname_to_tid[tags.tid_to_tname[tid]];
+            delete tags.tid_to_tname[tid];
+            delete tags.tid_children[tid];
+            delete tags.tid_parents[tid];
         }
     }
 
