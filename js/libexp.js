@@ -452,11 +452,16 @@ var libexp = (function(){
     **/
     function jsfunc_deleteTag(tid)
     {
-        libtags.jsfunc_delete(tid);
-        libsearch.jsfunc_updateSourceTags();
+        var ptid = libtags.jsfunc_getParent(tid);
 
         $("#css-explorer-children-" + tid).slideUp(ANIMATION_LEN, function(){ $(this).remove() });
         $("#css-explorer-item-" + tid).slideUp(ANIMATION_LEN, function(){ $(this).remove() });
+
+        libtags.jsfunc_delete(tid);
+        libsearch.jsfunc_updateSourceTags();
+
+        if(!libtags.jsfunc_hasSubTags(ptid))
+            $("#css-explorer-expander-" + ptid).removeClass("css-explorer-collapse");
     }
 
 
