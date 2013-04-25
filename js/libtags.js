@@ -250,7 +250,7 @@ var libtags = (function() {
             if(children != undefined)
                 alltags = alltags.concat(children);
 
-            delete tags.tname_to_tid[tags.tid_to_tname[tid]];
+            delete tags.tname_to_tid[tags.tid_to_tname[tid].toLowerCase()];
             delete tags.tid_to_tname[tid];
             delete tags.tid_children[tid];
             delete tags.tid_parents[tid];
