@@ -215,6 +215,8 @@ var libtags = (function() {
      *
      * @param tid   The ID of the tag to be renamed.
      * @param tname The new name of the tag.
+     *
+     * @return The ID of the new sibling of the tag.
     **/
     my.jsfunc_rename = function(tid, tname)
     {
@@ -222,6 +224,14 @@ var libtags = (function() {
 
         tags.tid_to_tname[tid]                 = tname;
         tags.tname_to_tid[tname.toLowerCase()] = tid;
+
+        // The tag has been renamed, we now need to put it at the right place in its parent's children
+        var ptid     = tags.tid_parents[tid];
+        var children = tags.tid_children[ptid];
+
+        children.splice(children.indexOf(tid), 1);
+
+        return jsfunc_addToChildren(tid, ptid);
     }
 
 

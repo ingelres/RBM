@@ -64,23 +64,25 @@
         <input type="text" id="css-search-by-tag" placeholder="<?=_("Type a tag name...")?>"/>
 
         <div id="css-explorer">
-            <div id="css-explorer-item-25" class="css-explorer-item">
-                <div class="css-explorer-handle"></div>
-                <div class="css-explorer-toolbox"></div>
-                <div id="css-explorer-expander-25" class="css-explorer-expander css-explorer-expand"></div>
-                <div class="css-explorer-tag-name">Code</div>
-            </div>
-            <div id="css-explorer-item-5" class="css-explorer-item">
-                <div class="css-explorer-handle"></div>
-                <div class="css-explorer-toolbox"></div>
-                <div id="css-explorer-expander-5" class="css-explorer-expander css-explorer-expand"></div>
-                <div class="css-explorer-tag-name">Games</div>
-            </div>
-            <div id="css-explorer-item-59" class="css-explorer-item">
-                <div class="css-explorer-handle"></div>
-                <div class="css-explorer-toolbox"></div>
-                <div id="css-explorer-expander-59" class="css-explorer-expander"></div>
-                <div class="css-explorer-tag-name">Tools</div>
+            <div id="css-explorer-children-0">
+                <div id="css-explorer-item-25" class="css-explorer-item">
+                    <div class="css-explorer-handle"></div>
+                    <div class="css-explorer-toolbox"></div>
+                    <div id="css-explorer-expander-25" class="css-explorer-expander css-explorer-expand"></div>
+                    <div class="css-explorer-tag-name">Code</div>
+                </div>
+                <div id="css-explorer-item-5" class="css-explorer-item">
+                    <div class="css-explorer-handle"></div>
+                    <div class="css-explorer-toolbox"></div>
+                    <div id="css-explorer-expander-5" class="css-explorer-expander css-explorer-expand"></div>
+                    <div class="css-explorer-tag-name">Games</div>
+                </div>
+                <div id="css-explorer-item-59" class="css-explorer-item">
+                    <div class="css-explorer-handle"></div>
+                    <div class="css-explorer-toolbox"></div>
+                    <div id="css-explorer-expander-59" class="css-explorer-expander"></div>
+                    <div class="css-explorer-tag-name">Tools</div>
+                </div>
             </div>
         </div>
 

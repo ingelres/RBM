@@ -433,10 +433,15 @@ var libexp = (function(){
     **/
     function jsfunc_renameTag(tid, tname)
     {
-        libtags.jsfunc_rename(tid, tname);
-        libsearch.jsfunc_updateSourceTags();
+        var item    = $("#css-explorer-item-" + tid);
+        var sibling = libtags.jsfunc_rename(tid, tname);
 
-        $("#css-explorer-item-" + tid).find(".css-explorer-tag-name").html(tname);
+        libsearch.jsfunc_updateSourceTags();
+        item.find(".css-explorer-tag-name").html(tname);
+
+             if(sibling == -1)                                      item.prependTo("#css-explorer-children-" + libtags.jsfunc_getParent(tid));
+        else if($("#css-explorer-children-" + sibling).length != 0) item.insertAfter("#css-explorer-children-" + sibling);
+        else                                                        item.insertAfter("#css-explorer-item-" + sibling);
     }
 
 
