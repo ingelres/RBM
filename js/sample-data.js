@@ -1,5 +1,7 @@
 var tags = {
 
+    next_tid: 100,
+
     tid_to_tname : {
          5: 'Games',
         11: 'DS',

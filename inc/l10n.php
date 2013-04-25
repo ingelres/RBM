@@ -1,7 +1,11 @@
 var L10N = {
+    ok:                         "<?=_('Ok')?>",
+    newtag:                     "<?=_('New Tag')?>",
     rename:                     "<?=_('Rename')?>",
     delete:                     "<?=_('Delete')?>",
     cancel:                     "<?=_('Cancel')?>",
+    create_tag:                 "<?=_('Create Tag')?>",
+    rename_tag:                 "<?=_('Rename Tag')?>",
     name_empty:                 "<?=_('Please enter a name')?>",
     name_exists:                "<?=_('This name is already used')?>",
     confirm_delete_tag:         "<?=_('Delete this tag?')?>",

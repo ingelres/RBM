@@ -257,6 +257,26 @@ var libtags = (function() {
         }
     }
 
+
+    /**
+     * Create a new tag.
+     *
+     * @param ptid  The ID of the parent tag.
+     * @param tname The name of the new tag.
+     *
+     * @return The ID of the new sibling after which the tag has been inserted, or -1 if it's the first child of the parent.
+    **/
+    my.jsfunc_create = function(ptid, tname)
+    {
+        var tid = tags.next_tid++;
+
+        tags.tid_parents[tid]                  = ptid;
+        tags.tid_to_tname[tid]                 = tname;
+        tags.tname_to_tid[tname.toLowerCase()] = tid;
+
+        return {tid: tid, sibling: jsfunc_addToChildren(tid, ptid)};
+    }
+
     return my;
 
 }());

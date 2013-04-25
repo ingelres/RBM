@@ -90,15 +90,16 @@
 
         <!-- The tag toolbox popup -->
         <ul id="css-explorer-toolbox-popup" class="popup-menu">
+            <li id="css-explorer-toolbox-create"><?=_("Create Tag")?></li>
             <li id="css-explorer-toolbox-rename"><?=_("Rename Tag")?></li>
             <li id="css-explorer-toolbox-delete"><?=_("Delete Tag")?></li>
         </ul>
 
         <!-- The dialog box for renaming a tag -->
-        <div id="css-explorer-dialog-rename" title="<?=_('Rename Tag')?>">
-            <?=_("New name:")?><br />
+        <div id="css-explorer-dialog-rename">
+            <?=_("Tag name:")?><br />
             <input type="text" id="css-explorer-tag-new-name" /><br />
-            <div id="css-explorer-dialog-rename-errmsg" class="css-dialog-errmsg">An error occurred</div>
+            <div id="css-explorer-dialog-rename-errmsg" class="css-dialog-errmsg">Error</div>
         </div>
 
         <!-- The dialog box for confirmation when deleting a tag -->

@@ -32,15 +32,17 @@ var libexp = (function(){
             modal:true,
             autoOpen:false,
             buttons:[{
-                text: L10N.rename,
+                text: L10N.ok,
                 click: function(){
                     var name   = $("#css-explorer-tag-new-name").val();
                     var errmsg = $("#css-explorer-dialog-rename-errmsg");
                     var tid    = libtags.jsfunc_getIdFromName(name);
+                    var dlg    = $(this);
 
-                         if(name.length == 0)                               errmsg.html(L10N.name_empty).css("visibility", "visible");
-                    else if(tid != undefined && tid != $(this).data("tid")) errmsg.html(L10N.name_exists).css("visibility", "visible");
-                    else                                                    jsfunc_renameTag($(this).dialog("close").data("tid"), name);
+                         if(name.length == 0)                           errmsg.html(L10N.name_empty).css("visibility", "visible");
+                    else if(tid != undefined && tid != dlg.data("tid")) errmsg.html(L10N.name_exists).css("visibility", "visible");
+                    else if(dlg.data("action") == "rename")             jsfunc_renameTag(dlg.dialog("close").data("tid"), name);
+                    else                                                jsfunc_createTag(dlg.dialog("close").data("tid"), name);
                 }},{
                 text: L10N.cancel,
                 click: function(){
@@ -127,7 +129,6 @@ var libexp = (function(){
         // We need to remove the previous handler first, otherwise they just keep being added one to another
         popup.off("click").on("click", function(evt){
 
-            var tname  = libtags.jsfunc_getName(tid);
             var target = $(evt.target);
 
             if(target.is("#css-explorer-toolbox-delete"))
@@ -139,13 +140,47 @@ var libexp = (function(){
             }
             else
             {
-                $("#css-explorer-tag-new-name").val("").attr("placeholder", tname);
+                var dlg = $("#css-explorer-dialog-rename");
+
                 $("#css-explorer-dialog-rename-errmsg").css("visibility", "hidden");
-                $("#css-explorer-dialog-rename").data("tid", tid).dialog("open");
+
+                if(target.is("#css-explorer-toolbox-create"))
+                {
+                    $("#css-explorer-tag-new-name").val("").attr("placeholder", L10N.newtag);
+                    dlg.data("tid", tid).data("action", "create").dialog("option", "title", L10N.create_tag).dialog("open");
+                }
+                else
+                {
+                    $("#css-explorer-tag-new-name").val("").attr("placeholder", libtags.jsfunc_getName(tid));
+                    dlg.data("tid", tid).data("action", "rename").dialog("option", "title", L10N.rename_tag).dialog("open");
+                }
             }
 
             popup.hide();
         });
+    }
+
+
+    /**
+     * Create the HTML item code for a given tag.
+     *
+     * @param tid The ID of the tag.
+     *
+     * @return The HTML code.
+    **/
+    function jsfunc_getItemCode(tid)
+    {
+        var marginLeft = (Math.min(libtags.jsfunc_getLevel(tid), MAX_ITEM_LVL)-1) * MARGIN_LEFT_PER_LVL;
+
+        var code = "<div id='css-explorer-item-" + tid + "' class='css-explorer-item'>"
+                        + "<div class='css-explorer-handle'></div>"
+                        + "<div class='css-explorer-toolbox'></div>"
+                        + "<div id='css-explorer-expander-" + tid + "' style='margin-left:" + marginLeft + "px' ";
+
+        if(libtags.jsfunc_hasSubTags(tid)) code += "class='css-explorer-expander css-explorer-expand'></div>";
+        else                               code += "class='css-explorer-expander'></div>";
+
+        return code + "<div class='css-explorer-tag-name'>" + libtags.jsfunc_getName(tid) + "</div></div>";
     }
 
 
@@ -157,26 +192,13 @@ var libexp = (function(){
     **/
     function jsfunc_expandTag(ptid, expander)
     {
+        // Create the code and insert it at once, this is faster than inserting many small bits of code
         var code       = "<div id='css-explorer-children-" + ptid + "' style='display: none'>";
         var children   = libtags.jsfunc_getSubTags(ptid);
         var nbChildren = children.length;
-        var marginLeft = (Math.min(libtags.jsfunc_getLevel(ptid)+1, MAX_ITEM_LVL)-1) * MARGIN_LEFT_PER_LVL;
 
-        // Create the code and insert it at once, this is faster than inserting many small bits of code
         for(var i=0; i<nbChildren; ++i)
-        {
-            var tid = children[i];
-
-            code += "<div id='css-explorer-item-" + tid + "' class='css-explorer-item'>";
-            code += "<div class='css-explorer-handle'></div>";
-            code += "<div class='css-explorer-toolbox'></div>";
-            code += "<div id='css-explorer-expander-" + tid + "' style='margin-left:" + marginLeft + "px' ";
-
-            if(libtags.jsfunc_hasSubTags(tid)) code += "class='css-explorer-expander css-explorer-expand'></div>";
-            else                               code += "class='css-explorer-expander'></div>";
-
-            code += "<div class='css-explorer-tag-name'>" + libtags.jsfunc_getName(tid) + "</div></div>";
-        }
+            code += jsfunc_getItemCode(children[i]);
 
         $(code + "</div>").insertAfter("#css-explorer-item-" + ptid).slideDown(ANIMATION_LEN);
 
@@ -430,6 +452,35 @@ var libexp = (function(){
 
         $("#css-explorer-children-" + tid).slideUp(ANIMATION_LEN, function(){ $(this).remove() });
         $("#css-explorer-item-" + tid).slideUp(ANIMATION_LEN, function(){ $(this).remove() });
+    }
+
+
+    /**
+     * Create a new tag.
+     *
+     * @param ptid  The ID of the parent tag.
+     * @param tname The name of the new tag.
+    **/
+    function jsfunc_createTag(ptid, tname)
+    {
+        var tag = libtags.jsfunc_create(ptid, tname);
+
+        if($("#css-explorer-expander-" + ptid).hasClass("css-explorer-collapse"))
+        {
+            var item = $(jsfunc_getItemCode(tag.tid));
+
+                 if(tag.sibling == -1)                                      item.prependTo("#css-explorer-children-" + ptid);
+            else if($("#css-explorer-children-" + tag.sibling).length != 0) item.insertAfter("#css-explorer-children-" + tag.sibling);
+            else                                                            item.insertAfter("#css-explorer-item-" + tag.sibling);
+
+            jsfunc_makeDNDItem(tag.tid);
+            $("#css-explorer-item-" + tag.tid).on("click", tag.tid, my.jsfunc_onItemClicked);
+        }
+        else
+            $("#css-explorer-expander-" + ptid).addClass("css-explorer-expand");
+
+        libsearch.jsfunc_updateSourceTags();
+        libexp.jsfunc_showAndSelectTag(tname);
     }
 
     return my;
