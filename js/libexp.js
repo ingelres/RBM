@@ -294,7 +294,7 @@ var libexp = (function(){
             $("#css-explorer-item-" + tid).draggable("destroy").droppable("destroy").remove();
 
             // Clear selection if needed
-            if(tid == selectedTagId || libtags.jsfunc_tidIsDescendant(selectedTagId, tid))
+            if(tid == selectedTagId || (selectedTagId != -1 && libtags.jsfunc_tidIsDescendant(selectedTagId, tid)))
                 jsfunc_selectTag(-1);
         }
     }
