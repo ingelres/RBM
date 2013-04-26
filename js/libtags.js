@@ -87,7 +87,10 @@ var libtags = (function() {
     **/
     my.jsfunc_tidIsDescendant = function(tid, ptid)
     {
-        while((tid = tags.tid_parents[tid]) != 0)
+        if(tid == ptid)
+            return true;
+
+        while((tid = tags.tid_parents[tid]) != undefined)
         {
             if(tid == ptid)
                 return true;
@@ -108,7 +111,7 @@ var libtags = (function() {
     {
         var parents = [];
 
-        while((tid = tags.tid_parents[tid]) != 0)
+        while((tid = tags.tid_parents[tid]) != undefined)
             parents.push(tid);
 
         return parents.reverse();

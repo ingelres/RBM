@@ -231,7 +231,7 @@ var libexp = (function(){
         children.slideUp(ANIMATION_LEN, function(){ $(this).remove() });
 
         // Clear selection if it's a descendant of the item we're collapsing
-        if(selectedTagId != -1 && libtags.jsfunc_tidIsDescendant(selectedTagId, ptid))
+        if(libtags.jsfunc_tidIsDescendant(selectedTagId, ptid))
             jsfunc_selectTag(-1);
 
         // Collapse -> expand
@@ -325,7 +325,7 @@ var libexp = (function(){
             $("#css-explorer-item-" + tid).draggable("destroy").droppable("destroy").remove();
 
             // Clear selection if needed
-            if(tid == selectedTagId || (selectedTagId != -1 && libtags.jsfunc_tidIsDescendant(selectedTagId, tid)))
+            if(libtags.jsfunc_tidIsDescendant(selectedTagId, tid))
                 jsfunc_selectTag(-1);
         }
     }
@@ -453,6 +453,10 @@ var libexp = (function(){
     function jsfunc_deleteTag(tid)
     {
         var ptid = libtags.jsfunc_getParent(tid);
+
+        // Clear selection if it's a descendant of the item we're deleting
+        if(libtags.jsfunc_tidIsDescendant(selectedTagId, tid))
+            jsfunc_selectTag(-1);
 
         libtags.jsfunc_delete(tid);
         libsearch.jsfunc_updateSourceTags();
