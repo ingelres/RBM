@@ -442,6 +442,8 @@ var libexp = (function(){
              if(sibling == -1)                                      item.prependTo("#css-explorer-children-" + libtags.jsfunc_getParent(tid));
         else if($("#css-explorer-children-" + sibling).length != 0) item.insertAfter("#css-explorer-children-" + sibling);
         else                                                        item.insertAfter("#css-explorer-item-" + sibling);
+
+        $("#css-explorer-children-" + tid).insertAfter(item);
     }
 
 
