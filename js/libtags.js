@@ -116,9 +116,7 @@ var libtags = (function() {
 
 
     /**
-     * @return An array with all the tag names.
-     *
-     * @note The array is not sorted.
+     * @return A sorted array with all the tag names.
     **/
     my.jsfunc_getAllTagNames = function()
     {
@@ -127,7 +125,7 @@ var libtags = (function() {
         for(var tid in tags.tid_to_tname)
             tnames.push(tags.tid_to_tname[tid]);
 
-        return tnames;
+        return tnames.sort();
     }
 
 
