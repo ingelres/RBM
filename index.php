@@ -46,6 +46,7 @@
                 include("./inc/l10n.php");
 
                 include("./js/sample-data.js");
+                include("./js/libtools.js");
                 include("./js/libtags.js");
                 include("./js/libsearch.js");
                 include("./js/libexp.js");
