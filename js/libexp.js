@@ -470,7 +470,7 @@ var libexp = (function(){
             $("#css-explorer-expander-" + ptid).removeClass("css-explorer-collapse");
 
         libajax.jsfunc_ajax({
-            data: "action=deleteTag&id=" + tid,
+            data: "action=deleteTag&tid=" + tid,
         });
     }
 
@@ -506,7 +506,7 @@ var libexp = (function(){
         // Don't pass the escaped version of the tag name
         // Escaping is done server-side as well
         libajax.jsfunc_ajax({
-            data: "action=addTag&name=" + tname,
+            data: "action=addTag&tname=" + tname + "&ptid=" + ptid,
         });
     }
 

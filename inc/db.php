@@ -5,17 +5,19 @@
     /**
      * Create a new tag file.
      *
+     * @param nextTid   The id to be used the next time a tag is created.
      * @param tname2tid The array that maps a tag name to its UID.
      * @param tid2tname The array that maps a tag id to its name.
-     * @param nextTagId The id to be used the next time a tag is created.
+     * @param children  Mapping id -> list of children.
+     * @param parents   Mapping id -> ptid.
     **/
-    function db_saveTagFile($tname2tid, $tid2tname, $nextTagId)
+    function db_saveTagFile($nextTid, $tname2tid, $tid2tname, $children, $parents)
     {
         global $CONSTS_FILE_TAGS;
 
         $handle = fopen($CONSTS_FILE_TAGS, "w");
 
-        fprintf($handle, "<?php\n\$NEXT_TAG_ID=%u;\n\$TNAME_TO_TID=%s;\n\$TID_TO_TNAME=%s;\n?>\n", $nextTagId, var_export($tname2tid, true), var_export($tid2tname, true));
+        fprintf($handle, "<?php\n\$db_nextTid=%u;\n\$db_tname2tid=%s;\n\$db_tid2tname=%s;\n\$db_children=%s;\n\$db_parents=%s;\n?>\n", $nextTid, var_export($tname2tid, true), var_export($tid2tname, true), var_export($children, true), var_export($parents, true));
         fclose($handle);
     }
 

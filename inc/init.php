@@ -30,7 +30,7 @@
             // Create all the data files
             db_saveTidToBidFile(array());
             db_saveBidToTidFile(array());
-            db_saveTagFile(array(), array(), 0);
+            db_saveTagFile(1, array(), array(), array(), array());
         }
 
         return NULL;

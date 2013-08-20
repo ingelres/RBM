@@ -19,9 +19,50 @@
 
 
     /**
+     * Add a tag to the list of children of another tag.
+     *
+     * @param tid         The tag ID.
+     * @param ptid        The parent tag ID.
+     * @param allChildren The array mapping tid to children.
+     * @param tid2tname   The array mapping tid to tname.
+    **/
+    function __addToChildren($tid, $ptid, $allChildren, $tid2tname)
+    {
+        $insertionPoint = 0;
+
+        if(array_key_exists($ptid, $children))
+        {
+            $children = $allChildren[$ptid];
+
+            // There's at least one child, so we know that low <= high the first time
+            $low   = 0;
+            $high  = count($children)-1;
+            $tname = strtolower($tid2tname[$tid]);
+
+            while(low <= high)
+            {
+                $middle     = floor((low + high) / 2);
+                $comparison = strcmp($tname, strtolower($tid2tname[$children[$middle]]));
+
+                if(comparison > 0) low  = middle + 1;
+                else               high = middle - 1;
+            }
+
+            if(comparison > 0) $insertionPoint = middle+1;
+            else               $insertionPoint = middle;
+
+            array_splice($children, $insertionPoint, 0, $tid);
+        }
+        else
+            $children[$ptid] = array($tid);
+    }
+
+
+    /**
      * Add a new tag to the database.
      *
-     * @param name Name of the tag to be added.
+     * @param ptid  ID of the parent tag.
+     * @param tname Name of the tag to be added.
     **/
     function addTag()
     {
@@ -29,16 +70,24 @@
 
         include $CONSTS_FILE_TAGS;
 
-        $tname = htmlspecialchars(getStringParam("name"));
+        $ptid  = getIntParam("ptid");
+        $tname = htmlspecialchars(getStringParam("tname"));
 
-        if(!array_key_exists($tname, $TNAME_TO_TID))
+        // Make sure the tag doesn't already exist
+        if(!array_key_exists($tname, $db_tname2tid))
         {
-            // The tag doesn't already exist
-            // Create a mapping between the tag name and its id
-            $TNAME_TO_TID[$tname]       = $NEXT_TAG_ID;
-            $TID_TO_TNAME[$NEXT_TAG_ID] = $tname;
+            // Create the mapping name <-> id
+            $db_tname2tid[$tname]      = $db_nextTid;
+            $db_tid2tname[$db_nextTid] = $tname;
 
-            db_saveTagFile($TNAME_TO_TID, $TID_TO_TNAME, $NEXT_TAG_ID+1);
+            // Create the mapping tid -> ptid
+            $db_parents[$db_nextTid] = $ptid;
+
+            // Insert the new child in its parent's list
+            __addToChildren($db_nextTid, $ptid, $db_children, $db_tid2tname);
+
+            // We're done
+            db_saveTagFile($db_nextTid+1, $db_tname2tid, $db_tid2tname, $db_children, $db_parents);
         }
     }
 
@@ -46,17 +95,19 @@
     /**
      * Delete a tag from the database.
      *
-     * @param id Id of the tag to be deleted.
+     * @param tid Id of the tag to be deleted.
     **/
     function deleteTag()
     {
+
+        /*
         global $CONSTS_FILE_TAGS, $CONSTS_FILE_TID_TO_BID, $CONSTS_FILE_BID_TO_TID;
 
         include $CONSTS_FILE_TAGS;
 
-        $tid = getStringParam("id");
+        $tid = getIntParam("tid");
 
-        if(array_key_exists($tid, $TID_TO_TNAME))
+        if(array_key_exists($tid, $db_tid2tname))
         {
             include $CONSTS_FILE_TID_TO_BID;
 
@@ -78,13 +129,14 @@
             }
 
             // Now we can remove the tag itself
-            $tname = $TID_TO_TNAME[$tid];
+            $tname = $db_tid2tname[$tid];
 
-            unset($TNAME_TO_TID[$tname]);
-            unset($TID_TO_TNAME[$tid]);
+            unset($db_tname2tid[$tname]);
+            unset($db_tid2tname[$tid]);
 
-            db_saveTagFile($TNAME_TO_TID, $TID_TO_TNAME, $NEXT_TAG_ID);
+            db_saveTagFile($db_nextTid, $db_tname2tid, $db_tid2tname);
         }
+         */
     }
 
 ?>

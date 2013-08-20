@@ -45,7 +45,8 @@
 
                 include("./inc/l10n.php");
 
-                include("./js/sample-data.js");
+                include("./js/empty-sample-data.js");
+
                 include("./js/libtools.js");
                 include("./js/libajax.js");
                 include("./js/libtags.js");
@@ -69,6 +70,7 @@
 
         <div id="css-explorer">
             <div id="css-explorer-children-0">
+                <!--
                 <div id="css-explorer-item-25" class="css-explorer-item">
                     <div class="css-explorer-handle"></div>
                     <div class="css-explorer-toolbox"></div>
@@ -87,6 +89,7 @@
                     <div id="css-explorer-expander-59" class="css-explorer-expander"></div>
                     <div class="css-explorer-tag-name">Tools</div>
                 </div>
+                -->
             </div>
         </div>
 
