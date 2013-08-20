@@ -29,7 +29,7 @@
 
         include $CONSTS_FILE_TAGS;
 
-        $tname = getStringParam("name");
+        $tname = htmlspecialchars(getStringParam("name"));
 
         if(!array_key_exists($tname, $TNAME_TO_TID))
         {
