@@ -47,6 +47,7 @@
 
                 include("./js/sample-data.js");
                 include("./js/libtools.js");
+                include("./js/libajax.js");
                 include("./js/libtags.js");
                 include("./js/libsearch.js");
                 include("./js/libexp.js");
