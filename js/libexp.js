@@ -27,7 +27,8 @@ var libexp = (function(){
             $("#css-explorer-item-" + tid).on("click", tid, my.jsfunc_onItemClicked);
         }
 
-        // The root tag should be clickable as well
+        // Take care of the root tag as well
+        jsfunc_makeDNDItem(0);
         $("#css-explorer-item-0").on("click", 0, my.jsfunc_onItemClicked);
 
         // Create the dialog box used to rename a tag
@@ -129,15 +130,15 @@ var libexp = (function(){
         // Special case for tag 0 (root)
         if(tid == 0)
         {
-            $("#css-explorer-toolbox-create").html(L10N.create_tag);
             $("#css-explorer-toolbox-delete").hide();
             $("#css-explorer-toolbox-rename").hide();
+            $("#css-explorer-toolbox-create").html(L10N.create_tag);
         }
         else
         {
-            $("#css-explorer-toolbox-create").html(L10N.create_subtag);
             $("#css-explorer-toolbox-delete").show();
             $("#css-explorer-toolbox-rename").show();
+            $("#css-explorer-toolbox-create").html(L10N.create_subtag);
         }
 
         // Show the popup right below the corresponding item
@@ -300,9 +301,10 @@ var libexp = (function(){
         var newSibling = libtags.jsfunc_reparent(tid, ptid);
 
         // Update the GUI
+        // Assume tag 0 (root) is always expanded even though it doesn't have an expander
         var expander = $("#css-explorer-expander-" + ptid);
 
-        if(expander.hasClass("css-explorer-collapse"))
+        if(ptid == 0 || expander.hasClass("css-explorer-collapse"))
         {
             // The new parent is already expanded, so we just move things around in the DOM
             var item     = $("#css-explorer-item-" + tid).css("top", "");
