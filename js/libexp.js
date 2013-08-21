@@ -497,7 +497,7 @@ var libexp = (function(){
         var tname2 = libtools.jsfunc_htmlspecialchars(tname);
         var tag    = libtags.jsfunc_create(ptid, tname2);
 
-        if($("#css-explorer-expander-" + ptid).hasClass("css-explorer-collapse"))
+        if(ptid == 0 || $("#css-explorer-expander-" + ptid).hasClass("css-explorer-collapse"))
         {
             var item = $(jsfunc_getItemCode(tag.tid));
 

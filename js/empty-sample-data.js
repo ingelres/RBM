@@ -9,7 +9,6 @@ var tags = {
     },
 
     tid_children : {
-        0: [],
     },
 
     tid_parents : {

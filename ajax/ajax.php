@@ -26,11 +26,9 @@
      * @param allChildren The array mapping tid to children.
      * @param tid2tname   The array mapping tid to tname.
     **/
-    function __addToChildren($tid, $ptid, $allChildren, $tid2tname)
+    function __addToChildren($tid, $ptid, &$allChildren, $tid2tname)
     {
-        $insertionPoint = 0;
-
-        if(array_key_exists($ptid, $children))
+        if(array_key_exists($ptid, $allChildren))
         {
             $children = $allChildren[$ptid];
 
@@ -41,20 +39,21 @@
 
             while(low <= high)
             {
-                $middle     = floor((low + high) / 2);
+                $middle     = floor(($low + $high) / 2);
                 $comparison = strcmp($tname, strtolower($tid2tname[$children[$middle]]));
 
-                if(comparison > 0) low  = middle + 1;
-                else               high = middle - 1;
+                if(comparison > 0) $low  = $middle + 1;
+                else               $high = $middle - 1;
             }
 
-            if(comparison > 0) $insertionPoint = middle+1;
-            else               $insertionPoint = middle;
+            if(comparison > 0) $insertionPoint = $middle+1;
+            else               $insertionPoint = $middle;
 
-            array_splice($children, $insertionPoint, 0, $tid);
+            // Don't call array_splice on $children, otherwise $allChildren is never updated
+            array_splice($allChildren[$ptid], $insertionPoint, 0, $tid);
         }
         else
-            $children[$ptid] = array($tid);
+            $allChildren[$ptid] = array($tid);
     }
 
 

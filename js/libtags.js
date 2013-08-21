@@ -56,11 +56,14 @@ var libtags = (function() {
      *
      * @param tid The ID of the tag.
      *
-     * @return An array with the ID of the subtags, or undefined if the tag has no subtags.
+     * @return An array with the ID of the subtags (may be empty).
     **/
     my.jsfunc_getSubTags = function(tid)
     {
-        return tags.tid_children[tid];
+        var children = tags.tid_children[tid];
+
+        if(children == undefined) return [];
+        else                      return children;
     }
 
 
