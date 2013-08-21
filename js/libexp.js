@@ -27,6 +27,9 @@ var libexp = (function(){
             $("#css-explorer-item-" + tid).on("click", tid, my.jsfunc_onItemClicked);
         }
 
+        // The root tag should be clickable as well
+        $("#css-explorer-item-0").on("click", 0, my.jsfunc_onItemClicked);
+
         // Create the dialog box used to rename a tag
         $("#css-explorer-dialog-rename").dialog({
             modal:true,

@@ -45,7 +45,7 @@
 
                 include("./inc/l10n.php");
 
-                include("./js/empty-sample-data.js");
+                include("./js/sample-data.js");
 
                 include("./js/libtools.js");
                 include("./js/libajax.js");
@@ -69,8 +69,12 @@
         <input type="text" id="css-search-by-tag" placeholder="<?=_("Type a tag name...")?>"/>
 
         <div id="css-explorer">
+            <div id="css-explorer-item-0" class="css-explorer-item">
+                <div class="css-explorer-placeholder"></div>
+                <div class="css-explorer-toolbox"></div>
+                <div class="css-explorer-tag-name">Root</div>
+            </div>
             <div id="css-explorer-children-0">
-                <!--
                 <div id="css-explorer-item-25" class="css-explorer-item">
                     <div class="css-explorer-handle"></div>
                     <div class="css-explorer-toolbox"></div>
@@ -89,7 +93,6 @@
                     <div id="css-explorer-expander-59" class="css-explorer-expander"></div>
                     <div class="css-explorer-tag-name">Tools</div>
                 </div>
-                -->
             </div>
         </div>
 
