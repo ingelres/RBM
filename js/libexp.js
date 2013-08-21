@@ -13,21 +13,10 @@ var libexp = (function(){
     **/
     $(function(){
 
-        var topLvlItems   = libtags.jsfunc_getTopLevelTags();
-        var nbTopLvlItems = topLvlItems.length;
+        // Expand the root tag (tid 0)
+        jsfunc_expandTag(0, null);
 
-        for(var i=0; i<nbTopLvlItems; ++i)
-        {
-            var tid = topLvlItems[i];
-
-            jsfunc_makeDNDItem(tid);
-
-            // We use JQuery handler system instead of simple onclick handlers
-            // to manage difference between browsers (e.g., Firefox doesn't know what window.event is)
-            $("#css-explorer-item-" + tid).on("click", tid, my.jsfunc_onItemClicked);
-        }
-
-        // Take care of the root tag as well
+        // Make it react as well to user's interactions
         jsfunc_makeDNDItem(0);
         $("#css-explorer-item-0").on("click", 0, my.jsfunc_onItemClicked);
 
@@ -218,7 +207,9 @@ var libexp = (function(){
         for(var i=0; i<nbChildren; ++i)
             code += jsfunc_getItemCode(children[i]);
 
-        $(code + "</div>").insertAfter("#css-explorer-item-" + ptid).slideDown(ANIMATION_LEN);
+        // Skip the animation for the root tag
+        if(ptid == 0) $(code + "</div>").insertAfter("#css-explorer-item-" + ptid).show();
+        else          $(code + "</div>").insertAfter("#css-explorer-item-" + ptid).slideDown(ANIMATION_LEN);
 
         // We must do this outside of the above loop, for the items must be present in the DOM when calling these functions
         for(var i=0; i<nbChildren; ++i)
@@ -229,8 +220,9 @@ var libexp = (function(){
             $("#css-explorer-item-" + tid).on("click", tid, my.jsfunc_onItemClicked);
         }
 
-        // Expand -> collapse
-        expander.removeClass("css-explorer-expand").addClass("css-explorer-collapse");
+        // Expand -> collapse (ignore for the root tag)
+        if(ptid != 0)
+            expander.removeClass("css-explorer-expand").addClass("css-explorer-collapse");
     }
 
 
