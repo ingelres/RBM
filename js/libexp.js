@@ -126,6 +126,20 @@ var libexp = (function(){
     {
         var popup = $("#css-explorer-toolbox-popup");
 
+        // Special case for tag 0 (root)
+        if(tid == 0)
+        {
+            $("#css-explorer-toolbox-create").html(L10N.create_tag);
+            $("#css-explorer-toolbox-delete").hide();
+            $("#css-explorer-toolbox-rename").hide();
+        }
+        else
+        {
+            $("#css-explorer-toolbox-create").html(L10N.create_subtag);
+            $("#css-explorer-toolbox-delete").show();
+            $("#css-explorer-toolbox-rename").show();
+        }
+
         // Show the popup right below the corresponding item
         popup.show().position({my: "left top", at: "left bottom", of: $("#css-explorer-item-" + tid).find(".css-explorer-toolbox")});
 

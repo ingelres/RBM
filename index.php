@@ -102,7 +102,7 @@
 
         <!-- The tag toolbox popup -->
         <ul id="css-explorer-toolbox-popup" class="popup-menu">
-            <li id="css-explorer-toolbox-create"><?=_("Create Tag")?></li>
+            <li id="css-explorer-toolbox-create"></li>
             <li id="css-explorer-toolbox-rename"><?=_("Rename Tag")?></li>
             <li id="css-explorer-toolbox-delete"><?=_("Delete Tag")?></li>
         </ul>

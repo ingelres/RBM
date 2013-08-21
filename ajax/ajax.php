@@ -100,6 +100,8 @@
     function deleteTag()
     {
 
+        // FIXME Make sure we don't delete tag 0
+
         /*
         global $CONSTS_FILE_TAGS, $CONSTS_FILE_TID_TO_BID, $CONSTS_FILE_BID_TO_TID;
 
