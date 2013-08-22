@@ -247,8 +247,8 @@ var libtags = (function() {
         var ptid     = tags.tid_parents[tid];
         var children = tags.tid_children[ptid];
 
-        if(children.length == 1 && ptid != 0) delete tags.tid_children[ptid];
-        else                                  children.splice(children.indexOf(tid), 1);
+        if(children.length == 1) delete tags.tid_children[ptid];
+        else                     children.splice(children.indexOf(tid), 1);
 
         // Delete the tag and its subtags
         var alltags = [tid];
