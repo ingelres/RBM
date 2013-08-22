@@ -5,6 +5,8 @@ var libajax = (function(){
     var callback = null;
 
 
+    // FIXME Manage requests timeout
+
     /**
      * Perform the next AJAX request.
     **/
