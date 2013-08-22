@@ -96,46 +96,41 @@
     **/
     function deleteTag()
     {
-
-        // FIXME Make sure we don't delete tag 0
-
-        /*
-        global $CONSTS_FILE_TAGS, $CONSTS_FILE_TID_TO_BID, $CONSTS_FILE_BID_TO_TID;
+        global $CONSTS_FILE_TAGS;
 
         include $CONSTS_FILE_TAGS;
 
         $tid = getIntParam("tid");
 
-        if(array_key_exists($tid, $db_tid2tname))
+        // Root tag (id 0) cannot be deleted
+        if($tid != 0 && array_key_exists($tid, $tags_tid2tname))
         {
-            include $CONSTS_FILE_TID_TO_BID;
+            // Remove the tag from its parent's children
+            $ptid     = $tags_parents[$tid];
+            $children = $tags_children[$ptid];
 
-            // First remove all the associations to bookmarks, if any
-            if(array_key_exists($tid, $TID_TO_BID))
+            if(children.length == 1) unset($tags_children[$ptid]);
+            else                     unset($tags_children[$ptid][array_search($tid, $children)]);
+
+            // Delete the tag and its subtags
+            $alltags = array($tid);
+
+            while(count($alltags) != 0)
             {
-                include $CONSTS_FILE_BID_TO_TID;
+                $tid = array_shift($alltags);
 
-                foreach($TID_TO_BID[$tid] as $bid => $foo)
-                {
-                    if(count($BID_TO_TID[$bid]) == 1) unset($BID_TO_TID[$bid]);
-                    else                              unset($BID_TO_TID[$bid][$tid]);
-                }
+                if(array_key_exists($tid, $tags_children))
+                    $alltags = array_merge($alltags, $tags_children[$tid]);
 
-                db_saveBIdToTidFile($BID_TO_TID);
-
-                unset($TID_TO_BID[$tid]);
-                db_saveTidToBidFile($TID_TO_BID);
+                unset($tags_tname2tid[strtolower($tags_tid2tname[$tid])]);
+                unset($tags_tid2tname[$tid]);
+                unset($tags_children[$tid]);
+                unset($tags_parents[$tid]);
             }
 
-            // Now we can remove the tag itself
-            $tname = $db_tid2tname[$tid];
-
-            unset($db_tname2tid[$tname]);
-            unset($db_tid2tname[$tid]);
-
-            db_saveTagFile($db_nextTid, $db_tname2tid, $db_tid2tname);
+            // We're done
+            db_saveTagFile($tags_nexttid, $tags_tname2tid, $tags_tid2tname, $tags_children, $tags_parents);
         }
-         */
     }
 
 ?>
