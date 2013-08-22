@@ -8,8 +8,9 @@
 
 
     $ALL_ACTIONS = array(
-            "addTag"    => NULL,
-            "deleteTag" => NULL,
+            "addTag"      => NULL,
+            "deleteTag"   => NULL,
+            "reparentTag" => NULL,
         );
 
     $action = getStringParam("action");
@@ -37,17 +38,17 @@
             $high  = count($children)-1;
             $tname = strtolower($tid2tname[$tid]);
 
-            while(low <= high)
+            while($low <= $high)
             {
                 $middle     = floor(($low + $high) / 2);
                 $comparison = strcmp($tname, strtolower($tid2tname[$children[$middle]]));
 
-                if(comparison > 0) $low  = $middle + 1;
-                else               $high = $middle - 1;
+                if($comparison > 0) $low  = $middle + 1;
+                else                $high = $middle - 1;
             }
 
-            if(comparison > 0) $insertionPoint = $middle+1;
-            else               $insertionPoint = $middle;
+            if($comparison > 0) $insertionPoint = $middle+1;
+            else                $insertionPoint = $middle;
 
             // Don't call array_splice on $children, otherwise $allChildren is never updated
             array_splice($allChildren[$ptid], $insertionPoint, 0, $tid);
@@ -106,11 +107,12 @@
         if($tid != 0 && array_key_exists($tid, $tags_tid2tname))
         {
             // Remove the tag from its parent's children
+            // Dont use unset(), otherwise indexing is not correct
             $ptid     = $tags_parents[$tid];
             $children = $tags_children[$ptid];
 
             if(count($children) == 1) unset($tags_children[$ptid]);
-            else                      unset($tags_children[$ptid][array_search($tid, $children)]);
+            else                      array_splice($tags_children[$ptid], array_search($tid, $children), 1);
 
             // Delete the tag and its subtags
             $alltags = array($tid);
@@ -127,6 +129,65 @@
                 unset($tags_children[$tid]);
                 unset($tags_parents[$tid]);
             }
+
+            // We're done
+            db_saveTagFile($tags_nexttid, $tags_tname2tid, $tags_tid2tname, $tags_children, $tags_parents);
+        }
+    }
+
+
+    /**
+     * Check whether a tag is a descendant of another tag (not necessary a direct child).
+     *
+     * @param tid     Id of the tag.
+     * @param ptid    Id of the potential parent tag.
+     * @param parents Array of parents.
+    **/
+    function __isDescendant($tid, $ptid, $parents)
+    {
+        while(array_key_exists($tid, $parents))
+        {
+            $tid = $parents[$tid];
+
+            if($tid == $ptid)
+                return true;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Reparent a tag.
+     *
+     * @param tid  Id of the tag to reparent.
+     * @param ptid Id of the new parent.
+    **/
+    function reparentTag()
+    {
+        global $CONSTS_FILE_TAGS;
+
+        include $CONSTS_FILE_TAGS;
+
+        $tid  = getIntParam("tid");
+        $ptid = getIntParam("ptid");
+
+        // Root tag (id 0) cannot be reparented
+        if($tid != 0 && !__isDescendant($ptid, $tid, $tags_parents))
+        {
+            // Delete the tag from its parent's children
+            // Dont use unset(), otherwise indexing is not correct
+            $oldptid     = $tags_parents[$tid];
+            $oldchildren = $tags_children[$oldptid];
+
+            if(count($oldchildren) == 1) unset($tags_children[$oldptid]);
+            else                         array_splice($tags_children[$ptid], array_search($tid, $children), 1);
+
+            // Set the new parent of the tag
+            $tags_parents[$tid] = $ptid;
+
+            // Add the tag to the children of the new parent
+            __addToChildren($tid, $ptid, $tags_children, $tags_tid2tname);
 
             // We're done
             db_saveTagFile($tags_nexttid, $tags_tname2tid, $tags_tid2tname, $tags_children, $tags_parents);

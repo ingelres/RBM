@@ -339,6 +339,10 @@ var libexp = (function(){
             if($("#css-explorer-item-" + selectedTagId).length == 0)
                 jsfunc_selectTag(-1);
         }
+
+        libajax.jsfunc_ajax({
+            data: "action=reparentTag&tid=" + tid + "&ptid=" + ptid,
+        });
     }
 
 
