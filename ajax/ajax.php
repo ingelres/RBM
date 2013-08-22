@@ -73,20 +73,18 @@
         $tname = htmlspecialchars(getStringParam("tname"));
 
         // Make sure the tag doesn't already exist
-        if(!array_key_exists($tname, $db_tname2tid))
+        if(!array_key_exists($tname, $tags_tname2tid))
         {
-            // Create the mapping name <-> id
-            $db_tname2tid[$tname]      = $db_nextTid;
-            $db_tid2tname[$db_nextTid] = $tname;
-
-            // Create the mapping tid -> ptid
-            $db_parents[$db_nextTid] = $ptid;
+            // Create the mappings
+            $tags_tname2tid[$tname]        = $tags_nexttid;
+            $tags_tid2tname[$tags_nexttid] = $tname;
+            $tags_parents[$tags_nexttid]   = $ptid;
 
             // Insert the new child in its parent's list
-            __addToChildren($db_nextTid, $ptid, $db_children, $db_tid2tname);
+            __addToChildren($tags_nexttid, $ptid, $tags_children, $tags_tid2tname);
 
             // We're done
-            db_saveTagFile($db_nextTid+1, $db_tname2tid, $db_tid2tname, $db_children, $db_parents);
+            db_saveTagFile($tags_nexttid+1, $tags_tname2tid, $tags_tid2tname, $tags_children, $tags_parents);
         }
     }
 
