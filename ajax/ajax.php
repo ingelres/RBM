@@ -109,8 +109,8 @@
             $ptid     = $tags_parents[$tid];
             $children = $tags_children[$ptid];
 
-            if(children.length == 1) unset($tags_children[$ptid]);
-            else                     unset($tags_children[$ptid][array_search($tid, $children)]);
+            if(count($children) == 1) unset($tags_children[$ptid]);
+            else                      unset($tags_children[$ptid][array_search($tid, $children)]);
 
             // Delete the tag and its subtags
             $alltags = array($tid);
