@@ -76,9 +76,9 @@
         if(!array_key_exists($tname, $tags_tname2tid))
         {
             // Create the mappings
-            $tags_tname2tid[$tname]        = $tags_nexttid;
-            $tags_tid2tname[$tags_nexttid] = $tname;
-            $tags_parents[$tags_nexttid]   = $ptid;
+            $tags_parents[$tags_nexttid]        = $ptid;
+            $tags_tid2tname[$tags_nexttid]      = $tname;
+            $tags_tname2tid[strtolower($tname)] = $tags_nexttid;
 
             // Insert the new child in its parent's list
             __addToChildren($tags_nexttid, $ptid, $tags_children, $tags_tid2tname);
