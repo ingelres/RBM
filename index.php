@@ -5,6 +5,7 @@
     // Base directory of the website
     $RBM_BASE_DIR = __DIR__;
 
+    require_once $RBM_BASE_DIR . "/inc/db.php";
     require_once $RBM_BASE_DIR . "/inc/init.php";
     require_once $RBM_BASE_DIR . "/inc/consts.php";
 
@@ -43,10 +44,9 @@
 
             <?php
 
+                echo db_exportTagToJSON();
+
                 include("./inc/l10n.php");
-
-                include("./js/empty-sample-data.js");
-
                 include("./js/libtools.js");
                 include("./js/libajax.js");
                 include("./js/libtags.js");

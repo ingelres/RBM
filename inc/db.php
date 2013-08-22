@@ -2,6 +2,7 @@
 
     require_once $RBM_BASE_DIR . "/inc/consts.php";
 
+
     /**
      * Create a new tag file.
      *
@@ -22,6 +23,28 @@
 
         fclose($handle);
     }
+
+
+    /**
+     * Export tags to a JSON structure.
+     *
+     * @return A string containing the JSON structure.
+    **/
+    function db_exportTagToJSON()
+    {
+        global $CONSTS_FILE_TAGS;
+
+        include $CONSTS_FILE_TAGS;
+
+        return "var tags = {"
+                    . "next_tid: "     . $tags_nexttid                . ","
+                    . "tid_to_tname: " . json_encode($tags_tid2tname) . ","
+                    . "tname_to_tid: " . json_encode($tags_tname2tid) . ","
+                    . "tid_parents:  " . json_encode($tags_parents)   . ","
+                    . "tid_children: " . json_encode($tags_children)  . ","
+                . "};";
+    }
+
 
     /**
      * Save an array to a PHP file.
