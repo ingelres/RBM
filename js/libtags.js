@@ -243,7 +243,7 @@ var libtags = (function() {
     **/
     my.jsfunc_delete = function(tid)
     {
-        // Delete the tag from its parent's children
+        // Remove the tag from its parent's children
         var ptid     = tags.tid_parents[tid];
         var children = tags.tid_children[ptid];
 
