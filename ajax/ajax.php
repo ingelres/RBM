@@ -181,7 +181,7 @@
             $oldchildren = $tags_children[$oldptid];
 
             if(count($oldchildren) == 1) unset($tags_children[$oldptid]);
-            else                         array_splice($tags_children[$ptid], array_search($tid, $children), 1);
+            else                         array_splice($tags_children[$oldptid], array_search($tid, $children), 1);
 
             // Set the new parent of the tag
             $tags_parents[$tid] = $ptid;
