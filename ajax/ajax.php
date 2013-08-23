@@ -10,6 +10,7 @@
     $ALL_ACTIONS = array(
             "addTag"      => NULL,
             "deleteTag"   => NULL,
+            "renameTag"   => NULL,
             "reparentTag" => NULL,
         );
 
@@ -17,6 +18,28 @@
 
     if(array_key_exists($action, $ALL_ACTIONS))
         $action();
+
+
+
+    /**
+     * Check whether a tag is a descendant of another tag (not necessary a direct child).
+     *
+     * @param tid     Id of the tag.
+     * @param ptid    Id of the potential parent tag.
+     * @param parents Array of parents.
+    **/
+    function __isDescendant($tid, $ptid, $parents)
+    {
+        while(array_key_exists($tid, $parents))
+        {
+            $tid = $parents[$tid];
+
+            if($tid == $ptid)
+                return true;
+        }
+
+        return false;
+    }
 
 
     /**
@@ -59,6 +82,28 @@
 
 
     /**
+     * Delete a specific tag from its parent's children.
+     *
+     * @param tid         Id of the tag to delete.
+     * @param allParents  The array mapping tid to ptid.
+     * @param allChildren The array mapping tid to children.
+    **/
+    function __deleteFromChildren($tid, $allParents, &$allChildren)
+    {
+        $ptid     = $allParents[$tid];
+        $children = $allChildren[$ptid];
+        $idx      = array_search($tid, $children);
+
+        if($idx !== FALSE)
+        {
+            // User array_splice() to keep a valid indexing when there's more than one child
+            if(count($children) == 1) unset($allChildren[$ptid]);
+            else                      array_splice($allChildren[$ptid], $idx, 1);
+        }
+    }
+
+
+    /**
      * Add a new tag to the database.
      *
      * @param ptid  ID of the parent tag.
@@ -70,16 +115,17 @@
 
         include $CONSTS_FILE_TAGS;
 
-        $ptid  = getIntParam("ptid");
-        $tname = htmlspecialchars(getStringParam("tname"));
+        $ptid       = getIntParam("ptid");
+        $tname      = htmlspecialchars(getStringParam("tname"));
+        $tnamelower = strtolower($tname);
 
         // Make sure the tag doesn't already exist
-        if(!array_key_exists($tname, $tags_tname2tid))
+        if(!array_key_exists($tnamelower, $tags_tname2tid))
         {
             // Create the mappings
-            $tags_parents[$tags_nexttid]        = $ptid;
-            $tags_tid2tname[$tags_nexttid]      = $tname;
-            $tags_tname2tid[strtolower($tname)] = $tags_nexttid;
+            $tags_parents[$tags_nexttid]   = $ptid;
+            $tags_tname2tid[$tnamelower]   = $tags_nexttid;
+            $tags_tid2tname[$tags_nexttid] = $tname;
 
             // Insert the new child in its parent's list
             __addToChildren($tags_nexttid, $ptid, $tags_children, $tags_tid2tname);
@@ -106,13 +152,7 @@
         // Root tag (id 0) cannot be deleted
         if($tid != 0 && array_key_exists($tid, $tags_tid2tname))
         {
-            // Remove the tag from its parent's children
-            // Dont use unset(), otherwise indexing is not correct
-            $ptid     = $tags_parents[$tid];
-            $children = $tags_children[$ptid];
-
-            if(count($children) == 1) unset($tags_children[$ptid]);
-            else                      array_splice($tags_children[$ptid], array_search($tid, $children), 1);
+            __deleteFromChildren($tid, $tags_parents, $tags_children);
 
             // Delete the tag and its subtags
             $alltags = array($tid);
@@ -137,27 +177,6 @@
 
 
     /**
-     * Check whether a tag is a descendant of another tag (not necessary a direct child).
-     *
-     * @param tid     Id of the tag.
-     * @param ptid    Id of the potential parent tag.
-     * @param parents Array of parents.
-    **/
-    function __isDescendant($tid, $ptid, $parents)
-    {
-        while(array_key_exists($tid, $parents))
-        {
-            $tid = $parents[$tid];
-
-            if($tid == $ptid)
-                return true;
-        }
-
-        return false;
-    }
-
-
-    /**
      * Reparent a tag.
      *
      * @param tid  Id of the tag to reparent.
@@ -175,19 +194,47 @@
         // Root tag (id 0) cannot be reparented
         if($tid != 0 && !__isDescendant($ptid, $tid, $tags_parents))
         {
-            // Delete the tag from its parent's children
-            // Dont use unset(), otherwise indexing is not correct
-            $oldptid     = $tags_parents[$tid];
-            $oldchildren = $tags_children[$oldptid];
-
-            if(count($oldchildren) == 1) unset($tags_children[$oldptid]);
-            else                         array_splice($tags_children[$oldptid], array_search($tid, $children), 1);
+            __deleteFromChildren($tid, $tags_parents, $tags_children);
 
             // Set the new parent of the tag
             $tags_parents[$tid] = $ptid;
 
             // Add the tag to the children of the new parent
             __addToChildren($tid, $ptid, $tags_children, $tags_tid2tname);
+
+            // We're done
+            db_saveTagFile($tags_nexttid, $tags_tname2tid, $tags_tid2tname, $tags_children, $tags_parents);
+        }
+    }
+
+
+    /**
+     * Rename a tag.
+     *
+     * @param tid   Id of the tage to rename.
+     * @param tname The new name of the tag.
+    **/
+    function renameTag()
+    {
+        global $CONSTS_FILE_TAGS;
+
+        include $CONSTS_FILE_TAGS;
+
+        $tid        = getIntParam("tid");
+        $tname      = htmlspecialchars(getStringParam("tname"));
+        $tnamelower = strtolower($tname);
+
+        // Make sure the tag doesn't already exist
+        if(!array_key_exists($tnamelower, $tags_tname2tid))
+        {
+            unset($tags_tname2tid[strtolower($tags_tid2tname[$tid])]);
+
+            $tags_tid2tname[$tid]        = $tname;
+            $tags_tname2tid[$tnamelower] = $tid;
+
+            // The tag has been renamed, we now need to put it at the right place in its parent's children
+            __deleteFromChildren($tid, $tags_parents, $tags_children);
+            __addToChildren($tid, $tags_parents[$tid], $tags_children, $tags_tid2tname);
 
             // We're done
             db_saveTagFile($tags_nexttid, $tags_tname2tid, $tags_tid2tname, $tags_children, $tags_parents);

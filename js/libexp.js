@@ -449,16 +449,23 @@ var libexp = (function(){
     function jsfunc_renameTag(tid, tname)
     {
         var item    = $("#css-explorer-item-" + tid);
-        var sibling = libtags.jsfunc_rename(tid, tname);
+        var tname2  = libtools.jsfunc_htmlspecialchars(tname);
+        var sibling = libtags.jsfunc_rename(tid, tname2);
 
         libsearch.jsfunc_updateSourceTags();
-        item.find(".css-explorer-tag-name").html(tname);
+        item.find(".css-explorer-tag-name").html(tname2);
 
              if(sibling == -1)                                      item.prependTo("#css-explorer-children-" + libtags.jsfunc_getParent(tid));
         else if($("#css-explorer-children-" + sibling).length != 0) item.insertAfter("#css-explorer-children-" + sibling);
         else                                                        item.insertAfter("#css-explorer-item-" + sibling);
 
         $("#css-explorer-children-" + tid).insertAfter(item);
+
+        // Don't pass the escaped version of the tag name
+        // Escaping is done server-side as well
+        libajax.jsfunc_ajax({
+            data: "action=renameTag&tid=" + tid + "&tname=" + tname,
+        });
     }
 
 
