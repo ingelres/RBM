@@ -5,6 +5,7 @@ var L10N = {
     delete:                     "<?=_('Delete')?>",
     cancel:                     "<?=_('Cancel')?>",
 
+    rename_tag:                 "<?=_('Rename Tag')?>",
     create_tag:                 "<?=_('Create Tag')?>",
     create_subtag:              "<?=_('Create Subtag')?>",
 
