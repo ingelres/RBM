@@ -1,20 +1,20 @@
 <?php
 
     // Base directory of the website
-    $RBM_BASE_DIR = realpath(__DIR__ . "/..");
+    $RBM_BASE_DIR = realpath(__DIR__ . '/..');
 
-    require_once $RBM_BASE_DIR . "/inc/db.php";
-    require_once $RBM_BASE_DIR . "/inc/params.php";
+    require_once $RBM_BASE_DIR . '/inc/db.php';
+    require_once $RBM_BASE_DIR . '/inc/params.php';
 
 
     $ALL_ACTIONS = array(
-            "addTag"      => NULL,
-            "deleteTag"   => NULL,
-            "renameTag"   => NULL,
-            "reparentTag" => NULL,
+            'addTag'      => NULL,
+            'deleteTag'   => NULL,
+            'renameTag'   => NULL,
+            'reparentTag' => NULL,
         );
 
-    $action = getStringParam("action");
+    $action = getStringParam('action');
 
     if(array_key_exists($action, $ALL_ACTIONS))
         $action();
@@ -115,8 +115,8 @@
 
         include $CONSTS_FILE_TAGS;
 
-        $ptid       = getIntParam("ptid");
-        $tname      = htmlspecialchars(getStringParam("tname"));
+        $ptid       = getIntParam('ptid');
+        $tname      = getStringParam('tname');
         $tnamelower = strtolower($tname);
 
         // Make sure the tag doesn't already exist
@@ -147,7 +147,7 @@
 
         include $CONSTS_FILE_TAGS;
 
-        $tid = getIntParam("tid");
+        $tid = getIntParam('tid');
 
         // Root tag (id 0) cannot be deleted
         if($tid != 0 && array_key_exists($tid, $tags_tid2tname))
@@ -188,8 +188,8 @@
 
         include $CONSTS_FILE_TAGS;
 
-        $tid  = getIntParam("tid");
-        $ptid = getIntParam("ptid");
+        $tid  = getIntParam('tid');
+        $ptid = getIntParam('ptid');
 
         // Root tag (id 0) cannot be reparented
         if($tid != 0 && !__isDescendant($ptid, $tid, $tags_parents))
@@ -220,8 +220,8 @@
 
         include $CONSTS_FILE_TAGS;
 
-        $tid        = getIntParam("tid");
-        $tname      = htmlspecialchars(getStringParam("tname"));
+        $tid        = getIntParam('tid');
+        $tname      = getStringParam('tname');
         $tnamelower = strtolower($tname);
 
         // Make sure the tag doesn't already exist

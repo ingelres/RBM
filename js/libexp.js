@@ -187,7 +187,7 @@ var libexp = (function(){
         if(libtags.jsfunc_hasSubTags(tid)) code += "class='css-explorer-expander css-explorer-expand'></div>";
         else                               code += "class='css-explorer-expander'></div>";
 
-        return code + "<div class='css-explorer-tag-name'>" + libtags.jsfunc_getName(tid) + "</div></div>";
+        return code + "<div class='css-explorer-tag-name'>" + libtools.jsfunc_htmlspecialchars(libtags.jsfunc_getName(tid)) + "</div></div>";
     }
 
 
@@ -449,11 +449,10 @@ var libexp = (function(){
     function jsfunc_renameTag(tid, tname)
     {
         var item    = $("#css-explorer-item-" + tid);
-        var tname2  = libtools.jsfunc_htmlspecialchars(tname);
-        var sibling = libtags.jsfunc_rename(tid, tname2);
+        var sibling = libtags.jsfunc_rename(tid, tname);
 
         libsearch.jsfunc_updateSourceTags();
-        item.find(".css-explorer-tag-name").html(tname2);
+        item.find(".css-explorer-tag-name").html(tname);
 
              if(sibling == -1)                                      item.prependTo("#css-explorer-children-" + libtags.jsfunc_getParent(tid));
         else if($("#css-explorer-children-" + sibling).length != 0) item.insertAfter("#css-explorer-children-" + sibling);
@@ -461,10 +460,9 @@ var libexp = (function(){
 
         $("#css-explorer-children-" + tid).insertAfter(item);
 
-        // Don't pass the escaped version of the tag name
-        // Escaping is done server-side as well
+        // Update server-side DB
         libajax.jsfunc_ajax({
-            data: "action=renameTag&tid=" + tid + "&tname=" + tname,
+            data: "action=renameTag&tid=" + encodeURIComponent(tid) + "&tname=" + encodeURIComponent(tname),
         });
     }
 
@@ -491,8 +489,9 @@ var libexp = (function(){
         if(!libtags.jsfunc_hasSubTags(ptid))
             $("#css-explorer-expander-" + ptid).removeClass("css-explorer-collapse");
 
+        // Update server-side DB
         libajax.jsfunc_ajax({
-            data: "action=deleteTag&tid=" + tid,
+            data: "action=deleteTag&tid=" + encodeURIComponent(tid),
         });
     }
 
@@ -505,8 +504,7 @@ var libexp = (function(){
     **/
     function jsfunc_createTag(ptid, tname)
     {
-        var tname2 = libtools.jsfunc_htmlspecialchars(tname);
-        var tag    = libtags.jsfunc_create(ptid, tname2);
+        var tag = libtags.jsfunc_create(ptid, tname);
 
         if(ptid == 0 || $("#css-explorer-expander-" + ptid).hasClass("css-explorer-collapse"))
         {
@@ -523,12 +521,11 @@ var libexp = (function(){
             $("#css-explorer-expander-" + ptid).addClass("css-explorer-expand");
 
         libsearch.jsfunc_updateSourceTags();
-        libexp.jsfunc_showAndSelectTag(tname2);
+        libexp.jsfunc_showAndSelectTag(tname);
 
-        // Don't pass the escaped version of the tag name
-        // Escaping is done server-side as well
+        // Update server-side DB
         libajax.jsfunc_ajax({
-            data: "action=addTag&tname=" + tname + "&ptid=" + ptid,
+            data: "action=addTag&tname=" + encodeURIComponent(tname) + "&ptid=" + encodeURIComponent(ptid),
         });
     }
 
