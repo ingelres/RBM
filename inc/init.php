@@ -3,6 +3,7 @@
     require_once $RBM_BASE_DIR . "/inc/db.php";
     require_once $RBM_BASE_DIR . "/inc/consts.php";
 
+
     /**
      * Create the data directory if needed and check file permissions.
      *
@@ -15,7 +16,7 @@
         if(!is_writable($CONSTS_DIR_DATA))
         {
                  if(file_exists($CONSTS_DIR_DATA))  return sprintf(_("Directory '%s' is not writable"), $CONSTS_DIR_DATA);
-            else if(!mkdir($CONSTS_DIR_DATA, 0755)) return sprintf(_("Could not create directory '%s', please check file permissions"), $CONSTS_DIR_DATA);
+            else if(!mkdir($CONSTS_DIR_DATA, 0755)) return sprintf(_("Could not create directory '%s'<br/>Please check file permissions"), $CONSTS_DIR_DATA);
         }
 
         if(file_exists($CONSTS_FILE_TAGS))

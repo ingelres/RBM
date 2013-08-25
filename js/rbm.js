@@ -6,4 +6,8 @@ $(function(){
         type:  "GET",
         cache: false,
     });
+
+    // Initialization error?
+    if(INIT_ERR != null)
+        libsysmsg.jsfunc_error(INIT_ERR);
 });

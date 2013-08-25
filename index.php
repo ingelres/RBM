@@ -17,13 +17,7 @@
     }
 
     // Init our data directory
-    $error = init_initDataDir();
-
-    if(!is_null($error))
-    {
-        // FIXME Do something smarter to display errors (there may be other ones later on)
-        echo $error;
-    }
+    $initErr = init_initDataDir();
 
     // Additional HTTP headers
     header("Content-Type: text/html; charset=UTF-8");
@@ -44,15 +38,25 @@
 
             <?php
 
-                echo db_exportTagToJSON();
-
                 include("./inc/l10n.php");
+                include("./js/libajax.js");
                 include("./js/libtools.js");
                 include("./js/libsysmsg.js");
-                include("./js/libajax.js");
-                include("./js/libtags.js");
-                include("./js/libsearch.js");
-                include("./js/libexp.js");
+
+                // Pass any initialization error to the JS code
+                if(is_null($initErr))
+                {
+                    echo "var INIT_ERR = null;";
+
+                    echo db_exportTagToJSON();
+
+                    include("./js/libtags.js");
+                    include("./js/libsearch.js");
+                    include("./js/libexp.js");
+                }
+                else
+                    echo "var INIT_ERR = \"$initErr\";";
+
                 include("./js/rbm.js");
 
             ?>

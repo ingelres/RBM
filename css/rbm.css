@@ -86,7 +86,6 @@ input[type="text"] {
     position: absolute;
     z-index: 100;
     width: 100px;
-    display: none;
     padding: 0px;
     cursor: pointer;
     list-style-type: none;
@@ -101,6 +100,10 @@ input[type="text"] {
 .popup-menu li:hover {
     color: #FFF;
     background-color: #87AFFF;
+}
+
+#css-explorer-toolbox-popup, #css-explorer-dialog-rename, #css-explorer-dialog-delete {
+    display: none;
 }
 
 /* The style of errors displayed on top of buttons in dialog boxes */
