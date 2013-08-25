@@ -48,6 +48,7 @@
 
                 include("./inc/l10n.php");
                 include("./js/libtools.js");
+                include("./js/libsysmsg.js");
                 include("./js/libajax.js");
                 include("./js/libtags.js");
                 include("./js/libsearch.js");

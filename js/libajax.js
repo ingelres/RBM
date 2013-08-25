@@ -1,11 +1,24 @@
 var libajax = (function(){
 
-    var my       = {};
-    var queue    = [];
-    var callback = null;
+    var TIMEOUT = 3000;
+
+    var my        = {};
+    var queue     = [];
+    var callback  = null;
+    var timeoutId = null;
 
 
-    // FIXME Manage requests timeout
+    /**
+     * Handler AJAX requests timeout.
+    **/
+    function jsfunc_timeoutHandler()
+    {
+        timeoutId = null;
+
+        // Something went wrong with the current request: Alert the user
+        // Further AJAX requests won't be executed since this one will forever stay in the queue
+        libsysmsg.jsfunc_error(L10N.server_communication_error);
+    }
 
     /**
      * Perform the next AJAX request.
@@ -20,6 +33,9 @@ var libajax = (function(){
 
         params.success = jsfunc_success;
 
+        // Manage request timeout
+        timeoutId = setTimeout(jsfunc_timeoutHandler, TIMEOUT);
+
         // Now we can perform the request
         $.ajax(params);
     }
@@ -30,6 +46,13 @@ var libajax = (function(){
     **/
     function jsfunc_success(output)
     {
+        // If the timeout is no longer running, something bad happened and we
+        // should stop handling further AJAX requests
+        if(timeoutId == null)
+            return;
+
+        clearTimeout(timeoutId);
+
         queue.shift();
 
         // Call the actual handler, if any
