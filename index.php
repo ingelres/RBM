@@ -12,8 +12,8 @@
     // Debug mode
     if($CONSTS_DEBUG_MODE)
     {
-        ini_set('display_errors', 1);
-        ini_set('error_reporting', E_ALL);
+        ini_set("display_errors", 1);
+        ini_set("error_reporting", E_ALL);
     }
 
     // Init our data directory
@@ -26,7 +26,7 @@
     }
 
     // Additional HTTP headers
-    header('Content-Type: text/html; charset=UTF-8');
+    header("Content-Type: text/html; charset=UTF-8");
 
 ?>
 
@@ -96,7 +96,7 @@
         </div>
 
         <!-- The dialog box for confirmation when deleting a tag -->
-        <div id="css-explorer-dialog-delete" title="<?=_('Delete tag')?>">
+        <div id="css-explorer-dialog-delete" title="<?=_("Delete tag")?>">
             <div id="css-explorer-dialog-delete-msg"></div>
         </div>
 
