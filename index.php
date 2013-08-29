@@ -69,8 +69,8 @@
 
     <body>
 
-        <button onclick="libexp.jsfunc_expandAll()">Expand All</button>
-        <button onclick="libexp.jsfunc_collapseAll()">Collapse All</button>
+        <button onclick="libexp.expandAll()">Expand All</button>
+        <button onclick="libexp.collapseAll()">Collapse All</button>
         <input type="text" id="css-search-by-tag" placeholder="<?=_("Type a tag name...")?>"/>
 
         <div id="css-explorer">

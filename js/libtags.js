@@ -46,7 +46,7 @@ var libtags = (function() {
     *
     * @return The ID of the new sibling after which the tag has been inserted, or -1 if it's the first child of the list.
     **/
-    function jsfunc_addToChildren(tid, ptid)
+    function addToChildren(tid, ptid)
     {
         var children    = tags.children[ptid];
         var insertPoint = 0;
@@ -81,7 +81,7 @@ var libtags = (function() {
     /**
      * @return An array containing the top-level tags (children of the root tag).
     **/
-    my.jsfunc_getTopLevelTags = function()
+    my.getTopLevelTags = function()
     {
         return tags.children[0];
     }
@@ -94,7 +94,7 @@ var libtags = (function() {
      *
      * @return An array of tid.
     **/
-    my.jsfunc_getIdFromName = function(tname)
+    my.getIdFromName = function(tname)
     {
         return tags.tname_to_tid[tname.toLowerCase()];
     }
@@ -107,7 +107,7 @@ var libtags = (function() {
      *
      * @return The name of the tag.
     **/
-    my.jsfunc_getName = function(tid)
+    my.getName = function(tid)
     {
         return tags.tid_to_tname[tid];
     }
@@ -120,7 +120,7 @@ var libtags = (function() {
      *
      * @return true if the tag has subtags, false otherwise.
     **/
-    my.jsfunc_hasSubTags = function(tid)
+    my.hasSubTags = function(tid)
     {
         return tags.children[tid] != undefined;
     }
@@ -133,7 +133,7 @@ var libtags = (function() {
      *
      * @return An array with the ID of the subtags (may be empty).
     **/
-    my.jsfunc_getSubTags = function(tid)
+    my.getSubTags = function(tid)
     {
         var children = tags.children[tid];
 
@@ -149,7 +149,7 @@ var libtags = (function() {
      *
      * @return The ID of the parent.
     **/
-    my.jsfunc_getParent = function(tid)
+    my.getParent = function(tid)
     {
         return tags.parents[tid];
     }
@@ -163,7 +163,7 @@ var libtags = (function() {
      *
      * @return true or false.
     **/
-    my.jsfunc_tidIsDescendant = function(tid, ptid)
+    my.tidIsDescendant = function(tid, ptid)
     {
         while((tid = tags.parents[tid]) != undefined)
         {
@@ -182,7 +182,7 @@ var libtags = (function() {
      *
      * @return The array of the parents ID.
     **/
-    my.jsfunc_getParents = function(tid)
+    my.getParents = function(tid)
     {
         var parents = [];
 
@@ -196,7 +196,7 @@ var libtags = (function() {
     /**
      * @return A sorted array with all the tag names.
     **/
-    my.jsfunc_getAllTagNames = function()
+    my.getAllTagNames = function()
     {
         var tnames = [];
 
@@ -210,7 +210,7 @@ var libtags = (function() {
     /**
      * @return The level of a tag starting from the top level (root tag has level 0)
     **/
-    my.jsfunc_getLevel = function(tid)
+    my.getLevel = function(tid)
     {
         var level = 1;
 
@@ -229,7 +229,7 @@ var libtags = (function() {
      *
      * @return The ID of the new sibling after which the tag has been inserted, or -1 if it's the first child of the new parent.
     **/
-    my.jsfunc_reparent = function(tid, ptid)
+    my.reparent = function(tid, ptid)
     {
         // Delete tid from its parent's children
         deleteTidFromObjectArray(tags.children, tags.parents[tid], tid);
@@ -238,7 +238,7 @@ var libtags = (function() {
         tags.parents[tid] = ptid;
 
         // Add the new child to ptid
-        return jsfunc_addToChildren(tid, ptid);
+        return addToChildren(tid, ptid);
     }
 
 
@@ -247,7 +247,7 @@ var libtags = (function() {
      *
      * @param tid The ID of the tag.
     **/
-    my.jsfunc_delete = function(tid)
+    my.delete = function(tid)
     {
         // Remove the tag from its parent's children
         deleteTidFromObjectArray(tags.children, tags.parents[tid], tid);
@@ -280,7 +280,7 @@ var libtags = (function() {
      *
      * @return The ID of the new sibling after which the tag has been inserted, or -1 if it's the first child of the parent.
     **/
-    my.jsfunc_create = function(ptid, tname)
+    my.create = function(ptid, tname)
     {
         var tid = tags.next_tid++;
 
@@ -290,7 +290,7 @@ var libtags = (function() {
         if(tags.tname_to_tid[tname.toLowerCase()] == undefined) tags.tname_to_tid[tname.toLowerCase()] = [tid];
         else                                                    tags.tname_to_tid[tname.toLowerCase()].push(tid);
 
-        return {tid: tid, sibling: jsfunc_addToChildren(tid, ptid)};
+        return {tid: tid, sibling: addToChildren(tid, ptid)};
     }
 
 
@@ -302,7 +302,7 @@ var libtags = (function() {
     *
     * @return The ID of the new sibling of the tag.
     **/
-    my.jsfunc_rename = function(tid, tname)
+    my.rename = function(tid, tname)
     {
         deleteTidFromObjectArray(tags.tname_to_tid, tags.tid_to_tname[tid].toLowerCase(), tid);
 
@@ -316,7 +316,7 @@ var libtags = (function() {
 
         deleteTidFromObjectArray(tags.children, ptid, tid);
 
-        return jsfunc_addToChildren(tid, ptid);
+        return addToChildren(tid, ptid);
     }
 
     return my;

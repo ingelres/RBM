@@ -14,11 +14,11 @@ var libexp = (function(){
     $(function(){
 
         // Expand the root tag (tid 0)
-        jsfunc_expandTag(0, null);
+        expandTag(0, null);
 
         // Make it react as well to user's interactions
-        jsfunc_makeDNDItem(0);
-        $("#css-explorer-item-0").on("click", 0, my.jsfunc_onItemClicked);
+        makeDNDItem(0);
+        $("#css-explorer-item-0").on("click", 0, my.onItemClicked);
 
         // Create the dialog box used to rename a tag
         $("#css-explorer-dialog-rename").dialog({
@@ -29,17 +29,11 @@ var libexp = (function(){
                 click: function(){
                     var name   = $("#css-explorer-tag-new-name").val();
                     var errmsg = $("#css-explorer-dialog-rename-errmsg");
-/*
-                    var tid    = libtags.jsfunc_getIdFromName(name);
-*/
                     var dlg    = $(this);
 
-                         if(name.length == 0)                           errmsg.html(L10N.name_empty).css("visibility", "visible");
-/*
-                    else if(tid != undefined && tid != dlg.data("tid")) errmsg.html(L10N.name_exists).css("visibility", "visible");
-*/
-                    else if(dlg.data("action") == "rename")             jsfunc_renameTag(dlg.dialog("close").data("tid"), name);
-                    else                                                jsfunc_createTag(dlg.dialog("close").data("tid"), name);
+                         if(name.length == 0)               errmsg.html(L10N.name_empty).css("visibility", "visible");
+                    else if(dlg.data("action") == "rename") renameTag(dlg.dialog("close").data("tid"), name);
+                    else                                    createTag(dlg.dialog("close").data("tid"), name);
                 }},{
                 text: L10N.cancel,
                 click: function(){
@@ -62,7 +56,7 @@ var libexp = (function(){
             buttons: [{
                 text: L10N.delete,
                 click: function(){
-                    jsfunc_deleteTag($(this).dialog("close").data("tid"));
+                    deleteTag($(this).dialog("close").data("tid"));
                 }},{
                 text: L10N.cancel,
                 click: function(){
@@ -83,7 +77,7 @@ var libexp = (function(){
      *
      * @param evt The click event.
     **/
-    my.jsfunc_onItemClicked = function(evt)
+    my.onItemClicked = function(evt)
     {
         var tid    = evt.data;
         var target = $(evt.target);
@@ -92,13 +86,13 @@ var libexp = (function(){
         {
             var expander = $("#css-explorer-expander-" + tid);
 
-                 if(expander.hasClass("css-explorer-expand"))   jsfunc_expandTag(tid, expander);
-            else if(expander.hasClass("css-explorer-collapse")) jsfunc_collapseTag(tid, expander);
-            else                                                jsfunc_selectTag(tid);
+                 if(expander.hasClass("css-explorer-expand"))   expandTag(tid, expander);
+            else if(expander.hasClass("css-explorer-collapse")) collapseTag(tid, expander);
+            else                                                selectTag(tid);
         }
         else if(target.hasClass("css-explorer-toolbox"))
         {
-            jsfunc_showToolbox(tid);
+            showToolbox(tid);
 
             // Click events eventually end up in the global handler that closes the popup menu
             // We don't want that to happen when we open the menu, otherwise it would be immediately closed
@@ -106,7 +100,7 @@ var libexp = (function(){
         }
         else if(!target.hasClass("css-explorer-handle"))
         {
-            jsfunc_selectTag(tid);
+            selectTag(tid);
         }
     }
 
@@ -116,7 +110,7 @@ var libexp = (function(){
      *
      * @param tid The ID of the tag.
     **/
-    function jsfunc_showToolbox(tid)
+    function showToolbox(tid)
     {
         var popup = $("#css-explorer-toolbox-popup");
 
@@ -144,7 +138,7 @@ var libexp = (function(){
 
             if(target.is("#css-explorer-toolbox-delete"))
             {
-                if(libtags.jsfunc_hasSubTags(tid)) $("#css-explorer-dialog-delete-msg").html(L10N.confirm_delete_tag_subtags);
+                if(libtags.hasSubTags(tid)) $("#css-explorer-dialog-delete-msg").html(L10N.confirm_delete_tag_subtags);
                 else                               $("#css-explorer-dialog-delete-msg").html(L10N.confirm_delete_tag);
 
                 $("#css-explorer-dialog-delete").data("tid", tid).dialog("open");
@@ -162,7 +156,7 @@ var libexp = (function(){
                 }
                 else
                 {
-                    $("#css-explorer-tag-new-name").val("").attr("placeholder", libtags.jsfunc_getName(tid));
+                    $("#css-explorer-tag-new-name").val("").attr("placeholder", libtags.getName(tid));
                     dlg.data("tid", tid).data("action", "rename").dialog("option", "title", L10N.rename_tag).dialog("open");
                 }
             }
@@ -179,19 +173,19 @@ var libexp = (function(){
      *
      * @return The HTML code.
     **/
-    function jsfunc_getItemCode(tid)
+    function getItemCode(tid)
     {
-        var marginLeft = (Math.min(libtags.jsfunc_getLevel(tid), MAX_ITEM_LVL)-1) * MARGIN_LEFT_PER_LVL;
+        var marginLeft = (Math.min(libtags.getLevel(tid), MAX_ITEM_LVL)-1) * MARGIN_LEFT_PER_LVL;
 
         var code = "<div id='css-explorer-item-" + tid + "' class='css-explorer-item'>"
                         + "<div class='css-explorer-handle'></div>"
                         + "<div class='css-explorer-toolbox'></div>"
                         + "<div id='css-explorer-expander-" + tid + "' style='margin-left:" + marginLeft + "px' ";
 
-        if(libtags.jsfunc_hasSubTags(tid)) code += "class='css-explorer-expander css-explorer-expand'></div>";
+        if(libtags.hasSubTags(tid)) code += "class='css-explorer-expander css-explorer-expand'></div>";
         else                               code += "class='css-explorer-expander'></div>";
 
-        return code + "<div class='css-explorer-tag-name'>" + libtools.jsfunc_htmlspecialchars(libtags.jsfunc_getName(tid)) + "</div></div>";
+        return code + "<div class='css-explorer-tag-name'>" + libtools.htmlspecialchars(libtags.getName(tid)) + "</div></div>";
     }
 
 
@@ -201,15 +195,15 @@ var libexp = (function(){
      * @param ptid     The ID of the tag.
      * @param expander The JQuery object holding the expander associated to the tag.
     **/
-    function jsfunc_expandTag(ptid, expander)
+    function expandTag(ptid, expander)
     {
         // Create the code and insert it at once, this is faster than inserting many small bits of code
         var code       = "<div id='css-explorer-children-" + ptid + "' style='display: none'>";
-        var children   = libtags.jsfunc_getSubTags(ptid);
+        var children   = libtags.getSubTags(ptid);
         var nbChildren = children.length;
 
         for(var i=0; i<nbChildren; ++i)
-            code += jsfunc_getItemCode(children[i]);
+            code += getItemCode(children[i]);
 
         // Skip the animation for the root tag
         if(ptid == 0) $(code + "</div>").insertAfter("#css-explorer-item-" + ptid).show();
@@ -220,8 +214,8 @@ var libexp = (function(){
         {
             var tid = children[i];
 
-            jsfunc_makeDNDItem(tid);
-            $("#css-explorer-item-" + tid).on("click", tid, my.jsfunc_onItemClicked);
+            makeDNDItem(tid);
+            $("#css-explorer-item-" + tid).on("click", tid, my.onItemClicked);
         }
 
         // Expand -> collapse (ignore for the root tag)
@@ -236,7 +230,7 @@ var libexp = (function(){
      * @param ptid     The ID of the tag.
      * @param expander The JQuery object holding the expander associated to the tag.
     **/
-    function jsfunc_collapseTag(ptid, expander)
+    function collapseTag(ptid, expander)
     {
         // Destroy all draggable/droppable descendants (not only the direct children) before removing the container
         var children = $("#css-explorer-children-" + ptid);
@@ -245,8 +239,8 @@ var libexp = (function(){
         children.slideUp(ANIMATION_LEN, function(){ $(this).remove() });
 
         // Clear selection if it's a descendant of the item we're collapsing
-        if(libtags.jsfunc_tidIsDescendant(selectedTagId, ptid))
-            jsfunc_selectTag(-1);
+        if(libtags.tidIsDescendant(selectedTagId, ptid))
+            selectTag(-1);
 
         // Collapse -> expand
         expander.removeClass("css-explorer-collapse").addClass("css-explorer-expand");
@@ -256,7 +250,7 @@ var libexp = (function(){
     /**
      * Recursively expand all tags.
     **/
-    my.jsfunc_expandAll = function()
+    my.expandAll = function()
     {
         while($(".css-explorer-expand").trigger("click").length != 0);
     }
@@ -265,9 +259,9 @@ var libexp = (function(){
     /**
      * Collapse all tags.
     **/
-    my.jsfunc_collapseAll = function()
+    my.collapseAll = function()
     {
-        var topLvlItems   = libtags.jsfunc_getTopLevelTags();
+        var topLvlItems   = libtags.getTopLevelTags();
         var nbTopLvlItems = topLvlItems.length;
 
         for(var i=0; i<nbTopLvlItems; ++i)
@@ -284,17 +278,17 @@ var libexp = (function(){
      * @param tid  The ID of the tag to reparent.
      * @param ptid The ID of the new parent.
     **/
-    my.jsfunc_reparent = function(tid, ptid)
+    my.reparent = function(tid, ptid)
     {
         // Update the current parent (if any) by removing the expand/collapse icon if it has no more child after the reparenting
-        var oldptid = libtags.jsfunc_getParent(tid);
+        var oldptid = libtags.getParent(tid);
 
-        if(oldptid != 0 && libtags.jsfunc_getSubTags(oldptid).length == 1)
+        if(oldptid != 0 && libtags.getSubTags(oldptid).length == 1)
             $("#css-explorer-expander-" + oldptid).removeClass("css-explorer-expand").removeClass("css-explorer-collapse");
 
         // Reparent the tag internally
-        var lvlBefore  = libtags.jsfunc_getLevel(tid);
-        var newSibling = libtags.jsfunc_reparent(tid, ptid);
+        var lvlBefore  = libtags.getLevel(tid);
+        var newSibling = libtags.reparent(tid, ptid);
 
         // Update the GUI
         // Assume tag 0 (root) is always expanded even though it doesn't have an expander
@@ -304,7 +298,7 @@ var libexp = (function(){
         {
             // The new parent is already expanded, so we just move things around in the DOM
             var item     = $("#css-explorer-item-" + tid).css("top", "");
-            var lvlAfter = libtags.jsfunc_getLevel(tid);
+            var lvlAfter = libtags.getLevel(tid);
 
                  if(newSibling == -1)                                      item.prependTo("#css-explorer-children-" + ptid);
             else if($("#css-explorer-children-" + newSibling).length != 0) item.insertAfter("#css-explorer-children-" + newSibling);
@@ -341,10 +335,10 @@ var libexp = (function(){
 
             // Clear selection if needed
             if($("#css-explorer-item-" + selectedTagId).length == 0)
-                jsfunc_selectTag(-1);
+                selectTag(-1);
         }
 
-        libajax.jsfunc_ajax({
+        libajax.ajax({
             data: "action=reparentTag&tid=" + tid + "&ptid=" + ptid,
         });
     }
@@ -355,7 +349,7 @@ var libexp = (function(){
      *
      * @param tid The ID of the tag.
     **/
-    function jsfunc_makeDNDItem(tid)
+    function makeDNDItem(tid)
     {
         var item = $("#css-explorer-item-" + tid);
 
@@ -373,8 +367,8 @@ var libexp = (function(){
         item.droppable({
             tolerance: "pointer",
             hoverClass: "css-explorer-droppable",
-            accept: function(drg){ return !libtags.jsfunc_tidIsDescendant(tid, drg.data("tid")) && libtags.jsfunc_getParent(drg.data("tid")) != tid},
-            drop: function(evt, ui){libexp.jsfunc_reparent($(ui.draggable).data("tid"), tid)},
+            accept: function(drg){ return !libtags.tidIsDescendant(tid, drg.data("tid")) && libtags.getParent(drg.data("tid")) != tid},
+            drop: function(evt, ui){libexp.reparent($(ui.draggable).data("tid"), tid)},
         });
     }
 
@@ -386,7 +380,7 @@ var libexp = (function(){
      *
      * @param tid The ID of the tag.
     **/
-    function jsfunc_selectTag(tid)
+    function selectTag(tid)
     {
         // Clicking on the selected item should do nothing
         if(tid != selectedTagId)
@@ -410,21 +404,21 @@ var libexp = (function(){
 
 
     /**
-     * Select a tag even if it doesn't exist yet in the DOM (as opposed to jsfunc_selectTag). This function will:
+     * Select a tag even if it doesn't exist yet in the DOM (as opposed to selectTag). This function will:
      *  - Open all the parents of the tag.
      *  - Scroll to the tag.
      *  - Select the tag.
      *
      * @param tname The name of the tag.
     **/
-    my.jsfunc_showAndSelectTag = function(tname)
+    my.showAndSelectTag = function(tname)
     {
-        var tid = libtags.jsfunc_getIdFromName(tname);
+        var tid = libtags.getIdFromName(tname);
 
         if(tid != undefined)
         {
             // Go through the parents of the tags and open the collapsed ones
-            var parents   = libtags.jsfunc_getParents(tid);
+            var parents   = libtags.getParents(tid);
             var nbParents = parents.length;
 
             for(var i=0; i<nbParents; ++i)
@@ -433,13 +427,13 @@ var libexp = (function(){
                 var expander = $("#css-explorer-expander-" + ptid);
 
                 if(expander.hasClass("css-explorer-expand"))
-                    jsfunc_expandTag(ptid, expander);
+                    expandTag(ptid, expander);
             }
 
             // TODO Scroll to the tag
 
             // Now that the hierarchy has been expanded, the item exists and can be selected
-            jsfunc_selectTag(tid);
+            selectTag(tid);
         }
     }
 
@@ -450,22 +444,22 @@ var libexp = (function(){
     * @param tid   The ID of the tag to be renamed.
     * @param tname The new name of the tag.
     **/
-    function jsfunc_renameTag(tid, tname)
+    function renameTag(tid, tname)
     {
         var item    = $("#css-explorer-item-" + tid);
-        var sibling = libtags.jsfunc_rename(tid, tname);
+        var sibling = libtags.rename(tid, tname);
 
-        libsearch.jsfunc_updateSourceTags();
+        libsearch.updateSourceTags();
         item.find(".css-explorer-tag-name").html(tname);
 
-             if(sibling == -1)                                      item.prependTo("#css-explorer-children-" + libtags.jsfunc_getParent(tid));
+             if(sibling == -1)                                      item.prependTo("#css-explorer-children-" + libtags.getParent(tid));
         else if($("#css-explorer-children-" + sibling).length != 0) item.insertAfter("#css-explorer-children-" + sibling);
         else                                                        item.insertAfter("#css-explorer-item-" + sibling);
 
         $("#css-explorer-children-" + tid).insertAfter(item);
 
         // Update server-side DB
-        libajax.jsfunc_ajax({
+        libajax.ajax({
             data: "action=renameTag&tid=" + encodeURIComponent(tid) + "&tname=" + encodeURIComponent(tname),
         });
     }
@@ -476,25 +470,25 @@ var libexp = (function(){
      *
      * @param tid The ID of the tag.
     **/
-    function jsfunc_deleteTag(tid)
+    function deleteTag(tid)
     {
-        var ptid = libtags.jsfunc_getParent(tid);
+        var ptid = libtags.getParent(tid);
 
         // Clear selection if it's a descendant of the item we're deleting
-        if(selectedTagId == tid || libtags.jsfunc_tidIsDescendant(selectedTagId, tid))
-            jsfunc_selectTag(-1);
+        if(selectedTagId == tid || libtags.tidIsDescendant(selectedTagId, tid))
+            selectTag(-1);
 
-        libtags.jsfunc_delete(tid);
-        libsearch.jsfunc_updateSourceTags();
+        libtags.delete(tid);
+        libsearch.updateSourceTags();
 
         $("#css-explorer-children-" + tid).slideUp(ANIMATION_LEN, function(){ $(this).remove() });
         $("#css-explorer-item-" + tid).slideUp(ANIMATION_LEN, function(){ $(this).remove() });
 
-        if(!libtags.jsfunc_hasSubTags(ptid))
+        if(!libtags.hasSubTags(ptid))
             $("#css-explorer-expander-" + ptid).removeClass("css-explorer-collapse");
 
         // Update server-side DB
-        libajax.jsfunc_ajax({
+        libajax.ajax({
             data: "action=deleteTag&tid=" + encodeURIComponent(tid),
         });
     }
@@ -506,29 +500,29 @@ var libexp = (function(){
      * @param ptid  The ID of the parent tag.
      * @param tname The name of the new tag.
     **/
-    function jsfunc_createTag(ptid, tname)
+    function createTag(ptid, tname)
     {
-        var tag = libtags.jsfunc_create(ptid, tname);
+        var tag = libtags.create(ptid, tname);
 
         if(ptid == 0 || $("#css-explorer-expander-" + ptid).hasClass("css-explorer-collapse"))
         {
-            var item = $(jsfunc_getItemCode(tag.tid));
+            var item = $(getItemCode(tag.tid));
 
                  if(tag.sibling == -1)                                      item.prependTo("#css-explorer-children-" + ptid);
             else if($("#css-explorer-children-" + tag.sibling).length != 0) item.insertAfter("#css-explorer-children-" + tag.sibling);
             else                                                            item.insertAfter("#css-explorer-item-" + tag.sibling);
 
-            jsfunc_makeDNDItem(tag.tid);
-            $("#css-explorer-item-" + tag.tid).on("click", tag.tid, my.jsfunc_onItemClicked);
+            makeDNDItem(tag.tid);
+            $("#css-explorer-item-" + tag.tid).on("click", tag.tid, my.onItemClicked);
         }
         else
             $("#css-explorer-expander-" + ptid).addClass("css-explorer-expand");
 
-        libsearch.jsfunc_updateSourceTags();
-        libexp.jsfunc_showAndSelectTag(tname);
+        libsearch.updateSourceTags();
+        libexp.showAndSelectTag(tname);
 
         // Update server-side DB
-        libajax.jsfunc_ajax({
+        libajax.ajax({
             data: "action=addTag&tname=" + encodeURIComponent(tname) + "&ptid=" + encodeURIComponent(ptid),
         });
     }

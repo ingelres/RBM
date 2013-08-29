@@ -11,19 +11,19 @@ var libajax = (function(){
     /**
      * Handler AJAX requests timeout.
     **/
-    function jsfunc_timeoutHandler()
+    function timeoutHandler()
     {
         timeoutId = null;
 
         // Something went wrong with the current request: Alert the user
         // Further AJAX requests won't be executed since this one will forever stay in the queue
-        libsysmsg.jsfunc_error(L10N.server_communication_error);
+        libsysmsg.error(L10N.server_communication_error);
     }
 
     /**
      * Perform the next AJAX request.
     **/
-    function jsfunc_next()
+    function next()
     {
         var params = queue[0];
 
@@ -31,10 +31,10 @@ var libajax = (function(){
         if(params.hasOwnProperty("success")) callback = params.success;
         else                                 callback = null;
 
-        params.success = jsfunc_success;
+        params.success = success;
 
         // Manage request timeout
-        timeoutId = setTimeout(jsfunc_timeoutHandler, TIMEOUT);
+        timeoutId = setTimeout(timeoutHandler, TIMEOUT);
 
         // Now we can perform the request
         $.ajax(params);
@@ -44,7 +44,7 @@ var libajax = (function(){
     /**
      * Internal callback for successful AJAX requests.
     **/
-    function jsfunc_success(output)
+    function success(output)
     {
         // If the timeout is no longer running, something bad happened and we
         // should stop handling further AJAX requests
@@ -61,7 +61,7 @@ var libajax = (function(){
 
         // Next request?
         if(queue.length > 0)
-            jsfunc_next();
+            next();
     }
 
 
@@ -71,13 +71,13 @@ var libajax = (function(){
      *
      * @param params Parameters of the AJAX request.
     **/
-    my.jsfunc_ajax = function(params)
+    my.ajax = function(params)
     {
         queue.push(params);
 
         // If that's the only pending request, process it right now
         if(queue.length == 1)
-            jsfunc_next();
+            next();
     }
 
     return my;

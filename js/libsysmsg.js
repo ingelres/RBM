@@ -7,7 +7,7 @@ var libsysmsg = (function(){
      *
      * @param msg The error message.
     **/
-    my.jsfunc_error = function(msg)
+    my.error = function(msg)
     {
         var dlg = $("<span id='css-errmsg'>" + msg + "</span>").appendTo("body");
 

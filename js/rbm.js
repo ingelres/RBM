@@ -9,5 +9,5 @@ $(function(){
 
     // Initialization error?
     if(INIT_ERR != null)
-        libsysmsg.jsfunc_error(INIT_ERR);
+        libsysmsg.error(INIT_ERR);
 });

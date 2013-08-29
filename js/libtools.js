@@ -9,7 +9,7 @@ var libtools = (function(){
      *
      * @return The escaped string.
     **/
-    my.jsfunc_htmlspecialchars = function(str)
+    my.htmlspecialchars = function(str)
     {
         return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
     }
