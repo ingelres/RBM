@@ -30,14 +30,14 @@ var tags = {
         'tools':         59,
     },
 
-    tid_children : {
+    children : {
          0: [25, 5, 59],
          5: [11, 12],
         12: [24, 13],
         25: [36, 47, 48, 58],
     },
 
-    tid_parents : {
+    parents : {
          5:  0,
         11:  5,
         12:  5,

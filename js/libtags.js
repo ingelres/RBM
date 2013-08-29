@@ -8,7 +8,7 @@ var libtags = (function() {
     **/
     my.jsfunc_getTopLevelTags = function()
     {
-        return tags.tid_children[0];
+        return tags.children[0];
     }
 
 
@@ -47,7 +47,7 @@ var libtags = (function() {
     **/
     my.jsfunc_hasSubTags = function(tid)
     {
-        return tags.tid_children[tid] != undefined;
+        return tags.children[tid] != undefined;
     }
 
 
@@ -60,7 +60,7 @@ var libtags = (function() {
     **/
     my.jsfunc_getSubTags = function(tid)
     {
-        var children = tags.tid_children[tid];
+        var children = tags.children[tid];
 
         if(children == undefined) return [];
         else                      return children;
@@ -76,7 +76,7 @@ var libtags = (function() {
     **/
     my.jsfunc_getParent = function(tid)
     {
-        return tags.tid_parents[tid];
+        return tags.parents[tid];
     }
 
 
@@ -90,7 +90,7 @@ var libtags = (function() {
     **/
     my.jsfunc_tidIsDescendant = function(tid, ptid)
     {
-        while((tid = tags.tid_parents[tid]) != undefined)
+        while((tid = tags.parents[tid]) != undefined)
         {
             if(tid == ptid)
                 return true;
@@ -111,7 +111,7 @@ var libtags = (function() {
     {
         var parents = [];
 
-        while((tid = tags.tid_parents[tid]) != undefined)
+        while((tid = tags.parents[tid]) != undefined)
             parents.push(tid);
 
         return parents.reverse();
@@ -139,7 +139,7 @@ var libtags = (function() {
     {
         var level = 1;
 
-        while((tid = tags.tid_parents[tid]) != 0)
+        while((tid = tags.parents[tid]) != 0)
             ++level;
 
         return level;
@@ -156,7 +156,7 @@ var libtags = (function() {
     **/
     function jsfunc_addToChildren(tid, ptid)
     {
-        var children       = tags.tid_children[ptid];
+        var children       = tags.children[ptid];
         var insertionPoint = 0;
 
         if(children != undefined)
@@ -179,7 +179,7 @@ var libtags = (function() {
             children.splice(insertionPoint, 0, tid);
         }
         else
-            tags.tid_children[ptid] = [tid];
+            tags.children[ptid] = [tid];
 
         if(insertionPoint == 0) return -1;
         else                    return children[insertionPoint-1];
@@ -197,14 +197,14 @@ var libtags = (function() {
     my.jsfunc_reparent = function(tid, ptid)
     {
         // Delete tid from its parent's children
-        var oldptid     = tags.tid_parents[tid];
-        var oldchildren = tags.tid_children[oldptid];
+        var oldptid     = tags.parents[tid];
+        var oldchildren = tags.children[oldptid];
 
-        if(oldchildren.length == 1) delete tags.tid_children[oldptid];
+        if(oldchildren.length == 1) delete tags.children[oldptid];
         else                        oldchildren.splice(oldchildren.indexOf(tid), 1);
 
         // Update the parent of tid
-        tags.tid_parents[tid] = ptid;
+        tags.parents[tid] = ptid;
 
         // Add the new child to ptid
         return jsfunc_addToChildren(tid, ptid);
@@ -227,8 +227,8 @@ var libtags = (function() {
         tags.tname_to_tid[tname.toLowerCase()] = tid;
 
         // The tag has been renamed, we now need to put it at the right place in its parent's children
-        var ptid     = tags.tid_parents[tid];
-        var children = tags.tid_children[ptid];
+        var ptid     = tags.parents[tid];
+        var children = tags.children[ptid];
 
         children.splice(children.indexOf(tid), 1);
 
@@ -244,10 +244,10 @@ var libtags = (function() {
     my.jsfunc_delete = function(tid)
     {
         // Remove the tag from its parent's children
-        var ptid     = tags.tid_parents[tid];
-        var children = tags.tid_children[ptid];
+        var ptid     = tags.parents[tid];
+        var children = tags.children[ptid];
 
-        if(children.length == 1) delete tags.tid_children[ptid];
+        if(children.length == 1) delete tags.children[ptid];
         else                     children.splice(children.indexOf(tid), 1);
 
         // Delete the tag and its subtags
@@ -256,15 +256,15 @@ var libtags = (function() {
         while(alltags.length != 0)
         {
             tid      = alltags.shift();
-            children = tags.tid_children[tid];
+            children = tags.children[tid];
 
             if(children != undefined)
                 alltags = alltags.concat(children);
 
             delete tags.tname_to_tid[tags.tid_to_tname[tid].toLowerCase()];
             delete tags.tid_to_tname[tid];
-            delete tags.tid_children[tid];
-            delete tags.tid_parents[tid];
+            delete tags.children[tid];
+            delete tags.parents[tid];
         }
     }
 
@@ -281,7 +281,7 @@ var libtags = (function() {
     {
         var tid = tags.next_tid++;
 
-        tags.tid_parents[tid]                  = ptid;
+        tags.parents[tid]                      = ptid;
         tags.tid_to_tname[tid]                 = tname;
         tags.tname_to_tid[tname.toLowerCase()] = tid;
 
