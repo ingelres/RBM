@@ -2,7 +2,7 @@ var tags = {
 
     next_tid: 100,
 
-    tid_to_tname : {
+    id2name : {
          5: 'Games',
         11: 'DS',
         12: 'PS3',
@@ -16,7 +16,7 @@ var tags = {
         59: 'Tools',
     },
 
-    tname_to_tid : {
+    name2id : {
         'games':         [ 5,],
         'ds':            [11,],
         'ps3':           [12,],

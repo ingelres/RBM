@@ -37,11 +37,11 @@
         include $CONSTS_FILE_TAGS;
 
         return "var tags = {"
-                    . "next_tid: "     . $tags_nexttid                . ","
-                    . "tid_to_tname: " . json_encode($tags_tid2tname) . ","
-                    . "tname_to_tid: " . json_encode($tags_tname2tid) . ","
-                    . "parents:      " . json_encode($tags_parents)   . ","
-                    . "children:     " . json_encode($tags_children)  . ","
+                    . "next_tid: " . $tags_nexttid                . ","
+                    . "id2name:  " . json_encode($tags_tid2tname) . ","
+                    . "name2id:  " . json_encode($tags_tname2tid) . ","
+                    . "parents:  " . json_encode($tags_parents)   . ","
+                    . "children: " . json_encode($tags_children)  . ","
                 . "};";
     }
 
