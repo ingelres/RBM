@@ -413,6 +413,8 @@ var libexp = (function(){
     **/
     my.showAndSelectTag = function(tname)
     {
+        // FIXME There may be multiple tags with the same name
+
         var tid = libtags.getIdFromName(tname);
 
         if(tid != undefined)
