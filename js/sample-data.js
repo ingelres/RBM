@@ -17,17 +17,17 @@ var tags = {
     },
 
     tname_to_tid : {
-        'games':          5,
-        'ds':            11,
-        'ps3':           12,
-        'dark souls':    13,
-        'borderlands 2': 24,
-        'code':          25,
-        'c':             36,
-        'c++':           47,
-        'javascript':    48,
-        'python':        58,
-        'tools':         59,
+        'games':         [ 5,],
+        'ds':            [11,],
+        'ps3':           [12,],
+        'dark souls':    [13,],
+        'borderlands 2': [24,],
+        'code':          [25,],
+        'c':             [36,],
+        'c++':           [47,],
+        'javascript':    [48,],
+        'python':        [58,],
+        'tools':         [59,],
     },
 
     children : {

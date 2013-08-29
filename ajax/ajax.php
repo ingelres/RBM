@@ -119,20 +119,16 @@
         $tname      = getStringParam("tname");
         $tnamelower = strtolower($tname);
 
-        // Make sure the tag doesn't already exist
-        if(!array_key_exists($tnamelower, $tags_tname2tid))
-        {
-            // Create the mappings
-            $tags_parents[$tags_nexttid]   = $ptid;
-            $tags_tname2tid[$tnamelower]   = $tags_nexttid;
-            $tags_tid2tname[$tags_nexttid] = $tname;
+        // Create the mappings
+        $tags_parents[$tags_nexttid]   = $ptid;
+        $tags_tid2tname[$tags_nexttid] = $tname;
+        $tags_tname2tid[$tnamelower][] = $tags_nexttid;
 
-            // Insert the new child in its parent's list
-            __addToChildren($tags_nexttid, $ptid, $tags_children, $tags_tid2tname);
+        // Insert the new child in its parent's list
+        __addToChildren($tags_nexttid, $ptid, $tags_children, $tags_tid2tname);
 
-            // We're done
-            db_saveTagFile($tags_nexttid+1, $tags_tname2tid, $tags_tid2tname, $tags_children, $tags_parents);
-        }
+        // We're done
+        db_saveTagFile($tags_nexttid+1, $tags_tname2tid, $tags_tid2tname, $tags_children, $tags_parents);
     }
 
 
@@ -164,7 +160,12 @@
                 if(array_key_exists($tid, $tags_children))
                     $alltags = array_merge($alltags, $tags_children[$tid]);
 
-                unset($tags_tname2tid[strtolower($tags_tid2tname[$tid])]);
+                $lowername = strtolower($tags_tid2tname[$tid]);
+                $tags      = $tags_tname2tid[$lowername];
+
+                if(count($tags) == 1) unset($tags_tname2tid[$lowername]);
+                else                  array_splice($tags_tname2tid[$lowername], array_search($tid, $tags), 1);
+
                 unset($tags_tid2tname[$tid]);
                 unset($tags_children[$tid]);
                 unset($tags_parents[$tid]);
@@ -224,21 +225,21 @@
         $tname      = getStringParam("tname");
         $tnamelower = strtolower($tname);
 
-        // Make sure the tag doesn't already exist
-        if(!array_key_exists($tnamelower, $tags_tname2tid))
-        {
-            unset($tags_tname2tid[strtolower($tags_tid2tname[$tid])]);
+        $lowername = strtolower($tags_tid2tname[$tid]);
+        $tags      = $tags_tname2tid[$lowername];
 
-            $tags_tid2tname[$tid]        = $tname;
-            $tags_tname2tid[$tnamelower] = $tid;
+        if(count($tags) == 1) unset($tags_tname2tid[$lowername]);
+        else                  array_splice($tags_tname2tid[$lowername], array_search($tid, $tags), 1);
 
-            // The tag has been renamed, we now need to put it at the right place in its parent's children
-            __deleteFromChildren($tid, $tags_parents, $tags_children);
-            __addToChildren($tid, $tags_parents[$tid], $tags_children, $tags_tid2tname);
+        $tags_tid2tname[$tid]          = $tname;
+        $tags_tname2tid[$tnamelower][] = $tid;
 
-            // We're done
-            db_saveTagFile($tags_nexttid, $tags_tname2tid, $tags_tid2tname, $tags_children, $tags_parents);
-        }
+        // The tag has been renamed, we now need to put it at the right place in its parent's children
+        __deleteFromChildren($tid, $tags_parents, $tags_children);
+        __addToChildren($tid, $tags_parents[$tid], $tags_children, $tags_tid2tname);
+
+        // We're done
+        db_saveTagFile($tags_nexttid, $tags_tname2tid, $tags_tid2tname, $tags_children, $tags_parents);
     }
 
 ?>

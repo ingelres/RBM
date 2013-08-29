@@ -29,11 +29,15 @@ var libexp = (function(){
                 click: function(){
                     var name   = $("#css-explorer-tag-new-name").val();
                     var errmsg = $("#css-explorer-dialog-rename-errmsg");
+/*
                     var tid    = libtags.jsfunc_getIdFromName(name);
+*/
                     var dlg    = $(this);
 
                          if(name.length == 0)                           errmsg.html(L10N.name_empty).css("visibility", "visible");
+/*
                     else if(tid != undefined && tid != dlg.data("tid")) errmsg.html(L10N.name_exists).css("visibility", "visible");
+*/
                     else if(dlg.data("action") == "rename")             jsfunc_renameTag(dlg.dialog("close").data("tid"), name);
                     else                                                jsfunc_createTag(dlg.dialog("close").data("tid"), name);
                 }},{
