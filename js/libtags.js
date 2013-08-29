@@ -53,16 +53,16 @@ var libtags = (function() {
 
         if(children != undefined)
         {
-        // There's at least one child, so we know that low <= high the first time
-        var tname = tags.tid_to_tname[tid].toLowerCase(), low = 0, high = children.length-1;
+            // There's at least one child, so we know that low <= high the first time
+            var tname = tags.tid_to_tname[tid].toLowerCase(), low = 0, high = children.length-1;
 
-        while(low <= high)
-        {
-            var middle     = Math.floor((low + high) / 2);
-            var comparison = tname.localeCompare(tags.tid_to_tname[children[middle]].toLowerCase());
+            while(low <= high)
+            {
+                var middle     = Math.floor((low + high) / 2);
+                var comparison = tname.localeCompare(tags.tid_to_tname[children[middle]].toLowerCase());
 
-            if(comparison > 0) low  = middle + 1;
-            else               high = middle - 1;
+                if(comparison > 0) low  = middle + 1;
+                else               high = middle - 1;
             }
 
             if(comparison > 0) var insertPoint = middle+1;
@@ -284,8 +284,8 @@ var libtags = (function() {
     {
         var tid = tags.next_tid++;
 
-        tags.parents[tid]                      = ptid;
-        tags.tid_to_tname[tid]                 = tname;
+        tags.parents[tid]      = ptid;
+        tags.tid_to_tname[tid] = tname;
 
         if(tags.tname_to_tid[tname.toLowerCase()] == undefined) tags.tname_to_tid[tname.toLowerCase()] = [tid];
         else                                                    tags.tname_to_tid[tname.toLowerCase()].push(tid);
