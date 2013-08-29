@@ -183,7 +183,9 @@ var libexp = (function(){
                         + "<div id='css-explorer-expander-" + tid + "' style='margin-left:" + marginLeft + "px' ";
 
         if(libtags.hasSubTags(tid)) code += "class='css-explorer-expander css-explorer-expand'></div>";
-        else                               code += "class='css-explorer-expander'></div>";
+        else                        code += "class='css-explorer-expander'></div>";
+
+        code += "<div id='css-explorer-folder-" + tid + "' class='css-explorer-folder css-explorer-folder-collapsed'></div>";
 
         return code + "<div class='css-explorer-tag-name'>" + libtools.htmlspecialchars(libtags.getName(tid)) + "</div></div>";
     }
@@ -220,7 +222,10 @@ var libexp = (function(){
 
         // Expand -> collapse (ignore for the root tag)
         if(ptid != 0)
+        {
             expander.removeClass("css-explorer-expand").addClass("css-explorer-collapse");
+            $("#css-explorer-folder-" + ptid).removeClass("css-explorer-folder-collapsed").addClass("css-explorer-folder-expanded");
+        }
     }
 
 
@@ -244,6 +249,7 @@ var libexp = (function(){
 
         // Collapse -> expand
         expander.removeClass("css-explorer-collapse").addClass("css-explorer-expand");
+        $("#css-explorer-folder-" + ptid).removeClass("css-explorer-folder-expanded").addClass("css-explorer-folder-collapsed");
     }
 
 

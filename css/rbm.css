@@ -1,7 +1,7 @@
 body {
     margin: 0;
-    font-size: 9pt;
-    font-family: Arial, sans-serif;
+    font-size: 8pt;
+    font-family: Tahoma, Arial, sans-serif;
 }
 
 input[type="text"] {
@@ -30,8 +30,7 @@ input[type="text"] {
 
 .css-explorer-item {
     cursor: pointer;
-    border: 1px solid #000;
-    line-height: 26px;
+    line-height: 22px;
 }
 
 .css-explorer-item:hover {
@@ -45,10 +44,10 @@ input[type="text"] {
 
 /* An handle for moving items around, visible only when the item is hovered */
 /* An expander to expand / collapse items */
-.css-explorer-placeholder, .css-explorer-handle, .css-explorer-toolbox, .css-explorer-expander {
+.css-explorer-placeholder, .css-explorer-handle, .css-explorer-toolbox, .css-explorer-expander, .css-explorer-folder {
     float: left;
     width: 20px;
-    height: 26px;
+    height: 22px;
 
     background-repeat: no-repeat;
     background-position: center center;
@@ -70,6 +69,9 @@ input[type="text"] {
 /* Specific expand / collapse images */
 .css-explorer-expand   { background-image: url('img/expand.png');   }
 .css-explorer-collapse { background-image: url('img/collapse.png'); }
+
+.css-explorer-folder-expanded  { background-image: url('img/tag-expanded.png');  }
+.css-explorer-folder-collapsed { background-image: url('img/tag-collapsed.png'); }
 
 /* Class added by JQueryUI when dragging an item over a droppable item */
 .css-explorer-droppable {
