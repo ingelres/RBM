@@ -92,7 +92,7 @@ var libexp = (function(){
         }
         else if(target.hasClass("css-explorer-toolbox"))
         {
-            showToolbox(tid);
+            togglePopupMenu(tid);
 
             // Click events eventually end up in the global handler that closes the popup menu
             // We don't want that to happen when we open the menu, otherwise it would be immediately closed
@@ -106,63 +106,70 @@ var libexp = (function(){
 
 
     /**
-     * Show a toolbox with a few options to manipulate a tag.
+     * Show/hide a toolbox with a few options to manipulate a tag.
      *
      * @param tid The ID of the tag.
     **/
-    function showToolbox(tid)
+    function togglePopupMenu(tid)
     {
         var popup = $("#css-explorer-toolbox-popup");
 
-        // Special case for tag 0 (root)
-        if(tid == 0)
+        if(popup.is(":visible"))
         {
-            $("#css-explorer-toolbox-delete").hide();
-            $("#css-explorer-toolbox-rename").hide();
-            $("#css-explorer-toolbox-create").html(L10N.create_tag);
+            popup.hide();
         }
         else
         {
-            $("#css-explorer-toolbox-delete").show();
-            $("#css-explorer-toolbox-rename").show();
-            $("#css-explorer-toolbox-create").html(L10N.create_subtag);
-        }
-
-        // Show the popup right below the corresponding item
-        popup.show().position({my: "left top", at: "left bottom", of: $("#css-explorer-item-" + tid).find(".css-explorer-toolbox")});
-
-        // We need to remove the previous handler first, otherwise they just keep being added one to another
-        popup.off("click").on("click", function(evt){
-
-            var target = $(evt.target);
-
-            if(target.is("#css-explorer-toolbox-delete"))
+            // Special case for tag 0 (root)
+            if(tid == 0)
             {
-                if(libtags.hasSubTags(tid)) $("#css-explorer-dialog-delete-msg").html(L10N.confirm_delete_tag_subtags);
-                else                               $("#css-explorer-dialog-delete-msg").html(L10N.confirm_delete_tag);
-
-                $("#css-explorer-dialog-delete").data("tid", tid).dialog("open");
+                $("#css-explorer-toolbox-delete").hide();
+                $("#css-explorer-toolbox-rename").hide();
+                $("#css-explorer-toolbox-create").html(L10N.create_tag);
             }
             else
             {
-                var dlg = $("#css-explorer-dialog-rename");
+                $("#css-explorer-toolbox-delete").show();
+                $("#css-explorer-toolbox-rename").show();
+                $("#css-explorer-toolbox-create").html(L10N.create_subtag);
+            }
 
-                $("#css-explorer-dialog-rename-errmsg").css("visibility", "hidden");
+            // Show the popup right below the corresponding item
+            popup.show().position({my: "left top", at: "left bottom", of: $("#css-explorer-item-" + tid).find(".css-explorer-toolbox")});
 
-                if(target.is("#css-explorer-toolbox-create"))
+            // We need to remove the previous handler first, otherwise they just keep being added one to another
+            popup.off("click").on("click", function(evt){
+
+                var target = $(evt.target);
+
+                if(target.is("#css-explorer-toolbox-delete"))
                 {
-                    $("#css-explorer-tag-new-name").val("").attr("placeholder", L10N.newtag);
-                    dlg.data("tid", tid).data("action", "create").dialog("option", "title", L10N.create_tag).dialog("open");
+                    if(libtags.hasSubTags(tid)) $("#css-explorer-dialog-delete-msg").html(L10N.confirm_delete_tag_subtags);
+                    else                        $("#css-explorer-dialog-delete-msg").html(L10N.confirm_delete_tag);
+
+                    $("#css-explorer-dialog-delete").data("tid", tid).dialog("open");
                 }
                 else
                 {
-                    $("#css-explorer-tag-new-name").val("").attr("placeholder", libtags.getName(tid));
-                    dlg.data("tid", tid).data("action", "rename").dialog("option", "title", L10N.rename_tag).dialog("open");
-                }
-            }
+                    var dlg = $("#css-explorer-dialog-rename");
 
-            popup.hide();
-        });
+                    $("#css-explorer-dialog-rename-errmsg").css("visibility", "hidden");
+
+                    if(target.is("#css-explorer-toolbox-create"))
+                    {
+                        $("#css-explorer-tag-new-name").val("").attr("placeholder", L10N.newtag);
+                        dlg.data("tid", tid).data("action", "create").dialog("option", "title", L10N.create_tag).dialog("open");
+                    }
+                    else
+                    {
+                        $("#css-explorer-tag-new-name").val("").attr("placeholder", libtags.getName(tid));
+                        dlg.data("tid", tid).data("action", "rename").dialog("option", "title", L10N.rename_tag).dialog("open");
+                    }
+                }
+
+                popup.hide();
+            });
+        }
     }
 
 
