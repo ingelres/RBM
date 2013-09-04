@@ -391,7 +391,7 @@ var libexp = (function(){
         // Clicking on the selected item should do nothing
         if(tid != selectedTagId)
         {
-            $("#css-explorer-item-" + selectedTagId).removeClass("css-explorer-item-selected", ANIMATION_LEN);
+            $("#css-explorer-item-" + selectedTagId).removeClass("css-explorer-item-selected");
 
             if(tid == -1)
             {
@@ -399,7 +399,7 @@ var libexp = (function(){
             }
             else
             {
-                $("#css-explorer-item-" + tid).addClass("css-explorer-item-selected", ANIMATION_LEN);
+                $("#css-explorer-item-" + tid).addClass("css-explorer-item-selected");
 
                 // TODO Make an AJAX request to get the associated bookmarks
             }

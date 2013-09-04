@@ -25,7 +25,7 @@ input[type="text"] {
 }
 
 #css-explorer {
-    width: 300px;
+    width: 250px;
 }
 
 .css-explorer-item {
@@ -34,17 +34,21 @@ input[type="text"] {
 }
 
 .css-explorer-item:hover {
-    background: #C1DEC3 url('img/selected-shadow.png') no-repeat right center;
+    background-color: #D3E2F1;
 }
 
 .css-explorer-item-selected, .css-explorer-item-selected:hover {
-    background: #83C988 url('img/selected.png') no-repeat right center;
+    color: #FFF;
+    background-color: #68A2DC;
+}
+
+.css-explorer-root {
+    margin-left: 8px;
     font-weight: bold;
 }
 
-/* An handle for moving items around, visible only when the item is hovered */
-/* An expander to expand / collapse items */
-.css-explorer-placeholder, .css-explorer-handle, .css-explorer-toolbox, .css-explorer-expander, .css-explorer-folder-expanded, .css-explorer-folder-collapsed {
+/* Icons (handle, folder...) used within a line of the tag explorer */
+.css-explorer-handle, .css-explorer-toolbox, .css-explorer-expander, .css-explorer-folder-expanded, .css-explorer-folder-collapsed {
     float: left;
     width: 16px;
     height: 20px;
@@ -54,8 +58,8 @@ input[type="text"] {
     background-position: center center;
 }
 
-.css-explorer-placeholder {
-    cursor: auto;
+.css-explorer-toolbox {
+    float: right;
 }
 
 .css-explorer-item:hover .css-explorer-toolbox {

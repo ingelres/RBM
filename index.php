@@ -76,9 +76,8 @@
         <div id="css-explorer">
             <!-- Root tag, the top-level tags are created dynamically by the JS code -->
             <div id="css-explorer-item-0" class="css-explorer-item">
-                <div class="css-explorer-placeholder"></div>
                 <div class="css-explorer-toolbox"></div>
-                <div class="css-explorer-tag-name">Root</div>
+                <div class="css-explorer-tag-name css-explorer-root"><?=_("List of Tags")?></div>
             </div>
         </div>
 
