@@ -30,7 +30,7 @@ input[type="text"] {
 
 .css-explorer-item {
     cursor: pointer;
-    line-height: 22px;
+    line-height: 20px;
 }
 
 .css-explorer-item:hover {
@@ -46,8 +46,9 @@ input[type="text"] {
 /* An expander to expand / collapse items */
 .css-explorer-placeholder, .css-explorer-handle, .css-explorer-toolbox, .css-explorer-expander, .css-explorer-folder-expanded, .css-explorer-folder-collapsed {
     float: left;
-    width: 20px;
-    height: 22px;
+    width: 16px;
+    height: 20px;
+    margin-right: 4px;
 
     background-repeat: no-repeat;
     background-position: center center;
@@ -70,8 +71,8 @@ input[type="text"] {
 .css-explorer-expand   { background-image: url('img/expand.png');   }
 .css-explorer-collapse { background-image: url('img/collapse.png'); }
 
-.css-explorer-folder-expanded  { background-image: url('img/tag-expanded.png');  }
-.css-explorer-folder-collapsed { background-image: url('img/tag-collapsed.png'); }
+.css-explorer-folder-expanded  { background-image: url('img/folder-expanded.png');  }
+.css-explorer-folder-collapsed { background-image: url('img/folder-collapsed.png'); }
 
 /* Class added by JQueryUI when dragging an item over a droppable item */
 .css-explorer-droppable {
