@@ -44,7 +44,7 @@ input[type="text"] {
 
 /* An handle for moving items around, visible only when the item is hovered */
 /* An expander to expand / collapse items */
-.css-explorer-placeholder, .css-explorer-handle, .css-explorer-toolbox, .css-explorer-expander, .css-explorer-folder {
+.css-explorer-placeholder, .css-explorer-handle, .css-explorer-toolbox, .css-explorer-expander, .css-explorer-folder-expanded, .css-explorer-folder-collapsed {
     float: left;
     width: 20px;
     height: 22px;

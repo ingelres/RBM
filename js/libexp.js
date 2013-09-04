@@ -185,7 +185,7 @@ var libexp = (function(){
         if(libtags.hasSubTags(tid)) code += "class='css-explorer-expander css-explorer-expand'></div>";
         else                        code += "class='css-explorer-expander'></div>";
 
-        code += "<div id='css-explorer-folder-" + tid + "' class='css-explorer-folder css-explorer-folder-collapsed'></div>";
+        code += "<div id='css-explorer-folder-" + tid + "' class='css-explorer-folder-collapsed'></div>";
 
         return code + "<div class='css-explorer-tag-name'>" + libtools.htmlspecialchars(libtags.getName(tid)) + "</div></div>";
     }
