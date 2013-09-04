@@ -26,6 +26,9 @@ input[type="text"] {
 
 #css-explorer {
     width: 250px;
+    border: 0 solid #A7ABA7;
+    border-width: 1px 1px 0 0;
+    background-color: #F3F3F3;
 }
 
 .css-explorer-item {
@@ -105,8 +108,7 @@ input[type="text"] {
 }
 
 .popup-menu li:hover {
-    color: #FFF;
-    background-color: #87AFFF;
+    background-color: #D3E2F1;
 }
 
 #css-explorer-toolbox-popup, #css-explorer-dialog-rename, #css-explorer-dialog-delete {
