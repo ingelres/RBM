@@ -37,7 +37,7 @@ input[type="text"] {
 }
 
 .css-explorer-item:hover {
-    background-color: #D3E2F1;
+    background-color: #B6CCE3;
 }
 
 .css-explorer-item-selected, .css-explorer-item-selected:hover {
@@ -65,14 +65,14 @@ input[type="text"] {
     float: right;
 }
 
-.css-explorer-item:hover .css-explorer-toolbox {
-    background-image: url('img/toolbox.png');
-}
-
 .css-explorer-item:hover .css-explorer-handle {
     cursor: move;
     background-image: url('img/handle.png');
 }
+
+/* Arrow for the popup menu */
+.css-explorer-item:hover .css-explorer-toolbox       { background-image: url('img/menu-arrow.png');       }
+.css-explorer-item:hover .css-explorer-toolbox:hover { background-image: url('img/menu-arrow-hover.png'); }
 
 /* Specific expand / collapse images */
 .css-explorer-expand   { background-image: url('img/expand.png');   }
