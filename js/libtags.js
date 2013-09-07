@@ -92,11 +92,14 @@ var libtags = (function() {
      *
      * @param tname The tag name.
      *
-     * @return An array of tid.
+     * @return An array of tid (may be empty).
     **/
     my.getIdFromName = function(tname)
     {
-        return tags.name2id[tname.toLowerCase()];
+        var tid = tags.name2id[tname.toLowerCase()];
+
+        if(tid == undefined) return [];
+        else                 return tid;
     }
 
 

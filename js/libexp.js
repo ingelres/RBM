@@ -4,8 +4,8 @@ var libexp = (function(){
     var ANIMATION_LEN       = 200;
     var MARGIN_LEFT_PER_LVL =  20;
 
-    var my            = {};
-    var selectedTagId = -1;
+    var my          = {};
+    var selectedTid = [];
 
 
     /**
@@ -88,7 +88,7 @@ var libexp = (function(){
 
                  if(expander.hasClass("css-explorer-expand"))   expandTag(tid, expander);
             else if(expander.hasClass("css-explorer-collapse")) collapseTag(tid, expander);
-            else                                                selectTag(tid);
+            else                                                selectTags([tid]);
         }
         else if(target.hasClass("css-explorer-toolbox"))
         {
@@ -100,7 +100,7 @@ var libexp = (function(){
         }
         else if(!target.hasClass("css-explorer-handle"))
         {
-            selectTag(tid);
+            selectTags([tid]);
         }
     }
 
@@ -251,8 +251,12 @@ var libexp = (function(){
         children.slideUp(ANIMATION_LEN, function(){ $(this).remove() });
 
         // Clear selection if it's a descendant of the item we're collapsing
-        if(libtags.tidIsDescendant(selectedTagId, ptid))
-            selectTag(-1);
+        for(var i=0; i<selectedTid.length; ++i)
+            if(libtags.tidIsDescendant(selectedTid[i], ptid))
+            {
+                selectTags([]);
+                break;
+            }
 
         // Collapse -> expand
         expander.removeClass("css-explorer-collapse").addClass("css-explorer-expand");
@@ -347,8 +351,12 @@ var libexp = (function(){
             $("#css-explorer-item-" + tid).draggable("destroy").droppable("destroy").remove();
 
             // Clear selection if needed
-            if($("#css-explorer-item-" + selectedTagId).length == 0)
-                selectTag(-1);
+            for(var i=0; i<selectedTid.length; ++i)
+                if($("#css-explorer-item-" + selectedTid[i]).length == 0)
+                {
+                    selectTags([]);
+                    break;
+                }
         }
 
         libajax.ajax({
@@ -387,37 +395,28 @@ var libexp = (function(){
 
 
     /**
-     * Select a tag. The tag must exist in the DOM. This function will:
-     *  - Reflect the fact that the tag is selected.
+     * Select a set of tags. The tags must exist in the DOM. This function will:
+     *  - Reflect the fact that the tags are selected.
      *  - Load the associated bookmarks.
      *
-     * @param tid The ID of the tag.
+     * @param newSelection An array of tid.
     **/
-    function selectTag(tid)
+    function selectTags(newSelection)
     {
-        // Clicking on the selected item should do nothing
-        if(tid != selectedTagId)
-        {
-            $("#css-explorer-item-" + selectedTagId).removeClass("css-explorer-item-selected");
+        for(var i=0; i<selectedTid.length; ++i)
+            $("#css-explorer-item-" + selectedTid[i]).removeClass("css-explorer-item-selected");
 
-            if(tid == -1)
-            {
-                // TODO Should remove the things that depend on the selected tag (e.g., bookmarks)
-            }
-            else
-            {
-                $("#css-explorer-item-" + tid).addClass("css-explorer-item-selected");
+        for(var i=0; i<newSelection.length; ++i)
+            $("#css-explorer-item-" + newSelection[i]).addClass("css-explorer-item-selected");
 
-                // TODO Make an AJAX request to get the associated bookmarks
-            }
+        selectedTid = newSelection.slice(0);
 
-            selectedTagId = tid;
-        }
+        // FIXME Update bookmarks
     }
 
 
     /**
-     * Select a tag even if it doesn't exist yet in the DOM (as opposed to selectTag). This function will:
+     * Select a tag even if it doesn't exist yet in the DOM (as opposed to selectTags()). This function will:
      *  - Open all the parents of the tag.
      *  - Scroll to the tag.
      *  - Select the tag.
@@ -426,30 +425,30 @@ var libexp = (function(){
     **/
     my.showAndSelectTag = function(tname)
     {
-        // FIXME There may be multiple tags with the same name
+        var set = libtags.getIdFromName(tname);
 
-        var tid = libtags.getIdFromName(tname);
+        if(set.length == 0)
+            return;
 
-        if(tid != undefined)
+        for(var i=0; i<set.length; ++i)
         {
             // Go through the parents of the tags and open the collapsed ones
-            var parents   = libtags.getParents(tid);
+            var parents   = libtags.getParents(set[i]);
             var nbParents = parents.length;
 
-            for(var i=0; i<nbParents; ++i)
+            for(var j=0; j<nbParents; ++j)
             {
-                var ptid     = parents[i];
+                var ptid     = parents[j];
                 var expander = $("#css-explorer-expander-" + ptid);
 
                 if(expander.hasClass("css-explorer-expand"))
                     expandTag(ptid, expander);
             }
-
-            // TODO Scroll to the tag
-
-            // Now that the hierarchy has been expanded, the item exists and can be selected
-            selectTag(tid);
         }
+
+        // FIXME Scroll to the first tag in the set
+
+        selectTags(set);
     }
 
 
@@ -490,8 +489,12 @@ var libexp = (function(){
         var ptid = libtags.getParent(tid);
 
         // Clear selection if it's a descendant of the item we're deleting
-        if(selectedTagId == tid || libtags.tidIsDescendant(selectedTagId, tid))
-            selectTag(-1);
+        for(var i=0; i<selectedTid.length; ++i)
+            if(selectedTid[i] == tid || libtags.tidIsDescendant(selectedTid[i], tid))
+            {
+                selectTags([]);
+                break;
+            }
 
         libtags.delete(tid);
         libsearch.updateSourceTags();
