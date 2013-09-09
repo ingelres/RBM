@@ -14,7 +14,7 @@
     function getStringParam($name, $default = null)
     {
         if(isset($_GET[$name]))
-            return urldecode($_GET[$name]);
+            return $_GET[$name];
 
         if($default != null)
             return $default;
