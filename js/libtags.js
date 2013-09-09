@@ -203,10 +203,10 @@ var libtags = (function() {
     {
         var tnames = [];
 
-        for(var tid in tags.id2name)
-            tnames.push(tags.id2name[tid]);
+        for(var tname in tags.name2id)
+            tnames.push(tname);
 
-        return tnames.sort();
+        return tnames.sort(libtools.lowercaseStrCmp);
     }
 
 
