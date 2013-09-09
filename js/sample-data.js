@@ -17,17 +17,17 @@ var tags = {
     },
 
     name2id : {
-        'games':         [ 5,],
-        'ds':            [11,],
-        'ps3':           [12,],
-        'dark souls':    [13,],
-        'borderlands 2': [24,],
-        'code':          [25,],
-        'c':             [36,],
-        'c++':           [47,],
-        'javascript':    [48,],
-        'python':        [58,],
-        'tools':         [59,],
+        'Games':         [ 5,],
+        'DS':            [11,],
+        'PS3':           [12,],
+        'Dark Souls':    [13,],
+        'Borderlands 2': [24,],
+        'Code':          [25,],
+        'C':             [36,],
+        'C++':           [47,],
+        'JavaScript':    [48,],
+        'Python':        [58,],
+        'Tools':         [59,],
     },
 
     children : {

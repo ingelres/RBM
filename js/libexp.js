@@ -441,12 +441,10 @@ var libexp = (function(){
      *  - Scroll to the tag.
      *  - Select the tag.
      *
-     * @param tname The name of the tag.
+     * @param set The set of tag ID to select.
     **/
-    my.showAndSelectTag = function(tname)
+    my.showAndSelectTags = function(set)
     {
-        var set = libtags.getIdFromName(tname);
-
         if(set.length == 0)
             return;
 
@@ -552,7 +550,7 @@ var libexp = (function(){
             $("#css-explorer-expander-" + ptid).addClass("css-explorer-expand");
 
         libsearch.updateSourceTags();
-        libexp.showAndSelectTag(tname);
+        libexp.showAndSelectTags([tag.tid]);
 
         // Update server-side DB
         libajax.ajax({

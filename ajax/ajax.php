@@ -115,14 +115,13 @@
 
         include $CONSTS_FILE_TAGS;
 
-        $ptid       = getIntParam("ptid");
-        $tname      = getStringParam("tname");
-        $tnamelower = strtolower($tname);
+        $ptid  = getIntParam("ptid");
+        $tname = getStringParam("tname");
 
         // Create the mappings
+        $tags_tname2tid[$tname][]      = $tags_nexttid;
         $tags_parents[$tags_nexttid]   = $ptid;
         $tags_tid2tname[$tags_nexttid] = $tname;
-        $tags_tname2tid[$tnamelower][] = $tags_nexttid;
 
         // Insert the new child in its parent's list
         __addToChildren($tags_nexttid, $ptid, $tags_children, $tags_tid2tname);
@@ -160,11 +159,11 @@
                 if(array_key_exists($tid, $tags_children))
                     $alltags = array_merge($alltags, $tags_children[$tid]);
 
-                $lowername = strtolower($tags_tid2tname[$tid]);
-                $tags      = $tags_tname2tid[$lowername];
+                $tname    = $tags_tid2tname[$tid];
+                $homonyms = $tags_tname2tid[$tname];
 
-                if(count($tags) == 1) unset($tags_tname2tid[$lowername]);
-                else                  array_splice($tags_tname2tid[$lowername], array_search($tid, $tags), 1);
+                if(count($homonyms) == 1) unset($tags_tname2tid[$tname]);
+                else                      array_splice($tags_tname2tid[$tname], array_search($tid, $homonyms), 1);
 
                 unset($tags_tid2tname[$tid]);
                 unset($tags_children[$tid]);
@@ -221,18 +220,17 @@
 
         include $CONSTS_FILE_TAGS;
 
-        $tid        = getIntParam("tid");
-        $tname      = getStringParam("tname");
-        $tnamelower = strtolower($tname);
+        $tid   = getIntParam("tid");
+        $tname = getStringParam("tname");
 
-        $lowername = strtolower($tags_tid2tname[$tid]);
-        $tags      = $tags_tname2tid[$lowername];
+        $oldName  = $tags_tid2tname[$tid];
+        $homonyms = $tags_tname2tid[$oldName];
 
-        if(count($tags) == 1) unset($tags_tname2tid[$lowername]);
-        else                  array_splice($tags_tname2tid[$lowername], array_search($tid, $tags), 1);
+        if(count($homonyms) == 1) unset($tags_tname2tid[$oldName]);
+        else                      array_splice($tags_tname2tid[$oldName], array_search($tid, $homonyms), 1);
 
-        $tags_tid2tname[$tid]          = $tname;
-        $tags_tname2tid[$tnamelower][] = $tid;
+        $tags_tid2tname[$tid]     = $tname;
+        $tags_tname2tid[$tname][] = $tid;
 
         // The tag has been renamed, we now need to put it at the right place in its parent's children
         __deleteFromChildren($tid, $tags_parents, $tags_children);

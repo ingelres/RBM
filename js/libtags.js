@@ -96,7 +96,7 @@ var libtags = (function() {
     **/
     my.getIdFromName = function(tname)
     {
-        var tid = tags.name2id[tname.toLowerCase()];
+        var tid = tags.name2id[tname];
 
         if(tid == undefined) return [];
         else                 return tid;
@@ -266,7 +266,7 @@ var libtags = (function() {
             if(children != undefined)
                 alltags = alltags.concat(children);
 
-            deleteTidFromObjectArray(tags.name2id, tags.id2name[tid].toLowerCase(), tid);
+            deleteTidFromObjectArray(tags.name2id, tags.id2name[tid], tid);
 
             delete tags.id2name[tid];
             delete tags.children[tid];
@@ -290,8 +290,8 @@ var libtags = (function() {
         tags.parents[tid] = ptid;
         tags.id2name[tid] = tname;
 
-        if(tags.name2id[tname.toLowerCase()] == undefined) tags.name2id[tname.toLowerCase()] = [tid];
-        else                                               tags.name2id[tname.toLowerCase()].push(tid);
+        if(tags.name2id[tname] == undefined) tags.name2id[tname] = [tid];
+        else                                 tags.name2id[tname].push(tid);
 
         return {tid: tid, sibling: addToChildren(tid, ptid)};
     }
@@ -307,12 +307,12 @@ var libtags = (function() {
     **/
     my.rename = function(tid, tname)
     {
-        deleteTidFromObjectArray(tags.name2id, tags.id2name[tid].toLowerCase(), tid);
+        deleteTidFromObjectArray(tags.name2id, tags.id2name[tid], tid);
 
         tags.id2name[tid] = tname;
 
-        if(tags.name2id[tname.toLowerCase()] == undefined) tags.name2id[tname.toLowerCase()] = [tid];
-        else                                               tags.name2id[tname.toLowerCase()].push(tid);
+        if(tags.name2id[tname] == undefined) tags.name2id[tname] = [tid];
+        else                                 tags.name2id[tname].push(tid);
 
         // The tag has been renamed, we now need to put it at the right place in its parent's children
         var ptid = tags.parents[tid];
