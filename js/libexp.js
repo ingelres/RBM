@@ -250,13 +250,8 @@ var libexp = (function(){
         children.find(".css-explorer-item").draggable("destroy").droppable("destroy");
         children.slideUp(ANIMATION_LEN, function(){ $(this).remove() });
 
-        // Clear selection if it's a descendant of the item we're collapsing
-        for(var i=0; i<selectedTid.length; ++i)
-            if(libtags.tidIsDescendant(selectedTid[i], ptid))
-            {
-                selectTags([]);
-                break;
-            }
+        // Update selection
+        unselectDescendants(ptid);
 
         // Collapse -> expand
         expander.removeClass("css-explorer-collapse").addClass("css-explorer-expand");
@@ -350,13 +345,8 @@ var libexp = (function(){
             $("#css-explorer-children-" + tid).remove();
             $("#css-explorer-item-" + tid).draggable("destroy").droppable("destroy").remove();
 
-            // Clear selection if needed
-            for(var i=0; i<selectedTid.length; ++i)
-                if($("#css-explorer-item-" + selectedTid[i]).length == 0)
-                {
-                    selectTags([]);
-                    break;
-                }
+            // Update selection
+            unselectDescendants(ptid);
         }
 
         libajax.ajax({
@@ -412,6 +402,36 @@ var libexp = (function(){
         selectedTid = newSelection.slice(0);
 
         // FIXME Update bookmarks
+    }
+
+
+    /**
+     * Unselect all selected tags that are descendants of the given tag.
+     *
+     * @param ptid The ID of the parent.
+    **/
+    function unselectDescendants(ptid)
+    {
+        var newSelection     = [];
+        var selectionChanged = false;
+
+        for(var i=0; i<selectedTid.length; ++i)
+        {
+            if(libtags.tidIsDescendant(selectedTid[i], ptid))
+            {
+                selectionChanged = true;
+                $("#css-explorer-item-" + selectedTid[i]).removeClass("css-explorer-item-selected");
+            }
+            else
+                newSelection.push(selectedTid[i]);
+        }
+
+        if(selectionChanged)
+        {
+            selectedTid = newSelection;
+
+            // FIXME Update bookmarks
+        }
     }
 
 
@@ -488,13 +508,8 @@ var libexp = (function(){
     {
         var ptid = libtags.getParent(tid);
 
-        // Clear selection if it's a descendant of the item we're deleting
-        for(var i=0; i<selectedTid.length; ++i)
-            if(selectedTid[i] == tid || libtags.tidIsDescendant(selectedTid[i], tid))
-            {
-                selectTags([]);
-                break;
-            }
+        // Update selection
+        unselectDescendants(ptid);
 
         libtags.delete(tid);
         libsearch.updateSourceTags();
