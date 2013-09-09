@@ -117,59 +117,58 @@ var libexp = (function(){
         if(popup.is(":visible"))
         {
             popup.hide();
+            return;
+        }
+
+        // Special case for tag 0 (root)
+        if(tid == 0)
+        {
+            $("#css-explorer-toolbox-delete").hide();
+            $("#css-explorer-toolbox-rename").hide();
+            $("#css-explorer-toolbox-create").html(L10N.create_tag);
         }
         else
         {
-            // Special case for tag 0 (root)
-            if(tid == 0)
+            $("#css-explorer-toolbox-delete").show();
+            $("#css-explorer-toolbox-rename").show();
+            $("#css-explorer-toolbox-create").html(L10N.create_subtag);
+        }
+
+        // Show the popup right below the corresponding item
+        popup.show().position({my: "left top", at: "left bottom", of: $("#css-explorer-item-" + tid).find(".css-explorer-toolbox")});
+
+        // We need to remove the previous handler first, otherwise they just keep being added one to another
+        popup.off("click").on("click", function(evt){
+
+            var target = $(evt.target);
+
+            if(target.is("#css-explorer-toolbox-delete"))
             {
-                $("#css-explorer-toolbox-delete").hide();
-                $("#css-explorer-toolbox-rename").hide();
-                $("#css-explorer-toolbox-create").html(L10N.create_tag);
+                if(libtags.hasSubTags(tid)) $("#css-explorer-dialog-delete-msg").html(L10N.confirm_delete_tag_subtags);
+                else                        $("#css-explorer-dialog-delete-msg").html(L10N.confirm_delete_tag);
+
+                $("#css-explorer-dialog-delete").data("tid", tid).dialog("open");
             }
             else
             {
-                $("#css-explorer-toolbox-delete").show();
-                $("#css-explorer-toolbox-rename").show();
-                $("#css-explorer-toolbox-create").html(L10N.create_subtag);
-            }
+                var dlg = $("#css-explorer-dialog-rename");
 
-            // Show the popup right below the corresponding item
-            popup.show().position({my: "left top", at: "left bottom", of: $("#css-explorer-item-" + tid).find(".css-explorer-toolbox")});
+                $("#css-explorer-dialog-rename-errmsg").css("visibility", "hidden");
 
-            // We need to remove the previous handler first, otherwise they just keep being added one to another
-            popup.off("click").on("click", function(evt){
-
-                var target = $(evt.target);
-
-                if(target.is("#css-explorer-toolbox-delete"))
+                if(target.is("#css-explorer-toolbox-create"))
                 {
-                    if(libtags.hasSubTags(tid)) $("#css-explorer-dialog-delete-msg").html(L10N.confirm_delete_tag_subtags);
-                    else                        $("#css-explorer-dialog-delete-msg").html(L10N.confirm_delete_tag);
-
-                    $("#css-explorer-dialog-delete").data("tid", tid).dialog("open");
+                    $("#css-explorer-tag-new-name").val("").attr("placeholder", L10N.newtag);
+                    dlg.data("tid", tid).data("action", "create").dialog("option", "title", L10N.create_tag).dialog("open");
                 }
                 else
                 {
-                    var dlg = $("#css-explorer-dialog-rename");
-
-                    $("#css-explorer-dialog-rename-errmsg").css("visibility", "hidden");
-
-                    if(target.is("#css-explorer-toolbox-create"))
-                    {
-                        $("#css-explorer-tag-new-name").val("").attr("placeholder", L10N.newtag);
-                        dlg.data("tid", tid).data("action", "create").dialog("option", "title", L10N.create_tag).dialog("open");
-                    }
-                    else
-                    {
-                        $("#css-explorer-tag-new-name").val("").attr("placeholder", libtags.getName(tid));
-                        dlg.data("tid", tid).data("action", "rename").dialog("option", "title", L10N.rename_tag).dialog("open");
-                    }
+                    $("#css-explorer-tag-new-name").val("").attr("placeholder", libtags.getName(tid));
+                    dlg.data("tid", tid).data("action", "rename").dialog("option", "title", L10N.rename_tag).dialog("open");
                 }
+            }
 
-                popup.hide();
-            });
-        }
+            popup.hide();
+        });
     }
 
 

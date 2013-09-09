@@ -61,6 +61,7 @@
         fclose($handle);
     }
 
+
     /**
      * Create a new tid to bid file.
      *
@@ -72,6 +73,7 @@
 
         db_saveArray("TID_TO_BID", $tid2bid, $CONSTS_FILE_TID_TO_BID);
     }
+
 
     /**
      * Create a new bid to tid file.
