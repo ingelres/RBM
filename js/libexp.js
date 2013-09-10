@@ -2,7 +2,7 @@ var libexp = (function(){
 
     var MAX_ITEM_LVL        =   5;
     var ANIMATION_LEN       = 200;
-    var MARGIN_LEFT_PER_LVL =  20;
+    var MARGIN_LEFT_PER_LVL =  18;
 
     var my          = {};
     var selectedTid = [];
@@ -139,9 +139,7 @@ var libexp = (function(){
         // We need to remove the previous handler first, otherwise they just keep being added one to another
         popup.off("click").on("click", function(evt){
 
-            var target = $(evt.target);
-
-            if(target.is("#css-explorer-toolbox-delete"))
+            if($(evt.target).is("#css-explorer-toolbox-delete"))
             {
                 if(libtags.hasSubTags(tid)) $("#css-explorer-dialog-delete-msg").html(L10N.confirm_delete_tag_subtags);
                 else                        $("#css-explorer-dialog-delete-msg").html(L10N.confirm_delete_tag);
@@ -150,7 +148,7 @@ var libexp = (function(){
             }
             else
             {
-                if(target.is("#css-explorer-toolbox-create"))
+                if($(evt.target).is("#css-explorer-toolbox-create"))
                 {
                     $("#css-explorer-tag-new-name").val("").attr("placeholder", L10N.newtag);
                     $("#css-explorer-dialog-rename").data("tid", tid).data("action", "create").dialog("option", "title", L10N.create_tag).dialog("open");
