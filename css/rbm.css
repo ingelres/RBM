@@ -14,7 +14,7 @@ input[type="text"] {
     display: none;
     position: fixed;
     top: 10px;
-    z-index: 100;
+    z-index: 1000;
     text-align: center;
     border-radius: 7px;
     font-size: 1.25em;

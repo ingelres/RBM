@@ -96,7 +96,6 @@
         <div id="css-explorer-dialog-rename">
             <?=_("Tag name:")?><br />
             <input type="text" id="css-explorer-tag-new-name" /><br />
-            <div id="css-explorer-dialog-rename-errmsg" class="css-dialog-errmsg">Error</div>
         </div>
 
         <!-- The dialog box for confirmation when deleting a tag -->

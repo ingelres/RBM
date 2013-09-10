@@ -27,11 +27,10 @@ var libexp = (function(){
             buttons:[{
                 text: L10N.ok,
                 click: function(){
-                    var name   = $("#css-explorer-tag-new-name").val();
-                    var errmsg = $("#css-explorer-dialog-rename-errmsg");
-                    var dlg    = $(this);
+                    var name = $("#css-explorer-tag-new-name").val();
+                    var dlg  = $(this);
 
-                         if(name.length == 0)               errmsg.html(L10N.name_empty).css("visibility", "visible");
+                         if(name.length == 0)               libsysmsg.error(L10N.name_empty);
                     else if(dlg.data("action") == "rename") renameTag(dlg.dialog("close").data("tid"), name);
                     else                                    createTag(dlg.dialog("close").data("tid"), name);
                 }},{
@@ -151,19 +150,15 @@ var libexp = (function(){
             }
             else
             {
-                var dlg = $("#css-explorer-dialog-rename");
-
-                $("#css-explorer-dialog-rename-errmsg").css("visibility", "hidden");
-
                 if(target.is("#css-explorer-toolbox-create"))
                 {
                     $("#css-explorer-tag-new-name").val("").attr("placeholder", L10N.newtag);
-                    dlg.data("tid", tid).data("action", "create").dialog("option", "title", L10N.create_tag).dialog("open");
+                    $("#css-explorer-dialog-rename").data("tid", tid).data("action", "create").dialog("option", "title", L10N.create_tag).dialog("open");
                 }
                 else
                 {
                     $("#css-explorer-tag-new-name").val("").attr("placeholder", libtags.getName(tid));
-                    dlg.data("tid", tid).data("action", "rename").dialog("option", "title", L10N.rename_tag).dialog("open");
+                    $("#css-explorer-dialog-rename").data("tid", tid).data("action", "rename").dialog("option", "title", L10N.rename_tag).dialog("open");
                 }
             }
 
