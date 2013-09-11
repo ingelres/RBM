@@ -14,7 +14,7 @@ var libexp = (function(){
     $(function(){
 
         // Expand the root tag (tid 0)
-        expandTag(0, null);
+        expandTag(0);
 
         // Make it react as well to user's interactions
         makeDNDItem(0);
@@ -85,8 +85,8 @@ var libexp = (function(){
         {
             var expander = $("#css-explorer-expander-" + tid);
 
-                 if(expander.hasClass("css-explorer-expand"))   expandTag(tid, expander);
-            else if(expander.hasClass("css-explorer-collapse")) collapseTag(tid, expander);
+                 if(expander.hasClass("css-explorer-expand"))   expandTag(tid);
+            else if(expander.hasClass("css-explorer-collapse")) collapseTag(tid);
             else                                                selectTags([tid]);
         }
         else if(target.hasClass("css-explorer-toolbox"))
@@ -146,6 +146,15 @@ var libexp = (function(){
 
                 $("#css-explorer-dialog-delete").data("tid", tid).dialog("open");
             }
+            else if($(evt.target).is("#css-explorer-toolbox-expandall"))
+            {
+                my.expandAll(tid);
+            }
+            else if($(evt.target).is("#css-explorer-toolbox-collapseall"))
+            {
+                if(tid == 0) my.collapseAll();
+                else         collapseTag(tid);
+            }
             else
             {
                 if($(evt.target).is("#css-explorer-toolbox-create"))
@@ -193,13 +202,13 @@ var libexp = (function(){
     /**
      * Expand a tag. It is assumed (i.e., not checked) that the tag actually has children and is currently collapsed.
      *
-     * @param ptid     The ID of the tag.
-     * @param expander The JQuery object holding the expander associated to the tag.
+     * @param ptid The ID of the tag.
     **/
-    function expandTag(ptid, expander)
+    function expandTag(ptid)
     {
         // Create the code and insert it at once, this is faster than inserting many small bits of code
         var code       = "<div id='css-explorer-children-" + ptid + "' style='display: none'>";
+        var expander   = $("#css-explorer-expander-" + ptid);
         var children   = libtags.getSubTags(ptid);
         var nbChildren = children.length;
 
@@ -231,12 +240,12 @@ var libexp = (function(){
     /**
      * Collapse a tag. It is assumed (i.e., not checked) that the tag actually has children and is currently expanded.
      *
-     * @param ptid     The ID of the tag.
-     * @param expander The JQuery object holding the expander associated to the tag.
+     * @param ptid The ID of the tag.
     **/
-    function collapseTag(ptid, expander)
+    function collapseTag(ptid)
     {
         // Destroy all draggable/droppable descendants (not only the direct children) before removing the container
+        var expander = $("#css-explorer-expander-" + ptid);
         var children = $("#css-explorer-children-" + ptid);
 
         children.find(".css-explorer-item").draggable("destroy").droppable("destroy");
@@ -252,11 +261,25 @@ var libexp = (function(){
 
 
     /**
-     * Recursively expand all tags.
+     * Recursively expand all tags below the given tag.
+     *
+     * @param tid The ID of the tag.
+     *
+     * @note It is assumed that tid is present in the DOM.
     **/
-    my.expandAll = function()
+    my.expandAll = function(tid)
     {
-        while($(".css-explorer-expand").trigger("click").length != 0);
+        var queue = [tid];
+
+        while(queue.length != 0)
+        {
+            tid   = queue.shift();
+            queue = queue.concat(libtags.getSubTags(tid));
+
+            // Expand the current tag if that's possible
+            if($("#css-explorer-item-" + tid).find(".css-explorer-expand").length)
+                expandTag(tid);
+        }
     }
 
 
@@ -452,7 +475,7 @@ var libexp = (function(){
                 var expander = $("#css-explorer-expander-" + ptid);
 
                 if(expander.hasClass("css-explorer-expand"))
-                    expandTag(ptid, expander);
+                    expandTag(ptid);
             }
         }
 

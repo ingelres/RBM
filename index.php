@@ -69,8 +69,6 @@
 
     <body>
 
-        <button onclick="libexp.expandAll()">Expand All</button>
-        <button onclick="libexp.collapseAll()">Collapse All</button>
         <input type="text" id="css-search-by-tag" placeholder="<?=_("Type a tag name...")?>"/>
 
         <div id="css-content">
@@ -99,6 +97,8 @@
             <li id="css-explorer-toolbox-create"></li>
             <li id="css-explorer-toolbox-rename"><?=_("Rename Tag")?></li>
             <li id="css-explorer-toolbox-delete"><?=_("Delete Tag")?></li>
+            <li id="css-explorer-toolbox-expandall"><?=_("Expand All")?></li>
+            <li id="css-explorer-toolbox-collapseall"><?=_("Collapse All")?></li>
         </ul>
 
         <!-- The dialog box for renaming a tag -->
