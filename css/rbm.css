@@ -99,6 +99,7 @@ input[type="text"] {
 /* Search boxes */
 #css-search-by-tag {
     margin-top: 10px;
+    width: 200px;
     background: #FFF url('./img/search.png') no-repeat center right;
 }
 
