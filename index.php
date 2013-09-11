@@ -73,12 +73,21 @@
         <button onclick="libexp.collapseAll()">Collapse All</button>
         <input type="text" id="css-search-by-tag" placeholder="<?=_("Type a tag name...")?>"/>
 
-        <div id="css-explorer">
-            <!-- Root tag, the top-level tags are created dynamically by the JS code -->
-            <div id="css-explorer-item-0" class="css-explorer-item">
-                <div class="css-explorer-toolbox"></div>
-                <div class="css-explorer-tag-name css-explorer-root"><?=_("List of Tags")?></div>
+        <div id="css-content">
+
+            <!-- Tag explorer: Only the root tag is statically created -->
+            <div id="css-explorer">
+                <div id="css-explorer-item-0" class="css-explorer-item">
+                    <div class="css-explorer-toolbox"></div>
+                    <div class="css-explorer-tag-name css-explorer-root"><?=_("List of Tags")?></div>
+                </div>
             </div>
+
+            <!-- List of bookmarks -->
+            <div id="css-bookmarks">
+                Bookmarks
+            </div>
+
         </div>
 
         <div id="css-footer">

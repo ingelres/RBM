@@ -26,9 +26,14 @@ input[type="text"] {
 
 #css-explorer {
     width: 250px;
+    float: left;
     border: 0 solid #A7ABA7;
     border-width: 1px 1px 0 0;
     background-color: #F3F3F3;
+}
+
+#css-bookmarks {
+    margin-left: 275px;
 }
 
 .css-explorer-item {
@@ -128,6 +133,9 @@ input[type="text"] {
 
 /* Footer of the page */
 #css-footer {
-    margin-top: 20px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 20px;
     text-align: center;
 }
