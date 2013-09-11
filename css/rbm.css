@@ -10,6 +10,11 @@ input[type="text"] {
     padding: 5px 26px 5px 6px;
 }
 
+#css-header {
+    height: 50px;
+    text-align: center;
+}
+
 #css-errmsg {
     display: none;
     position: fixed;
@@ -93,6 +98,7 @@ input[type="text"] {
 
 /* Search boxes */
 #css-search-by-tag {
+    margin-top: 10px;
     background: #FFF url('./img/search.png') no-repeat center right;
 }
 

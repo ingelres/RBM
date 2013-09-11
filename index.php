@@ -69,7 +69,9 @@
 
     <body>
 
-        <input type="text" id="css-search-by-tag" placeholder="<?=_("Type a tag name...")?>"/>
+        <div id="css-header">
+            <input type="text" id="css-search-by-tag" placeholder="<?=_("Type a tag name...")?>"/>
+        </div>
 
         <div id="css-content">
 
