@@ -15,6 +15,7 @@ var libsearch = (function() {
         }).keyup(function(evt){
             if(evt.keyCode == 13){
                 libexp.showAndSelectTags(libtags.getIdFromName($("#css-search-by-tag").autocomplete("close").val()));
+                $("#css-search-by-tag").val("");
             }
         });
     });
