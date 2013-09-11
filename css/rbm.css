@@ -100,16 +100,22 @@ input[type="text"] {
 .popup-menu {
     position: absolute;
     z-index: 100;
-    width: 100px;
+    width: 120px;
     padding: 0px;
     cursor: pointer;
     list-style-type: none;
     background-color: #FFF;
-    border: 1px solid #777;
+    border: 1px solid #A7ABA7;
+    box-shadow: 0 0 2px #BBB;
 }
 
 .popup-menu li {
     padding: 5px;
+    text-indent: 10px;
+}
+
+.popup-menu li.separator {
+    border-top: 1px solid #A7ABA7;
 }
 
 .popup-menu li:hover {

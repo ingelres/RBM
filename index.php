@@ -97,7 +97,7 @@
             <li id="css-explorer-toolbox-create"></li>
             <li id="css-explorer-toolbox-rename"><?=_("Rename Tag")?></li>
             <li id="css-explorer-toolbox-delete"><?=_("Delete Tag")?></li>
-            <li id="css-explorer-toolbox-expandall"><?=_("Expand All")?></li>
+            <li id="css-explorer-toolbox-expandall" class="separator"><?=_("Expand All")?></li>
             <li id="css-explorer-toolbox-collapseall"><?=_("Collapse All")?></li>
         </ul>
 
