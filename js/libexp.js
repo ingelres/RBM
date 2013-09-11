@@ -22,9 +22,13 @@ var libexp = (function(){
 
         // Create the dialog box used to rename a tag
         $("#css-explorer-dialog-rename").dialog({
-            modal:true,
-            autoOpen:false,
-            buttons:[{
+            modal: true,
+            autoOpen: false,
+            buttons: [{
+                text: L10N.cancel,
+                click: function(){
+                    $(this).dialog("close");
+                }},{
                 text: L10N.ok,
                 click: function(){
                     var name = $("#css-explorer-tag-new-name").val();
@@ -33,10 +37,6 @@ var libexp = (function(){
                          if(name.length == 0)               libsysmsg.error(L10N.name_empty);
                     else if(dlg.data("action") == "rename") renameTag(dlg.dialog("close").data("tid"), name);
                     else                                    createTag(dlg.dialog("close").data("tid"), name);
-                }},{
-                text: L10N.cancel,
-                click: function(){
-                    $(this).dialog("close");
                 }}
             ]
         });
@@ -49,17 +49,17 @@ var libexp = (function(){
 
         // Create the dialog box used to delete a tag
         $("#css-explorer-dialog-delete").dialog({
-            modal:true,
+            modal: true,
             width: 400,
-            autoOpen:false,
+            autoOpen: false,
             buttons: [{
-                text: L10N.delete,
-                click: function(){
-                    deleteTag($(this).dialog("close").data("tid"));
-                }},{
                 text: L10N.cancel,
                 click: function(){
                     $(this).dialog("close");
+                }},{
+                text: L10N.delete,
+                click: function(){
+                    deleteTag($(this).dialog("close").data("tid"));
                 }}
             ],
         });

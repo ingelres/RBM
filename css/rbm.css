@@ -7,7 +7,7 @@ body {
 input[type="text"] {
     border-radius: 3px;
     border: 1px solid #CCC;
-    padding: 5px 26px 5px 6px;
+    padding: 5px;
 }
 
 #css-header {
@@ -103,10 +103,20 @@ input[type="text"] {
     background-color: #0000AA;
 }
 
+/* Editing bookmarks */
+#css-edit-bookmark-table {
+    width: 100%;
+}
+
+#css-edit-bookmark-name, #css-edit-bookmark-url, #css-edit-bookmark-tags {
+    width: 95%;
+}
+
 /* Search boxes */
 #css-search-by-tag {
-    margin-top: 10px;
     width: 200px;
+    margin-top: 10px;
+    padding-right: 26px;
     background: #FFF url('./img/search.png') no-repeat center right;
 }
 

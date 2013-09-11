@@ -53,6 +53,7 @@
                     include("./js/libtags.js");
                     include("./js/libsearch.js");
                     include("./js/libexp.js");
+                    include("./js/libbookmarks.js");
                 }
                 else
                     echo "var INIT_ERR = \"$initErr\";";
@@ -71,6 +72,7 @@
 
         <div id="css-header">
             <input type="text" id="css-search-by-tag" placeholder="<?=_("Type a tag name...")?>"/>
+            <button onclick="libbookmarks.create()"><?=_("New Bookmark")?></button>
         </div>
 
         <div id="css-content">
@@ -114,6 +116,15 @@
         <!-- The dialog box for confirmation when deleting a tag -->
         <div id="css-explorer-dialog-delete" title="<?=_("Delete tag")?>">
             <div id="css-explorer-dialog-delete-msg"></div>
+        </div>
+
+        <!-- The dialog box for editing a bookmark -->
+        <div id="css-dialog-edit-bookmark">
+            <table id="css-edit-bookmark-table">
+                <tr><td><?=_("Name:")?></td><td><input type="text" id="css-edit-bookmark-name"/></td></tr>
+                <tr><td><?=_("URL:")?></td><td><input type="text" id="css-edit-bookmark-url"/></td></tr>
+                <tr><td><?=_("Tags:")?></td><td><input type="text" id="css-edit-bookmark-tags"/></td></tr>
+            </table>
         </div>
 
     </body>

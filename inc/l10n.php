@@ -9,6 +9,8 @@ var L10N = {
     create_tag:                 "<?=_('Create Tag')?>",
     create_subtag:              "<?=_('Create Subtag')?>",
 
+    create_bookmark:            "<?=_('Create New Bookmark')?>",
+
     name_empty:                 "<?=_('Please enter a name')?>",
     name_exists:                "<?=_('This name is already used')?>",
     confirm_delete_tag:         "<?=_('Delete this tag?')?>",
