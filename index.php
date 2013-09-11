@@ -77,9 +77,11 @@
 
             <!-- Tag explorer: Only the root tag is statically created -->
             <div id="css-explorer">
-                <div id="css-explorer-item-0" class="css-explorer-item">
-                    <div class="css-explorer-toolbox"></div>
-                    <div class="css-explorer-tag-name css-explorer-root"><?=_("List of Tags")?></div>
+                <div id="css-explorer-content">
+                    <div id="css-explorer-item-0" class="css-explorer-item">
+                        <div class="css-explorer-toolbox"></div>
+                        <div class="css-explorer-tag-name css-explorer-root"><?=_("List of Tags")?></div>
+                    </div>
                 </div>
             </div>
 

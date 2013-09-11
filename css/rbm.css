@@ -30,11 +30,18 @@ input[type="text"] {
 }
 
 #css-explorer {
+    height: 200px;
     width: 250px;
     float: left;
+    overflow: auto;
     border: 0 solid #A7ABA7;
-    border-width: 1px 1px 0 0;
     background-color: #F3F3F3;
+    border-width: 1px 1px 0 0;
+    border-top-right-radius: 3px;
+}
+
+#css-explorer-content {
+    padding: 10px 0;
 }
 
 #css-bookmarks {
@@ -43,7 +50,7 @@ input[type="text"] {
 
 .css-explorer-item {
     cursor: pointer;
-    line-height: 20px;
+    line-height: 22px;
 }
 
 .css-explorer-item:hover {
