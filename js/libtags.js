@@ -108,6 +108,27 @@ var libtags = (function() {
 
 
     /**
+     * Return whether a tag has a child with the given name.
+     *
+     * @param ptid  The ID of the tag.
+     * @param tname The potential child name.
+     *
+     * @return true or false.
+    **/
+    my.hasChildNamed = function(ptid, tname)
+    {
+        var homonyms = tags.name2id[tname];
+
+        if(homonyms != undefined)
+            for(var i=0; i<homonyms.length; ++i)
+                if(tags.parents[homonyms[i]] == ptid)
+                    return true;
+
+        return false;
+    }
+
+
+    /**
      * Return whether a tag has subtags.
      *
      * @param tid The ID of the tag.

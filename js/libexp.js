@@ -31,12 +31,24 @@ var libexp = (function(){
                 }},{
                 text: L10N.ok,
                 click: function(){
-                    var name = $("#css-explorer-tag-new-name").val();
                     var dlg  = $(this);
+                    var name = $("#css-explorer-tag-new-name").val();
 
-                         if(name.length == 0)               libsysmsg.error(L10N.name_empty);
-                    else if(dlg.data("action") == "rename") renameTag(dlg.dialog("close").data("tid"), name);
-                    else                                    createTag(dlg.dialog("close").data("tid"), name);
+                    if(name.length != 0)
+                    {
+                        if(dlg.data("action") == "create")
+                        {
+                            if(libtags.hasChildNamed(dlg.data("tid"), name)) libsysmsg.error(L10N.sibling_homonym);
+                            else                                             createTag(dlg.dialog("close").data("tid"), name);
+                        }
+                        else
+                        {
+                            if(libtags.hasChildNamed(libtags.getParent(dlg.data("tid")), name)) libsysmsg.error(L10N.sibling_homonym);
+                            else                                                                renameTag(dlg.dialog("close").data("tid"), name);
+                        }
+                    }
+                    else
+                        libsysmsg.error(L10N.name_empty);
                 }}
             ]
         });
