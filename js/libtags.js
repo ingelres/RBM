@@ -287,12 +287,12 @@ var libtags = (function() {
 
 
     /**
-    * Rename a tag.
-    *
-    * @param tid   The ID of the tag to be renamed.
-    * @param tname The new name of the tag.
-    *
-    * @return The ID of the new sibling of the tag.
+     * Rename a tag.
+     *
+     * @param tid   The ID of the tag to be renamed.
+     * @param tname The new name of the tag.
+     *
+     * @return The ID of the new sibling of the tag.
     **/
     my.rename = function(tid, tname)
     {
