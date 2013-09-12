@@ -288,7 +288,7 @@ var libexp = (function(){
     **/
     my.collapseAll = function()
     {
-        var topLvlItems   = libtags.getTopLevelTags();
+        var topLvlItems   = libtags.getSubTags(0);
         var nbTopLvlItems = topLvlItems.length;
 
         for(var i=0; i<nbTopLvlItems; ++i)

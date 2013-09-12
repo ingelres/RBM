@@ -39,12 +39,12 @@ var libtags = (function() {
 
 
     /**
-    * Add a tag to the children of another tag, keeping the list of children sorted by their name.
-    *
-    * @param tid  The ID of the tag.
-    * @param ptid The ID of the new parent.
-    *
-    * @return The ID of the new sibling after which the tag has been inserted, or -1 if it's the first child of the list.
+     * Add a tag to the children of another tag, keeping the list of children sorted by their name.
+     *
+     * @param tid  The ID of the tag.
+     * @param ptid The ID of the new parent.
+     *
+     * @return The ID of the new sibling after which the tag has been inserted, or -1 if it's the first child of the list.
     **/
     function addToChildren(tid, ptid)
     {
@@ -79,11 +79,15 @@ var libtags = (function() {
 
 
     /**
-     * @return An array containing the top-level tags (children of the root tag).
+     * Return the name of a tag.
+     *
+     * @param tid The ID of the tag.
+     *
+     * @return The name of the tag.
     **/
-    my.getTopLevelTags = function()
+    my.getName = function(tid)
     {
-        return tags.children[0];
+        return tags.id2name[tid];
     }
 
 
@@ -100,19 +104,6 @@ var libtags = (function() {
 
         if(tid == undefined) return [];
         else                 return tid;
-    }
-
-
-    /**
-     * Return the name of a tag.
-     *
-     * @param tid The ID of the tag.
-     *
-     * @return The name of the tag.
-    **/
-    my.getName = function(tid)
-    {
-        return tags.id2name[tid];
     }
 
 
@@ -159,26 +150,6 @@ var libtags = (function() {
 
 
     /**
-     * Check whether a tag is a descendant of another tag (not necessary a direct child).
-     *
-     * @param tid  The ID of the potential descendant.
-     * @param ptid The ID of the potential ancestor.
-     *
-     * @return true or false.
-    **/
-    my.tidIsDescendant = function(tid, ptid)
-    {
-        while((tid = tags.parents[tid]) != undefined)
-        {
-            if(tid == ptid)
-                return true;
-        }
-
-        return false;
-    }
-
-
-    /**
      * Return all the parents of a tag from the top level (including the root tag).
      *
      * @param tid The ID of the tag.
@@ -197,6 +168,24 @@ var libtags = (function() {
 
 
     /**
+     * Check whether a tag is a descendant of another tag (not necessarily a direct child).
+     *
+     * @param tid  The ID of the potential descendant.
+     * @param ptid The ID of the potential ancestor.
+     *
+     * @return true or false.
+    **/
+    my.tidIsDescendant = function(tid, ptid)
+    {
+        while((tid = tags.parents[tid]) != undefined)
+            if(tid == ptid)
+                return true;
+
+        return false;
+    }
+
+
+    /**
      * @return A sorted array with all the tag names.
     **/
     my.getAllTagNames = function()
@@ -211,7 +200,7 @@ var libtags = (function() {
 
 
     /**
-     * @return The level of a tag starting from the top level (root tag has level 0)
+     * @return The level of a tag starting from the root tag (level 0).
     **/
     my.getLevel = function(tid)
     {
@@ -260,8 +249,8 @@ var libtags = (function() {
 
         while(alltags.length != 0)
         {
-            tid      = alltags.shift();
-            children = tags.children[tid];
+            var tid      = alltags.shift();
+            var children = tags.children[tid];
 
             if(children != undefined)
                 alltags = alltags.concat(children);
@@ -269,8 +258,8 @@ var libtags = (function() {
             deleteTidFromObjectArray(tags.name2id, tags.id2name[tid], tid);
 
             delete tags.id2name[tid];
-            delete tags.children[tid];
             delete tags.parents[tid];
+            delete tags.children[tid];
         }
     }
 
