@@ -87,9 +87,17 @@
                 </div>
             </div>
 
-            <!-- List of bookmarks -->
-            <div id="css-bookmarks">
-                Bookmarks
+            <!-- Result of queries -->
+            <div id="css-results">
+
+                <!-- Homonyms, when the query matches multiple tags with the same name -->
+                <div id="css-results-homonyms">
+                </div>
+
+                <!-- Bookmarks returned by the query -->
+                <div id="css-results-bookmarks">
+                    Bookmarks
+                </div>
             </div>
 
         </div>
@@ -98,7 +106,12 @@
             <?php echo sprintf(_("Version %s"), $CONSTS_VERSION), " / ", sprintf(_("Page generated in %u ms"), (microtime(true) - $startTime) * 1000); ?>
         </div>
 
-        <!-- The tag toolbox popup -->
+
+
+        <!-- Popups -->
+
+
+        <!-- The tag explorer popup -->
         <ul id="css-explorer-toolbox-popup" class="popup-menu">
             <li id="css-explorer-toolbox-create"></li>
             <li id="css-explorer-toolbox-rename"><?=_("Rename Tag")?></li>
@@ -107,18 +120,23 @@
             <li id="css-explorer-toolbox-collapseall"><?=_("Collapse All")?></li>
         </ul>
 
-        <!-- The dialog box for renaming a tag -->
+
+
+        <!-- Dialog boxes -->
+
+
+        <!-- Create/Rename a tag -->
         <div id="css-explorer-dialog-rename">
             <?=_("Tag name:")?><br />
             <input type="text" id="css-explorer-tag-new-name" /><br />
         </div>
 
-        <!-- The dialog box for confirmation when deleting a tag -->
+        <!-- Delete a tag -->
         <div id="css-explorer-dialog-delete" title="<?=_("Delete tag")?>">
             <div id="css-explorer-dialog-delete-msg"></div>
         </div>
 
-        <!-- The dialog box for editing a bookmark -->
+        <!-- Create/Edit a bookmark -->
         <div id="css-dialog-edit-bookmark">
             <table id="css-edit-bookmark-table">
                 <tr><td><?=_("Name:")?></td><td><input type="text" id="css-edit-bookmark-name"/></td></tr>

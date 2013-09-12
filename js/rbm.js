@@ -12,8 +12,8 @@ $(function(){
         if(height < 200)
             height = 200;
 
+        $('#css-results').css('height', height);
         $('#css-explorer').css('height', height);
-        $('#css-bookmarks').css('height', height);
     }
 
 
