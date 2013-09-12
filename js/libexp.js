@@ -43,7 +43,7 @@ var libexp = (function(){
 
         $("#css-explorer-tag-new-name").keyup(function(evt){
             if(evt.keyCode == 13){
-                $("#css-explorer-dialog-rename").dialog('option', 'buttons')[0].click.apply($("#css-explorer-dialog-rename"));
+                $("#css-explorer-dialog-rename").dialog('option', 'buttons')[1].click.apply($("#css-explorer-dialog-rename"));
             }
         });
 
