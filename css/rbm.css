@@ -10,11 +10,23 @@ input[type="text"] {
     padding: 5px;
 }
 
-#css-header {
-    height: 50px;
-    text-align: center;
+
+/* Draw a tag */
+.css-tag-drawing {
+    padding: 6px 9px;
+    border-radius: 5px;
+    letter-spacing: 0.1em;
+    border: 1px solid #EDB14A;
+    background: #FEBC4A url('img/tag-bg-gradient.png') repeat-x center top;
 }
 
+.css-tag-drawing:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+
+/* System messages */
 #css-errmsg {
     display: none;
     position: fixed;
@@ -29,6 +41,25 @@ input[type="text"] {
     background-color: #EF4F4F;
 }
 
+
+/* Header */
+#css-header {
+    height: 50px;
+    text-align: center;
+}
+
+
+/* Footer */
+#css-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 20px;
+    text-align: center;
+}
+
+
+/* Tag explorer */
 #css-explorer {
     height: 200px;
     width: 250px;
@@ -42,10 +73,6 @@ input[type="text"] {
 
 #css-explorer-content {
     padding: 10px 0;
-}
-
-#css-results {
-    margin-left: 275px;
 }
 
 .css-explorer-item {
@@ -67,7 +94,6 @@ input[type="text"] {
     font-weight: bold;
 }
 
-/* Icons (handle, folder...) used within a line of the tag explorer */
 .css-explorer-handle, .css-explorer-toolbox, .css-explorer-expander, .css-explorer-folder-expanded, .css-explorer-folder-collapsed {
     float: left;
     width: 16px;
@@ -87,21 +113,37 @@ input[type="text"] {
     background-image: url('img/handle.png');
 }
 
-/* Arrow for the popup menu */
 .css-explorer-item:hover .css-explorer-toolbox       { background-image: url('img/menu-arrow.png');       }
 .css-explorer-item:hover .css-explorer-toolbox:hover { background-image: url('img/menu-arrow-hover.png'); }
 
-/* Specific expand / collapse images */
 .css-explorer-expand   { background-image: url('img/expand.png');   }
 .css-explorer-collapse { background-image: url('img/collapse.png'); }
 
 .css-explorer-folder-expanded  { background-image: url('img/folder-expanded.png');  }
 .css-explorer-folder-collapsed { background-image: url('img/folder-collapsed.png'); }
 
-/* Class added by JQueryUI when dragging an item over a droppable item */
 .css-explorer-droppable {
     background-color: #0000AA;
 }
+
+
+/* Results of queries */
+#css-results {
+    margin-left: 275px;
+}
+
+
+/* Section used to distinguish between multiple tags with the same name */
+#css-results-homonyms {
+    display: none;
+    line-height: 30px;
+    margin-bottom: 10px;
+}
+
+#css-results-homonyms .css-tag-drawing {
+    margin-left: 10px;
+}
+
 
 /* Editing bookmarks */
 #css-edit-bookmark-table {
@@ -148,24 +190,4 @@ input[type="text"] {
 
 #css-explorer-toolbox-popup, #css-explorer-dialog-rename, #css-explorer-dialog-delete {
     display: none;
-}
-
-/* The style of errors displayed on top of buttons in dialog boxes */
-.css-dialog-errmsg {
-    border: 1px solid #CD0A0A;
-    border-radius: 3px;
-    background-color: #FFF7F4;
-    color: #CD0A0A;
-    text-align: center;
-    line-height: 26px;
-    margin-top: 10px;
-}
-
-/* Footer of the page */
-#css-footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height: 20px;
-    text-align: center;
 }

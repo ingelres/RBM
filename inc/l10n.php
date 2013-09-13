@@ -11,6 +11,8 @@ var L10N = {
 
     create_bookmark:            "<?=_('Create New Bookmark')?>",
 
+    parent_tags:                "<?=_('Parent Tags')?>",
+
     name_empty:                 "<?=_('Please enter a name')?>",
     name_exists:                "<?=_('This name is already used')?>",
     sibling_homonym:            "<?=_('The parent tag already has a subtag with the same name')?>",

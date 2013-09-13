@@ -477,18 +477,12 @@ var libexp = (function(){
 
         for(var i=0; i<set.length; ++i)
         {
-            // Go through the parents of the tags and open the collapsed ones
-            var parents   = libtags.getParents(set[i]);
-            var nbParents = parents.length;
+            // Open all collapsed parents of the tag
+            var parents = libtags.getParents(set[i]);
 
-            for(var j=0; j<nbParents; ++j)
-            {
-                var ptid     = parents[j];
-                var expander = $("#css-explorer-expander-" + ptid);
-
-                if(expander.hasClass("css-explorer-expand"))
-                    expandTag(ptid);
-            }
+            for(var j=0; j<parents.length; ++j)
+                if($("#css-explorer-expander-" + parents[j]).hasClass("css-explorer-expand"))
+                    expandTag(parents[j]);
         }
 
         // FIXME Scroll to the first tag in the set
