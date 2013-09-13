@@ -14,7 +14,7 @@ var libsearch = (function() {
             source: libtags.getAllTagNames(),
         }).keyup(function(evt){
             if(evt.keyCode == 13){
-                searchTagName($("#css-search-by-tag").autocomplete("close").val());
+                searchByTagName($("#css-search-by-tag").autocomplete("close").val());
                 $("#css-search-by-tag").val("");
             }
         });
@@ -27,7 +27,7 @@ var libsearch = (function() {
      *
      * @param tname The tag name.
     **/
-    function searchTagName(tname)
+    function searchByTagName(tname)
     {
         var tid = libtags.getIdFromName(tname);
 
