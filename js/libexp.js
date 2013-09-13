@@ -14,7 +14,7 @@ var libexp = (function(){
     $(function(){
 
         // Expand the root tag (tid 0)
-        expandTag(0);
+        expandTag(0, false);
 
         // Make it react as well to user's interactions
         makeDNDItem(0);
@@ -97,7 +97,7 @@ var libexp = (function(){
         {
             var expander = $("#css-explorer-expander-" + tid);
 
-                 if(expander.hasClass("css-explorer-expand"))   expandTag(tid);
+                 if(expander.hasClass("css-explorer-expand"))   expandTag(tid, true);
             else if(expander.hasClass("css-explorer-collapse")) collapseTag(tid);
             else                                                selectTags([tid]);
         }
@@ -214,9 +214,10 @@ var libexp = (function(){
     /**
      * Expand a tag. It is assumed (i.e., not checked) that the tag actually has children and is currently collapsed.
      *
-     * @param ptid The ID of the tag.
+     * @param ptid    The ID of the tag.
+     * @param animate If an animation should be used to expand the tag.
     **/
-    function expandTag(ptid)
+    function expandTag(ptid, animate)
     {
         // Create the code and insert it at once, this is faster than inserting many small bits of code
         var code       = "<div id='css-explorer-children-" + ptid + "' style='display: none'>";
@@ -228,8 +229,8 @@ var libexp = (function(){
             code += getItemCode(children[i]);
 
         // Skip the animation for the root tag
-        if(ptid == 0) $(code + "</div>").insertAfter("#css-explorer-item-" + ptid).show();
-        else          $(code + "</div>").insertAfter("#css-explorer-item-" + ptid).slideDown(ANIMATION_LEN);
+        if(!animate) $(code + "</div>").insertAfter("#css-explorer-item-" + ptid).show();
+        else         $(code + "</div>").insertAfter("#css-explorer-item-" + ptid).slideDown(ANIMATION_LEN);
 
         // We must do this outside of the above loop, for the items must be present in the DOM when calling these functions
         for(var i=0; i<nbChildren; ++i)
@@ -290,7 +291,7 @@ var libexp = (function(){
 
             // Expand the current tag if that's possible
             if($("#css-explorer-item-" + tid).find(".css-explorer-expand").length)
-                expandTag(tid);
+                expandTag(tid, true);
         }
     }
 
@@ -463,14 +464,42 @@ var libexp = (function(){
 
 
     /**
+     * Ensure that the given tag is visible by scrolling to the right place.
+     *
+     * @param tid The tag ID.
+    **/
+    my.ensureVisible = function(tid)
+    {
+        var item     = $("#css-explorer-item-" + tid);
+        var explorer = $("#css-explorer");
+
+        var expHeight  = explorer.innerHeight();
+        var itemHeight = item.innerHeight();
+
+        var itemBottom    = item.offset().top - explorer.offset().top + itemHeight;
+        var neededOffset  = itemBottom - (itemHeight / 2);
+        var currentOffset = explorer.scrollTop();
+
+        // Scroll only when the item is not already visible
+        if(itemBottom < currentOffset || itemBottom > currentOffset + expHeight)
+        {
+            // Scroll to the very top when possible, otherwise try to get the item at the middle of the explorer
+            if(neededOffset < (expHeight - itemHeight)) explorer.scrollTop(0);
+            else                                        explorer.scrollTop(neededOffset - (expHeight / 2));
+        }
+    }
+
+
+    /**
      * Select a tag even if it doesn't exist yet in the DOM (as opposed to selectTags()). This function will:
      *  - Open all the parents of the tag.
      *  - Scroll to the tag.
      *  - Select the tag.
      *
-     * @param set The set of tag ID to select.
+     * @param set     The set of tag ID to select.
+     * @param animate If an animation should be used when expanding tags.
     **/
-    my.showAndSelectTags = function(set)
+    my.showAndSelectTags = function(set, animate)
     {
         if(set.length == 0)
             return;
@@ -482,10 +511,11 @@ var libexp = (function(){
 
             for(var j=0; j<parents.length; ++j)
                 if($("#css-explorer-expander-" + parents[j]).hasClass("css-explorer-expand"))
-                    expandTag(parents[j]);
+                    expandTag(parents[j], animate);
         }
 
-        // FIXME Scroll to the first tag in the set
+        // Scroll to the first tag in the set
+        libexp.ensureVisible(set[0]);
 
         selectTags(set);
     }
@@ -571,7 +601,7 @@ var libexp = (function(){
             $("#css-explorer-expander-" + ptid).addClass("css-explorer-expand");
 
         libsearch.updateSourceTags();
-        libexp.showAndSelectTags([tag.tid]);
+        libexp.showAndSelectTags([tag.tid], true);
 
         // Update server-side DB
         libajax.ajax({

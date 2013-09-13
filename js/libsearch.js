@@ -31,7 +31,7 @@ var libsearch = (function() {
     {
         var tid = libtags.getIdFromName(tname);
 
-        libexp.showAndSelectTags(tid);
+        libexp.showAndSelectTags(tid, false);
 
         // Multiple matches: Allow the user to distinguish between them
         if(tid.length > 1)
@@ -65,7 +65,7 @@ var libsearch = (function() {
     **/
     my.onHomonymClicked = function(tid)
     {
-        libexp.showAndSelectTags([tid]);
+        libexp.showAndSelectTags([tid], false);
         $("#css-results-homonyms").hide();
     }
 
