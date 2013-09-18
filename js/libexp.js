@@ -395,12 +395,14 @@ var libexp = (function(){
         item.data("tid", tid);
 
         item.draggable({
-            axis: "y",
             zIndex: 100,
-            opacity: 0.75,
+            opacity: 0.80,
+            cursor: "move",
             revert: "invalid",
             handle: ".css-explorer-handle",
-            containment: "#css-explorer",
+            helper: function () {
+                return $("<span class='css-tag-drawing'>" + libtags.getName(tid) + "</span>");
+            }
         });
 
         item.droppable({
