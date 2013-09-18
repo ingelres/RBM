@@ -19,5 +19,8 @@ var L10N = {
     confirm_delete_tag:         "<?=_('Delete this tag?')?>",
     confirm_delete_tag_subtags: "<?=_('This tag has subtags associated to it. They will be deleted as well.<br /><br />Delete this tag?')?>",
 
+    url_empty:                  "<?=_('Please enter a URL')?>",
+    tags_empty:                 "<?=_('Please assign some tags')?>",
+
     server_communication_error: "<?=_('Server communication error<br/>Please reload the page and try again...')?>",
 };

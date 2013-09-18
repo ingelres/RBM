@@ -150,8 +150,31 @@ input[type="text"] {
     width: 100%;
 }
 
-#css-edit-bookmark-name, #css-edit-bookmark-url, #css-edit-bookmark-tags {
+#css-edit-bookmark-name, #css-edit-bookmark-url {
     width: 95%;
+}
+
+#css-edit-bookmark-tags-title {
+    color: #A7ABA7;
+    text-align: center;
+    line-height: 35px;
+    font-style: italic;
+}
+
+#css-edit-bookmark-tags-dropzone {
+    height: 75px;
+    padding: 15px 0;
+    text-align: left;
+    border-radius: 4px;
+    border: 1px dotted #A7ABA7;
+}
+
+#css-edit-bookmark-tags-dropzone .css-tag-drawing {
+    margin-left: 10px;
+}
+
+.css-edit-bookmark-droppable {
+    background-color: #F0F0F0;
 }
 
 /* Search boxes */

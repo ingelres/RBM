@@ -395,7 +395,7 @@ var libexp = (function(){
         item.data("tid", tid);
 
         item.draggable({
-            zIndex: 100,
+            zIndex: 1000,
             opacity: 0.75,
             cursor: "move",
             revert: "invalid",

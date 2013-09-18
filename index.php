@@ -141,8 +141,14 @@
             <table id="css-edit-bookmark-table">
                 <tr><td><?=_("Name:")?></td><td><input type="text" id="css-edit-bookmark-name"/></td></tr>
                 <tr><td><?=_("URL:")?></td><td><input type="text" id="css-edit-bookmark-url"/></td></tr>
-                <tr><td><?=_("Tags:")?></td><td><input type="text" id="css-edit-bookmark-tags"/></td></tr>
             </table>
+            <div id="css-edit-bookmark-tags">
+                <div id="css-edit-bookmark-tags-title">
+                    <?=_("Drag tags in this zone from the list on the left")?>
+                </div>
+                <div id="css-edit-bookmark-tags-dropzone">
+                </div>
+            </div>
         </div>
 
     </body>
