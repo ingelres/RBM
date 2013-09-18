@@ -396,13 +396,20 @@ var libexp = (function(){
 
         item.draggable({
             zIndex: 100,
-            opacity: 0.80,
+            opacity: 0.75,
             cursor: "move",
             revert: "invalid",
             handle: ".css-explorer-handle",
             helper: function () {
                 return $("<span class='css-tag-drawing'>" + libtags.getName(tid) + "</span>");
-            }
+            },
+            start: function (event, ui) {
+                $(this).css("opacity", "0.5");
+            },
+            stop: function (event, ui) {
+                $(this).css("opacity", "1");
+            },
+
         });
 
         item.droppable({
