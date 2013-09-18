@@ -1,6 +1,6 @@
 <?php
 
-    $CONSTS_VERSION = "0.0.1";
+    $CONSTS_VERSION = "0.1.0";
 
     // Activate error reporting and a few debugging statements here and there
     $CONSTS_DEBUG_MODE = true;
