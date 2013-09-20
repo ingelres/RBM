@@ -127,7 +127,7 @@
         __addToChildren($tags_nexttid, $ptid, $tags_children, $tags_tid2tname);
 
         // We're done
-        db_saveTagFile($tags_nexttid+1, $tags_tname2tid, $tags_tid2tname, $tags_children, $tags_parents);
+        db_saveTags($tags_nexttid+1, $tags_tname2tid, $tags_tid2tname, $tags_children, $tags_parents);
     }
 
 
@@ -171,7 +171,7 @@
             }
 
             // We're done
-            db_saveTagFile($tags_nexttid, $tags_tname2tid, $tags_tid2tname, $tags_children, $tags_parents);
+            db_saveTags($tags_nexttid, $tags_tname2tid, $tags_tid2tname, $tags_children, $tags_parents);
         }
     }
 
@@ -203,7 +203,7 @@
             __addToChildren($tid, $ptid, $tags_children, $tags_tid2tname);
 
             // We're done
-            db_saveTagFile($tags_nexttid, $tags_tname2tid, $tags_tid2tname, $tags_children, $tags_parents);
+            db_saveTags($tags_nexttid, $tags_tname2tid, $tags_tid2tname, $tags_children, $tags_parents);
         }
     }
 
@@ -237,7 +237,7 @@
         __addToChildren($tid, $tags_parents[$tid], $tags_children, $tags_tid2tname);
 
         // We're done
-        db_saveTagFile($tags_nexttid, $tags_tname2tid, $tags_tid2tname, $tags_children, $tags_parents);
+        db_saveTags($tags_nexttid, $tags_tname2tid, $tags_tid2tname, $tags_children, $tags_parents);
     }
 
 ?>

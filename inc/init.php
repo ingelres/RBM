@@ -11,7 +11,7 @@
     **/
     function init_initDataDir()
     {
-        global $CONSTS_DIR_DATA, $CONSTS_FILE_TAGS, $CONSTS_FILE_TID_TO_BID, $CONSTS_FILE_BID_TO_TID;
+        global $CONSTS_DIR_DATA, $CONSTS_FILE_TAGS, $CONSTS_FILE_T2B;
 
         if(!is_writable($CONSTS_DIR_DATA))
         {
@@ -29,9 +29,8 @@
         else
         {
             // Create all the data files
-            db_saveTidToBidFile(array());
-            db_saveBidToTidFile(array());
-            db_saveTagFile(1, array(), array(), array(), array());
+            db_saveT2B(array());
+            db_saveTags(1, array(), array(), array(), array());
         }
 
         return NULL;

@@ -48,7 +48,7 @@
                 {
                     echo "var INIT_ERR = null;";
 
-                    echo db_exportTagToJSON();
+                    echo db_exportTagsToJSON();
 
                     include("./js/libtags.js");
                     include("./js/libsearch.js");
@@ -144,7 +144,7 @@
             </table>
             <div id="css-edit-bookmark-tags">
                 <div id="css-edit-bookmark-tags-title">
-                    <?=_("Drag tags in this zone from the list on the left")?>
+                    <?=_("Drag tags from the list on the left")?>
                 </div>
                 <div id="css-edit-bookmark-tags-dropzone">
                 </div>
