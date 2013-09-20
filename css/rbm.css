@@ -13,7 +13,8 @@ input[type="text"] {
 
 /* Draw a tag */
 .css-tag-drawing {
-    padding: 6px 9px;
+    padding: 0.5em 1em;
+    line-height: 4em;
     border-radius: 5px;
     letter-spacing: 0.1em;
     border: 1px solid #EDB14A;
@@ -130,6 +131,21 @@ input[type="text"] {
 /* Results of queries */
 #css-results {
     margin-left: 275px;
+}
+
+#css-results .css-tag-drawing {
+    margin-left: 10px;
+}
+
+#css-results a {
+    color: #000;
+    font-size: 1.25em;
+    text-decoration: none;
+}
+
+#css-results a:hover {
+    color: #00F;
+    text-decoration: underline;
 }
 
 

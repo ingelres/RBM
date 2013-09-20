@@ -70,10 +70,59 @@ var libbookmarks = (function(){
         else if(tags.length == 0) libsysmsg.error(L10N.tags_empty);
         else
         {
+            $("#css-dialog-edit-bookmark").dialog("close");
+
             libajax.ajax({
                 data: "action=addBookmark&url=" + url + "&name=" + name + "&tags=" + tags.join(","),
             });
         }
+    }
+
+
+    /**
+     * Load bookmarks associated to a list of tags.
+     *
+     * @param tags A list of tags id.
+    **/
+    my.loadBookmarksByTid = function(tags)
+    {
+        libajax.ajax({
+            data: "action=getBookmarksByTid&tags=" + tags.join(","),
+            success: onLoadBookmarks,
+        });
+    }
+
+
+    /**
+     * Handler for the getBookmarksByTid() AJAX function.
+    **/
+    function onLoadBookmarks(json)
+    {
+        console.log(json);
+
+        html         = "";
+        allBookmarks = jQuery.parseJSON(json);
+
+        for(var tid in allBookmarks)
+        {
+            var bookmarks = allBookmarks[tid];
+
+            html += "<h1>" + libtags.getName(tid) + "</h1>";
+
+            for(var i=0; i<bookmarks.length; ++i)
+            {
+                bookmark = bookmarks[i];
+
+                html += "<a href='" + bookmark["url"] + "'>" + bookmark["name"] + "</a>";
+
+                for(var j=0; j<bookmark["tags"].length; ++j)
+                    html += "<span class='css-tag-drawing'>" + libtags.getName(bookmark["tags"][j]) + "</span>";
+
+                html += "<br/>";
+            }
+        }
+
+        $("#css-results-bookmarks").html(html);
     }
 
 
