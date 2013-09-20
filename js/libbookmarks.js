@@ -70,7 +70,9 @@ var libbookmarks = (function(){
         else if(tags.length == 0) libsysmsg.error(L10N.tags_empty);
         else
         {
-            // FIXME Create the bookmark
+            libajax.ajax({
+                data: "action=addBookmark&url=" + url + "&name=" + name + "&tags=" + tags.join(","),
+            });
         }
     }
 

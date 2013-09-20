@@ -438,7 +438,10 @@ var libexp = (function(){
 
         selectedTid = newSelection.slice(0);
 
-        // FIXME Update bookmarks
+        // Update bookmarks
+        libajax.ajax({
+            data: "action=getBookmarksByTid&tags=" + selectedTid.join(","),
+        });
     }
 
 

@@ -11,7 +11,7 @@
     **/
     function init_initDataDir()
     {
-        global $CONSTS_DIR_DATA, $CONSTS_FILE_TAGS, $CONSTS_FILE_T2B;
+        global $CONSTS_DIR_DATA, $CONSTS_DIR_BOOKMARKS, $CONSTS_FILE_TAGS, $CONSTS_FILE_T2B;
 
         if(!is_writable($CONSTS_DIR_DATA))
         {
@@ -21,15 +21,18 @@
 
         if(file_exists($CONSTS_FILE_TAGS))
         {
-            // Only check for correct permissions on the file that store the list of tags
+            // Only check for correct permissions on the file that stores the tags
             // We assume that if permissions are correct for this file, they are correct as well for the other files
             if(!is_readable($CONSTS_FILE_TAGS) || !is_writable($CONSTS_FILE_TAGS))
                 return sprintf(_("File '%s' is either not readable or not writable"), $CONSTS_FILE_TAGS);
         }
         else
         {
-            // Create all the data files
-            db_saveT2B(array());
+            // Create the bookmark directory
+            mkdir($CONSTS_DIR_BOOKMARKS, 0755);
+
+            // Create the data files
+            db_saveT2B(1, array());
             db_saveTags(1, array(), array(), array(), array());
         }
 

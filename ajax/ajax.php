@@ -4,21 +4,27 @@
     $RBM_BASE_DIR = realpath(__DIR__ . "/..");
 
     require_once $RBM_BASE_DIR . "/inc/db.php";
+    require_once $RBM_BASE_DIR . "/inc/consts.php";
     require_once $RBM_BASE_DIR . "/inc/params.php";
 
 
     $ALL_ACTIONS = array(
-            "addTag"      => NULL,
-            "deleteTag"   => NULL,
-            "renameTag"   => NULL,
-            "reparentTag" => NULL,
+                            // Tags
+                            "addTag"      => NULL,
+                            "deleteTag"   => NULL,
+                            "renameTag"   => NULL,
+                            "reparentTag" => NULL,
+
+                            // Bookmarks
+                            "addBookmark"       => NULL,
+                            "getBookmarksByTid" => NULL,
+
         );
 
     $action = getStringParam("action");
 
     if(array_key_exists($action, $ALL_ACTIONS))
         $action();
-
 
 
     /**
@@ -238,6 +244,62 @@
 
         // We're done
         db_saveTags($tags_nexttid, $tags_tname2tid, $tags_tid2tname, $tags_children, $tags_parents);
+    }
+
+
+    /**
+     * Add a new bookmark.
+     *
+     * @param url  URL of the bookmark.
+     * @param name Name of the bookmark.
+     * @param tags A comma-separated list of tags id (e.g., "23,10,103").
+    **/
+    function addBookmark()
+    {
+        global $CONSTS_FILE_T2B;
+
+        $url  = getStringParam("url");
+        $name = getStringParam("name");
+        $tags = getStringParam("tags");
+
+        // Associate the bookmark to the correct tags
+        include $CONSTS_FILE_T2B;
+
+        $bid  = $nextbid++;
+        $tags = explode(",", $tags);
+
+        foreach($tags as $tid)
+            $t2b[(int)$tid][] = $bid;
+
+        db_saveT2B($nextbid, $t2b);
+
+        // Create the bookmark file
+        db_saveBookmark($bid, $url, $name, $tags);
+    }
+
+
+    /**
+     * Get the list of bookmarks associated to a list of tags id.
+     *
+     * @param tags A comma-separated list of tags id (e.g., "23,10,103").
+     *
+     * @return A JSON array with the bookmarks' data.
+    **/
+    function getBookmarksByTid()
+    {
+        global $CONSTS_FILE_T2B;
+
+        $tags      = explode(",", getStringParam("tags"));
+        $bookmarks = array();
+
+        include $CONSTS_FILE_T2B;
+
+        foreach($tags as $tid)
+            if(array_key_exists($tid, $t2b))
+                foreach($t2b[$tid] as $bid)
+                    $bookmarks[$tid][] = db_loadBookmark($bid);
+
+        echo json_encode($bookmarks);
     }
 
 ?>

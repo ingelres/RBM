@@ -25,7 +25,7 @@
                                 . "\$tags_tname2tid=%s;\n"
                                 . "\$tags_tid2tname=%s;\n"
                             . "?>\n",
-                    $nextTid, var_export($tname2tid, true), var_export($tid2tname, true), var_export($children, true), var_export($parents, true)
+                    $nextTid, var_export($parents, true), var_export($children, true), var_export($tname2tid, true), var_export($tid2tname, true)
         );
 
         fclose($handle);
@@ -56,21 +56,73 @@
     /**
      * Create a new tid to bid file.
      *
-     * @param tid2bid The array that maps a tag id to a number of bookmark id.
+     * @param nextBid The id to be used the next time a bookmark is created.
+     * @param t2b     The array that maps a tag id to a number of bookmark id.
     **/
-    function db_saveT2B($t2b)
+    function db_saveT2B($nextBid, $t2b)
     {
         global $CONSTS_FILE_T2B;
 
         $handle = fopen($CONSTS_FILE_T2B, "w");
 
         fprintf($handle, "<?php\n"
-                                . "\$T2B=%s;\n"
+                                . "\$nextbid=%u; \n"
+                                . "\$t2b=%s;     \n"
                             . "?>\n",
-                    var_export($t2b, true)
+                    $nextBid, var_export($t2b, true)
         );
 
         fclose($handle);
+    }
+
+
+    /**
+     * Save a bookmark.
+     *
+     * @param bid  Bookmark id.
+     * @param url  Bookmark URL.
+     * @param name Bookmark name.
+     * @param tags An array of tag id.
+    **/
+    function db_saveBookmark($bid, $url, $name, $tags)
+    {
+        global $CONSTS_DIR_BOOKMARKS, $CONSTS_BOOKMARKS_PER_DIR;
+
+        $subdir = $CONSTS_DIR_BOOKMARKS . "/" . (string)(int)($bid / $CONSTS_BOOKMARKS_PER_DIR);
+
+        if(!file_exists($subdir))
+            mkdir($subdir);
+
+        $bookmark["url"]  = $url;
+        $bookmark["name"] = $name;
+        $bookmark["tags"] = $tags;
+
+        $handle = fopen($subdir . "/" . (string)$bid, "w");
+
+        fprintf($handle, "<?php\n"
+                                . "\$b=%s; \n"
+                            . "?>\n",
+                    var_export($bookmark, true)
+        );
+
+        fclose($handle);
+    }
+
+
+    /**
+     * Load the given bookmark.
+     *
+     * @param bid The bookmark id.
+     *
+     * @return The bookmark.
+    **/
+    function db_loadBookmark($bid)
+    {
+        global $CONSTS_DIR_BOOKMARKS, $CONSTS_BOOKMARKS_PER_DIR;
+
+        include $CONSTS_DIR_BOOKMARKS . "/" . (string) (int) ($bid / $CONSTS_BOOKMARKS_PER_DIR) . "/" . (string) $bid;
+
+        return $b;
     }
 
 ?>
