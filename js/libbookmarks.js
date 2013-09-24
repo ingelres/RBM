@@ -107,7 +107,7 @@ var libbookmarks = (function(){
         {
             var bookmarks = allBookmarks[tid];
 
-            html += "<h1>" + libtags.getName(tid) + "</h1>";
+            html += "<div class='css-results-title'>" + libtags.getName(tid) + "</div>";
 
             for(var i=0; i<bookmarks.length; ++i)
             {

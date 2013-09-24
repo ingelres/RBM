@@ -148,6 +148,12 @@ input[type="text"] {
     text-decoration: underline;
 }
 
+.css-results-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
 
 /* Section used to distinguish between multiple tags with the same name */
 #css-results-homonyms {
@@ -193,6 +199,7 @@ input[type="text"] {
     background-color: #F0F0F0;
 }
 
+
 /* Search boxes */
 #css-search-by-tag {
     width: 200px;
@@ -200,6 +207,7 @@ input[type="text"] {
     padding-right: 26px;
     background: #FFF url('./img/search.png') no-repeat center right;
 }
+
 
 /* Popup menus */
 .popup-menu {
