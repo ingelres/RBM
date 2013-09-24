@@ -14,7 +14,6 @@ input[type="text"] {
 /* Draw a tag */
 .css-tag-drawing {
     padding: 0.5em 1em;
-    line-height: 4em;
     border-radius: 5px;
     letter-spacing: 0.1em;
     border: 1px solid #EDB14A;

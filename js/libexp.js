@@ -399,6 +399,7 @@ var libexp = (function(){
             opacity: 0.75,
             cursor: "move",
             revert: "invalid",
+            appendTo: "#css-content",
             handle: ".css-explorer-handle",
             helper: function () {
                 return $("<span class='css-tag-drawing'>" + libtags.getName(tid) + "</span>");
